@@ -1,6 +1,9 @@
 # Implementation of JAGUAR and ZO-MUON
 Here you can see the current state of our research in JAGUAR and ZO-MUON implementation
+
 The code is based on the [benchmark](https://github.com/ZO-Bench)
+
+На данный момент методы реализованы в функциях ```zo_jaguar_step``` и ```zo_muon_step``` соответственно
 
 ## Добавление своего метода в общий ZO-Benchmark
 
