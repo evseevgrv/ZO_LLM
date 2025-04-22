@@ -1,0 +1,96 @@
+2025-04-12 19:23:42,923 - INFO - Sample train set 1500/67349
+2025-04-12 19:23:42,924 - INFO - ... including dev set 500 samples
+2025-04-12 19:23:42,925 - INFO - Loading model with FP16...
+/home/rinya/anaconda3/envs/zollm/lib/python3.10/site-packages/huggingface_hub/file_download.py:797: FutureWarning: `resume_download` is deprecated and will be removed in version 1.0.0. Downloads always resume when possible. If you want to force a new download, use `force_download=True`.
+  warnings.warn(
+21
+2025-04-12 19:23:56,358 - INFO - Done with 13.43s
+2025-04-12 19:23:56,642 - INFO - Dev samples: 500
+2025-04-12 19:23:56,644 - INFO - Train samples: 1000
+2025-04-12 19:23:56,644 - INFO - Eval sample length is 872
+2025-04-12 19:23:56,645 - INFO - Tokenizing training samples...
+2025-04-12 19:23:57,601 - INFO - Done with 0.95s
+/home/rinya/anaconda3/envs/zollm/lib/python3.10/site-packages/transformers/optimization.py:391: FutureWarning: This implementation of AdamW is deprecated and will be removed in a future version. Use the PyTorch implementation torch.optim.AdamW instead, or set `no_deprecation_warning=True` to disable this warning
+  warnings.warn(
+2025-04-12 19:23:57,615 - INFO - ***** Running training *****
+2025-04-12 19:23:57,616 - INFO -   Num examples = 1000
+2025-04-12 19:23:57,617 - INFO -   Num Epochs = 318
+2025-04-12 19:23:57,617 - INFO -   Instantaneous batch size per device = 16
+2025-04-12 19:23:57,617 - INFO -   Total train batch size (w. parallel, distributed & accumulation) = 16
+2025-04-12 19:23:57,618 - INFO -   Gradient Accumulation steps = 1
+2025-04-12 19:23:57,618 - INFO -   Total optimization steps = 20000
+2025-04-12 19:23:57,619 - INFO -   Number of trainable parameters = 1315758080
+  0%|                                                                                                                                                                       | 0/20000 [00:00<?, ?it/s]You're using a GPT2TokenizerFast tokenizer. Please note that with a fast tokenizer, using the `__call__` method is faster than using a method to encode the text followed by a call to the `pad` method to get a padded encoding.
+### layer-wise gradient sparsity = None
+-------------------------- Training Epoch 0 --------------------------
+  0%|                                                                                                                                                            | 1/20000 [00:08<49:38:34,  8.94s/it]
+
+  0%|                                                                                                                                                            | 2/20000 [00:18<51:23:03,  9.25s/it]
+
+  0%|                                                                                                                                                            | 3/20000 [00:27<51:13:04,  9.22s/it]
+
+  0%|                                                                                                                                                            | 4/20000 [00:36<51:06:00,  9.20s/it]
+
+  0%|                                                                                                                                                            | 5/20000 [00:46<51:30:15,  9.27s/it]
+{'peak_mem': 5.889943599700928, 'step_consumption': 9401.038646697998, 'epoch': 0.08}
+
+  0%|                                                                                                                                                            | 6/20000 [00:55<51:41:58,  9.31s/it]
+
+
+  0%|                                                                                                                                                            | 8/20000 [01:14<51:26:23,  9.26s/it]
+{'peak_mem': 5.889943599700928, 'step_consumption': 8825.825691223145, 'epoch': 0.13}
+
+
+  0%|                                                                                                                                                           | 10/20000 [01:32<51:06:33,  9.20s/it]
+{'loss': 348.0897, 'learning_rate': 0.001, 'epoch': 0.16}
+
+  0%|                                                                                                                                                           | 11/20000 [01:41<51:29:48,  9.27s/it]
+{'peak_mem': 5.890035152435303, 'step_consumption': 9385.384559631348, 'epoch': 0.17}
+
+
+  0%|                                                                                                                                                           | 13/20000 [02:00<51:35:38,  9.29s/it]
+{'peak_mem': 5.890042781829834, 'step_consumption': 9158.15782546997, 'epoch': 0.21}
+
+  0%|                                                                                                                                                           | 14/20000 [02:09<50:53:17,  9.17s/it]
+
+
+  0%|                                                                                                                                                           | 16/20000 [02:28<51:06:05,  9.21s/it]
+
+  0%|▏                                                                                                                                                          | 17/20000 [02:37<51:02:18,  9.19s/it]
+
+  0%|▏                                                                                                                                                          | 18/20000 [02:46<51:20:02,  9.25s/it]
+{'peak_mem': 6.010823726654053, 'step_consumption': 9357.402086257935, 'epoch': 0.29}
+
+  0%|▏                                                                                                                                                          | 19/20000 [02:55<51:04:20,  9.20s/it]
+{'loss': 0.0, 'learning_rate': 0.001, 'epoch': 0.32}
+
+
+  0%|▏                                                                                                                                                          | 21/20000 [03:14<51:13:04,  9.23s/it]
+
+  0%|▏                                                                                                                                                          | 22/20000 [03:23<50:42:38,  9.14s/it]
+
+  0%|▏                                                                                                                                                          | 23/20000 [03:32<50:43:48,  9.14s/it]
+
+  0%|▏                                                                                                                                                          | 24/20000 [03:41<50:13:32,  9.05s/it]
+
+  0%|▏                                                                                                                                                          | 25/20000 [03:51<51:23:05,  9.26s/it]
+
+  0%|▏                                                                                                                                                          | 26/20000 [04:00<51:19:19,  9.25s/it]
+  0%|▏                                                                                                                                                          | 26/20000 [04:00<51:19:19,  9.25s/it]Traceback (most recent call last):
+  File "/home/rinya/ZO-LLM-main/zo-bench/run.py", line 736, in <module>
+    main()
+  File "/home/rinya/ZO-LLM-main/zo-bench/run.py", line 688, in main
+    framework.train(train_samples, dev_samples if dev_samples is not None else eval_samples, eval_samples)
+  File "/home/rinya/ZO-LLM-main/zo-bench/run.py", line 573, in train
+    trainer.train(resume_from_checkpoint=last_checkpoint)
+  File "/home/rinya/anaconda3/envs/zollm/lib/python3.10/site-packages/transformers/trainer.py", line 1662, in train
+    return inner_training_loop(
+  File "/home/rinya/ZO-LLM-main/zo-bench/trainer.py", line 544, in _inner_training_loop
+    tr_loss_step = self.zo_muon_step(model, inputs)
+  File "/home/rinya/anaconda3/envs/zollm/lib/python3.10/site-packages/torch/utils/_contextlib.py", line 115, in decorate_context
+    return func(*args, **kwargs)
+  File "/home/rinya/ZO-LLM-main/zo-bench/trainer.py", line 1147, in zo_muon_step
+    g_ortho = zeropower_via_newtonschulz5(g, steps=10)
+  File "/home/rinya/ZO-LLM-main/zo-bench/trainer.py", line 147, in zeropower_via_newtonschulz5
+    X = a * X + B @ X
+KeyboardInterrupt

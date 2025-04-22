@@ -1,0 +1,1909 @@
+2025-04-12 16:59:05,978 - INFO - Sample train set 1500/67349
+2025-04-12 16:59:05,979 - INFO - ... including dev set 500 samples
+2025-04-12 16:59:05,979 - INFO - Loading model with FP16...
+/home/rinya/anaconda3/envs/zollm/lib/python3.10/site-packages/huggingface_hub/file_download.py:797: FutureWarning: `resume_download` is deprecated and will be removed in version 1.0.0. Downloads always resume when possible. If you want to force a new download, use `force_download=True`.
+  warnings.warn(
+23
+2025-04-12 16:59:12,545 - INFO - Done with 6.57s
+2025-04-12 16:59:13,009 - INFO - Inject lora to: model.decoder.layers.0.self_attn
+2025-04-12 16:59:13,186 - INFO - Inject lora to: model.decoder.layers.1.self_attn
+2025-04-12 16:59:13,305 - INFO - Inject lora to: model.decoder.layers.2.self_attn
+2025-04-12 16:59:13,427 - INFO - Inject lora to: model.decoder.layers.3.self_attn
+2025-04-12 16:59:13,541 - INFO - Inject lora to: model.decoder.layers.4.self_attn
+2025-04-12 16:59:13,667 - INFO - Inject lora to: model.decoder.layers.5.self_attn
+2025-04-12 16:59:13,792 - INFO - Inject lora to: model.decoder.layers.6.self_attn
+2025-04-12 16:59:13,916 - INFO - Inject lora to: model.decoder.layers.7.self_attn
+2025-04-12 16:59:14,041 - INFO - Inject lora to: model.decoder.layers.8.self_attn
+2025-04-12 16:59:14,169 - INFO - Inject lora to: model.decoder.layers.9.self_attn
+2025-04-12 16:59:14,320 - INFO - Inject lora to: model.decoder.layers.10.self_attn
+2025-04-12 16:59:14,458 - INFO - Inject lora to: model.decoder.layers.11.self_attn
+2025-04-12 16:59:14,594 - INFO - Inject lora to: model.decoder.layers.12.self_attn
+2025-04-12 16:59:14,835 - INFO - Inject lora to: model.decoder.layers.13.self_attn
+2025-04-12 16:59:14,983 - INFO - Inject lora to: model.decoder.layers.14.self_attn
+2025-04-12 16:59:15,133 - INFO - Inject lora to: model.decoder.layers.15.self_attn
+2025-04-12 16:59:15,295 - INFO - Inject lora to: model.decoder.layers.16.self_attn
+2025-04-12 16:59:15,454 - INFO - Inject lora to: model.decoder.layers.17.self_attn
+2025-04-12 16:59:15,618 - INFO - Inject lora to: model.decoder.layers.18.self_attn
+2025-04-12 16:59:15,762 - INFO - Inject lora to: model.decoder.layers.19.self_attn
+2025-04-12 16:59:15,907 - INFO - Inject lora to: model.decoder.layers.20.self_attn
+2025-04-12 16:59:16,066 - INFO - Inject lora to: model.decoder.layers.21.self_attn
+2025-04-12 16:59:16,213 - INFO - Inject lora to: model.decoder.layers.22.self_attn
+2025-04-12 16:59:16,358 - INFO - Inject lora to: model.decoder.layers.23.self_attn
+2025-04-12 16:59:16,535 - INFO - Dev samples: 500
+2025-04-12 16:59:16,535 - INFO - Train samples: 1000
+2025-04-12 16:59:16,537 - INFO - Eval sample length is 872
+2025-04-12 16:59:16,537 - INFO - Tokenizing training samples...
+2025-04-12 16:59:17,437 - INFO - Done with 0.90s
+/home/rinya/anaconda3/envs/zollm/lib/python3.10/site-packages/transformers/optimization.py:391: FutureWarning: This implementation of AdamW is deprecated and will be removed in a future version. Use the PyTorch implementation torch.optim.AdamW instead, or set `no_deprecation_warning=True` to disable this warning
+  warnings.warn(
+2025-04-12 16:59:17,449 - INFO - ***** Running training *****
+2025-04-12 16:59:17,449 - INFO -   Num examples = 1000
+2025-04-12 16:59:17,449 - INFO -   Num Epochs = 318
+2025-04-12 16:59:17,449 - INFO -   Instantaneous batch size per device = 16
+2025-04-12 16:59:17,449 - INFO -   Total train batch size (w. parallel, distributed & accumulation) = 16
+2025-04-12 16:59:17,449 - INFO -   Gradient Accumulation steps = 1
+2025-04-12 16:59:17,450 - INFO -   Total optimization steps = 20000
+2025-04-12 16:59:17,450 - INFO -   Number of trainable parameters = 1572864
+  0%|                                                                                                                                                                       | 0/20000 [00:00<?, ?it/s]You're using a GPT2TokenizerFast tokenizer. Please note that with a fast tokenizer, using the `__call__` method is faster than using a method to encode the text followed by a call to the `pad` method to get a padded encoding.
+### layer-wise gradient sparsity = None
+-------------------------- Training Epoch 0 --------------------------
+{'peak_mem': 2.9677186012268066, 'step_consumption': 758.4755420684814, 'epoch': 0.02}
+  0%|                                                                                                                                                             | 4/20000 [00:01<2:11:53,  2.53it/s]
+{'peak_mem': 3.2272868156433105, 'step_consumption': 317.6860809326172, 'epoch': 0.03}
+{'peak_mem': 3.3764472007751465, 'step_consumption': 356.1060428619385, 'epoch': 0.05}
+{'peak_mem': 3.3764472007751465, 'step_consumption': 315.22107124328613, 'epoch': 0.06}
+{'peak_mem': 3.3764472007751465, 'step_consumption': 276.963472366333, 'epoch': 0.08}
+{'peak_mem': 3.3764472007751465, 'step_consumption': 317.46816635131836, 'epoch': 0.1}
+{'peak_mem': 3.3764472007751465, 'step_consumption': 330.5847644805908, 'epoch': 0.11}
+
+  0%|                                                                                                                                                            | 11/20000 [00:03<1:43:34,  3.22it/s]
+{'peak_mem': 3.3764472007751465, 'step_consumption': 269.03462409973145, 'epoch': 0.14}
+{'loss': 0.8257, 'learning_rate': 0.01, 'epoch': 0.16}
+{'peak_mem': 3.3764472007751465, 'step_consumption': 315.76037406921387, 'epoch': 0.16}
+{'peak_mem': 3.3764472007751465, 'step_consumption': 312.0760917663574, 'epoch': 0.17}
+{'peak_mem': 3.3764472007751465, 'step_consumption': 315.6745433807373, 'epoch': 0.19}
+{'peak_mem': 3.3764472007751465, 'step_consumption': 321.06828689575195, 'epoch': 0.21}
+
+  0%|▏                                                                                                                                                           | 17/20000 [00:05<1:44:58,  3.17it/s]
+{'peak_mem': 3.3764472007751465, 'step_consumption': 301.35655403137207, 'epoch': 0.24}
+{'peak_mem': 3.3764472007751465, 'step_consumption': 267.228364944458, 'epoch': 0.25}
+{'peak_mem': 3.3764472007751465, 'step_consumption': 322.1628665924072, 'epoch': 0.27}
+{'peak_mem': 3.528818130493164, 'step_consumption': 378.5121440887451, 'epoch': 0.29}
+{'peak_mem': 3.528818130493164, 'step_consumption': 330.1410675048828, 'epoch': 0.3}
+{'loss': 0.9031, 'learning_rate': 0.01, 'epoch': 0.32}
+
+  0%|▏                                                                                                                                                           | 22/20000 [00:07<2:10:31,  2.55it/s]
+{'peak_mem': 3.528818130493164, 'step_consumption': 493.058443069458, 'epoch': 0.33}
+{'peak_mem': 3.528818130493164, 'step_consumption': 371.9356060028076, 'epoch': 0.35}
+{'peak_mem': 3.528818130493164, 'step_consumption': 372.5621700286865, 'epoch': 0.37}
+{'peak_mem': 3.528818130493164, 'step_consumption': 372.38550186157227, 'epoch': 0.38}
+
+  0%|▏                                                                                                                                                           | 26/20000 [00:09<2:29:32,  2.23it/s]
+{'peak_mem': 3.528818130493164, 'step_consumption': 522.2969055175781, 'epoch': 0.41}
+{'peak_mem': 3.528818130493164, 'step_consumption': 640.7721042633057, 'epoch': 0.43}
+
+  0%|▏                                                                                                                                                           | 30/20000 [00:11<2:43:13,  2.04it/s]
+{'peak_mem': 3.528818130493164, 'step_consumption': 470.5805778503418, 'epoch': 0.46}
+{'loss': 0.8559, 'learning_rate': 0.01, 'epoch': 0.48}
+{'peak_mem': 3.528818130493164, 'step_consumption': 384.702205657959, 'epoch': 0.48}
+{'peak_mem': 3.528818130493164, 'step_consumption': 392.3754692077637, 'epoch': 0.49}
+
+  0%|▎                                                                                                                                                           | 34/20000 [00:13<2:41:12,  2.06it/s]
+{'peak_mem': 3.6812081336975098, 'step_consumption': 643.1987285614014, 'epoch': 0.52}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 364.0768527984619, 'epoch': 0.54}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 523.8251686096191, 'epoch': 0.56}
+
+  0%|▎                                                                                                                                                           | 37/20000 [00:16<4:02:52,  1.37it/s]
+{'peak_mem': 3.6812081336975098, 'step_consumption': 1244.3008422851562, 'epoch': 0.59}
+
+  0%|▎                                                                                                                                                           | 40/20000 [00:18<3:40:28,  1.51it/s]
+{'peak_mem': 3.6812081336975098, 'step_consumption': 633.5573196411133, 'epoch': 0.62}
+{'loss': 0.8292, 'learning_rate': 0.01, 'epoch': 0.63}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 449.9697685241699, 'epoch': 0.63}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 388.80205154418945, 'epoch': 0.65}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 350.24452209472656, 'epoch': 0.67}
+
+  0%|▎                                                                                                                                                           | 46/20000 [00:20<2:02:09,  2.72it/s]
+{'peak_mem': 3.6812081336975098, 'step_consumption': 282.5334072113037, 'epoch': 0.7}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 337.59069442749023, 'epoch': 0.71}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 318.4356689453125, 'epoch': 0.73}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 296.0033416748047, 'epoch': 0.75}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 324.6438503265381, 'epoch': 0.76}
+
+  0%|▍                                                                                                                                                           | 52/20000 [00:22<1:50:04,  3.02it/s]
+{'loss': 0.9409, 'learning_rate': 0.01, 'epoch': 0.79}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 303.3616542816162, 'epoch': 0.79}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 368.83091926574707, 'epoch': 0.81}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 308.94994735717773, 'epoch': 0.83}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 311.7201328277588, 'epoch': 0.84}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 321.2306499481201, 'epoch': 0.86}
+
+  0%|▍                                                                                                                                                           | 59/20000 [00:24<1:46:13,  3.13it/s]
+{'peak_mem': 3.6812081336975098, 'step_consumption': 280.20524978637695, 'epoch': 0.89}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 289.48402404785156, 'epoch': 0.9}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 334.3696594238281, 'epoch': 0.92}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 316.7843818664551, 'epoch': 0.94}
+{'loss': 0.882, 'learning_rate': 0.01, 'epoch': 0.95}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 310.5173110961914, 'epoch': 0.95}
+
+  0%|▌                                                                                                                                                           | 65/20000 [00:26<1:43:39,  3.21it/s]
+{'peak_mem': 3.6812081336975098, 'step_consumption': 385.17093658447266, 'epoch': 0.98}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 326.3354301452637, 'epoch': 1.0}
+-------------------------- Training Epoch 1 --------------------------
+{'peak_mem': 3.6812081336975098, 'step_consumption': 315.659761428833, 'epoch': 1.02}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 254.23526763916016, 'epoch': 1.03}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 277.28843688964844, 'epoch': 1.05}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 272.9377746582031, 'epoch': 1.06}
+
+  0%|▌                                                                                                                                                           | 72/20000 [00:28<1:35:05,  3.49it/s]
+{'peak_mem': 3.6812081336975098, 'step_consumption': 334.3212604522705, 'epoch': 1.1}
+{'loss': 0.9425, 'learning_rate': 0.01, 'epoch': 1.11}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 250.70714950561523, 'epoch': 1.11}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 275.0272750854492, 'epoch': 1.13}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 273.0526924133301, 'epoch': 1.14}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 367.4161434173584, 'epoch': 1.16}
+
+  0%|▌                                                                                                                                                           | 78/20000 [00:30<1:46:10,  3.13it/s]
+{'peak_mem': 3.6812081336975098, 'step_consumption': 334.99622344970703, 'epoch': 1.19}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 314.0993118286133, 'epoch': 1.21}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 272.5062370300293, 'epoch': 1.22}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 331.8510055541992, 'epoch': 1.24}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 309.5574378967285, 'epoch': 1.25}
+{'loss': 0.9146, 'learning_rate': 0.01, 'epoch': 1.27}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 271.03447914123535, 'epoch': 1.27}
+
+  0%|▋                                                                                                                                                           | 84/20000 [00:32<1:46:20,  3.12it/s]
+{'peak_mem': 3.6812081336975098, 'step_consumption': 310.1835250854492, 'epoch': 1.3}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 312.81375885009766, 'epoch': 1.32}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 324.6161937713623, 'epoch': 1.33}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 327.93283462524414, 'epoch': 1.35}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 342.299222946167, 'epoch': 1.37}
+
+  0%|▋                                                                                                                                                           | 90/20000 [00:34<1:52:06,  2.96it/s]
+{'peak_mem': 3.6812081336975098, 'step_consumption': 292.93251037597656, 'epoch': 1.4}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 326.5707492828369, 'epoch': 1.41}
+{'loss': 0.9273, 'learning_rate': 0.01, 'epoch': 1.43}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 373.86631965637207, 'epoch': 1.43}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 358.12973976135254, 'epoch': 1.44}
+
+  0%|▋                                                                                                                                                           | 96/20000 [00:36<1:49:25,  3.03it/s]
+{'peak_mem': 3.6812081336975098, 'step_consumption': 360.0337505340576, 'epoch': 1.48}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 356.905460357666, 'epoch': 1.49}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 294.77620124816895, 'epoch': 1.51}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 301.03039741516113, 'epoch': 1.52}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 364.26234245300293, 'epoch': 1.54}
+
+  1%|▊                                                                                                                                                          | 102/20000 [00:38<1:38:04,  3.38it/s]
+{'peak_mem': 3.6812081336975098, 'step_consumption': 333.7676525115967, 'epoch': 1.57}
+{'loss': 0.8545, 'learning_rate': 0.01, 'epoch': 1.59}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 271.99602127075195, 'epoch': 1.59}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 271.84128761291504, 'epoch': 1.6}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 274.1515636444092, 'epoch': 1.62}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 313.5349750518799, 'epoch': 1.63}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 273.07963371276855, 'epoch': 1.65}
+
+  1%|▊                                                                                                                                                          | 108/20000 [00:40<1:46:51,  3.10it/s]
+{'peak_mem': 3.6812081336975098, 'step_consumption': 389.45698738098145, 'epoch': 1.68}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 309.9229335784912, 'epoch': 1.7}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 310.6875419616699, 'epoch': 1.71}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 331.5286636352539, 'epoch': 1.73}
+{'loss': 0.7645, 'learning_rate': 0.01, 'epoch': 1.75}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 310.81628799438477, 'epoch': 1.75}
+
+  1%|▉                                                                                                                                                          | 115/20000 [00:42<1:45:21,  3.15it/s]
+{'peak_mem': 3.6812081336975098, 'step_consumption': 349.092960357666, 'epoch': 1.78}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 350.5513668060303, 'epoch': 1.79}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 299.59869384765625, 'epoch': 1.81}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 300.93932151794434, 'epoch': 1.83}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 298.2661724090576, 'epoch': 1.84}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 326.8618583679199, 'epoch': 1.86}
+
+  1%|▉                                                                                                                                                          | 121/20000 [00:44<1:43:29,  3.20it/s]
+{'peak_mem': 3.6812081336975098, 'step_consumption': 271.7902660369873, 'epoch': 1.89}
+{'loss': 0.8921, 'learning_rate': 0.01, 'epoch': 1.9}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 314.62621688842773, 'epoch': 1.9}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 333.71734619140625, 'epoch': 1.92}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 272.5980281829834, 'epoch': 1.94}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 315.0646686553955, 'epoch': 1.95}
+
+  1%|▉                                                                                                                                                          | 128/20000 [00:46<1:40:07,  3.31it/s]
+{'peak_mem': 3.6812081336975098, 'step_consumption': 298.6936569213867, 'epoch': 1.98}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 244.50254440307617, 'epoch': 2.0}
+-------------------------- Training Epoch 2 --------------------------
+{'peak_mem': 3.6812081336975098, 'step_consumption': 311.62571907043457, 'epoch': 2.02}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 312.23011016845703, 'epoch': 2.03}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 293.76959800720215, 'epoch': 2.05}
+{'loss': 0.7464, 'learning_rate': 0.01, 'epoch': 2.06}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 298.126220703125, 'epoch': 2.06}
+
+  1%|█                                                                                                                                                          | 134/20000 [00:48<1:46:44,  3.10it/s]
+{'peak_mem': 3.6812081336975098, 'step_consumption': 387.77828216552734, 'epoch': 2.1}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 270.68042755126953, 'epoch': 2.11}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 343.62268447875977, 'epoch': 2.13}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 379.1351318359375, 'epoch': 2.14}
+
+  1%|█                                                                                                                                                          | 139/20000 [00:50<2:13:54,  2.47it/s]
+{'peak_mem': 3.6812081336975098, 'step_consumption': 441.44606590270996, 'epoch': 2.17}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 384.89651679992676, 'epoch': 2.19}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 423.5539436340332, 'epoch': 2.21}
+{'loss': 0.7824, 'learning_rate': 0.01, 'epoch': 2.22}
+
+  1%|█                                                                                                                                                          | 141/20000 [00:51<3:26:30,  1.60it/s]
+{'peak_mem': 3.6812081336975098, 'step_consumption': 820.1920986175537, 'epoch': 2.24}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 581.9079875946045, 'epoch': 2.25}
+
+  1%|█                                                                                                                                                          | 144/20000 [00:53<3:32:22,  1.56it/s]
+{'peak_mem': 3.6812081336975098, 'step_consumption': 631.2346458435059, 'epoch': 2.29}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 731.7190170288086, 'epoch': 2.3}
+
+{'peak_mem': 3.6812081336975098, 'step_consumption': 593.2154655456543, 'epoch': 2.32}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 387.9566192626953, 'epoch': 2.33}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 897.244930267334, 'epoch': 2.35}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 763.8499736785889, 'epoch': 2.37}
+  1%|█▏                                                                                                                                                         | 150/20000 [00:58<4:12:03,  1.31it/s]
+{'loss': 0.8063, 'learning_rate': 0.01, 'epoch': 2.38}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 900.808572769165, 'epoch': 2.38}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 541.8016910552979, 'epoch': 2.4}
+
+  1%|█▏                                                                                                                                                         | 155/20000 [01:00<2:35:31,  2.13it/s]
+{'peak_mem': 3.6812081336975098, 'step_consumption': 396.8007564544678, 'epoch': 2.43}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 463.9861583709717, 'epoch': 2.44}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 337.8877639770508, 'epoch': 2.46}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 268.186092376709, 'epoch': 2.48}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 317.2914981842041, 'epoch': 2.49}
+
+  1%|█▏                                                                                                                                                         | 161/20000 [01:02<2:00:20,  2.75it/s]
+{'peak_mem': 3.6812081336975098, 'step_consumption': 309.3528747558594, 'epoch': 2.52}
+{'loss': 0.8875, 'learning_rate': 0.01, 'epoch': 2.54}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 414.3702983856201, 'epoch': 2.54}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 317.52896308898926, 'epoch': 2.56}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 245.08070945739746, 'epoch': 2.57}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 297.5201606750488, 'epoch': 2.59}
+
+  1%|█▎                                                                                                                                                         | 168/20000 [01:04<1:40:21,  3.29it/s]
+{'peak_mem': 3.6812081336975098, 'step_consumption': 310.441255569458, 'epoch': 2.62}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 310.8639717102051, 'epoch': 2.63}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 311.17725372314453, 'epoch': 2.65}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 261.5818977355957, 'epoch': 2.67}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 336.6703987121582, 'epoch': 2.68}
+{'loss': 0.8802, 'learning_rate': 0.01, 'epoch': 2.7}
+
+  1%|█▎                                                                                                                                                         | 174/20000 [01:06<1:37:24,  3.39it/s]
+{'peak_mem': 3.6812081336975098, 'step_consumption': 299.1604804992676, 'epoch': 2.71}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 265.72513580322266, 'epoch': 2.73}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 322.9050636291504, 'epoch': 2.75}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 267.05050468444824, 'epoch': 2.76}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 310.1944923400879, 'epoch': 2.78}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 341.16291999816895, 'epoch': 2.79}
+
+  1%|█▍                                                                                                                                                         | 180/20000 [01:08<1:51:55,  2.95it/s]
+{'peak_mem': 3.6812081336975098, 'step_consumption': 289.2193794250488, 'epoch': 2.83}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 386.31463050842285, 'epoch': 2.84}
+{'loss': 0.7858, 'learning_rate': 0.01, 'epoch': 2.86}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 359.94577407836914, 'epoch': 2.86}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 329.221248626709, 'epoch': 2.87}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 275.15721321105957, 'epoch': 2.89}
+
+  1%|█▍                                                                                                                                                         | 187/20000 [01:10<1:48:41,  3.04it/s]
+{'peak_mem': 3.6812081336975098, 'step_consumption': 272.7925777435303, 'epoch': 2.92}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 339.1528129577637, 'epoch': 2.94}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 377.3677349090576, 'epoch': 2.95}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 312.1163845062256, 'epoch': 2.97}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 375.3187656402588, 'epoch': 2.98}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 291.0957336425781, 'epoch': 3.0}
+
+  1%|█▍                                                                                                                                                         | 193/20000 [01:12<1:43:37,  3.19it/s]
+{'loss': 0.9292, 'learning_rate': 0.01, 'epoch': 3.02}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 349.74122047424316, 'epoch': 3.02}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 373.27098846435547, 'epoch': 3.03}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 280.60388565063477, 'epoch': 3.05}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 278.05423736572266, 'epoch': 3.06}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 308.5634708404541, 'epoch': 3.08}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 270.0183391571045, 'epoch': 3.1}
+
+  1%|█▌                                                                                                                                                         | 200/20000 [01:14<1:32:34,  3.56it/s]
+{'peak_mem': 3.6812081336975098, 'step_consumption': 308.29453468322754, 'epoch': 3.13}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 267.42076873779297, 'epoch': 3.14}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 276.75771713256836, 'epoch': 3.16}
+{'loss': 0.9507, 'learning_rate': 0.01, 'epoch': 3.17}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 257.2610378265381, 'epoch': 3.17}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 338.3960723876953, 'epoch': 3.19}
+
+  1%|█▌                                                                                                                                                         | 206/20000 [01:16<1:47:53,  3.06it/s]
+{'peak_mem': 3.6812081336975098, 'step_consumption': 316.1313533782959, 'epoch': 3.22}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 314.8365020751953, 'epoch': 3.24}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 333.93263816833496, 'epoch': 3.25}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 344.38443183898926, 'epoch': 3.27}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 315.75775146484375, 'epoch': 3.29}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 314.8176670074463, 'epoch': 3.3}
+
+  1%|█▋                                                                                                                                                         | 212/20000 [01:18<1:48:53,  3.03it/s]
+{'loss': 0.8315, 'learning_rate': 0.01, 'epoch': 3.33}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 339.5981788635254, 'epoch': 3.33}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 283.966064453125, 'epoch': 3.35}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 377.6817321777344, 'epoch': 3.37}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 314.8369789123535, 'epoch': 3.38}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 311.05780601501465, 'epoch': 3.4}
+
+  1%|█▋                                                                                                                                                         | 218/20000 [01:20<1:56:04,  2.84it/s]
+{'peak_mem': 3.6812081336975098, 'step_consumption': 401.5393257141113, 'epoch': 3.43}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 313.6096000671387, 'epoch': 3.44}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 372.24602699279785, 'epoch': 3.46}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 279.3247699737549, 'epoch': 3.48}
+{'loss': 0.7891, 'learning_rate': 0.01, 'epoch': 3.49}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 256.39867782592773, 'epoch': 3.49}
+
+  1%|█▋                                                                                                                                                         | 225/20000 [01:22<1:45:48,  3.11it/s]
+{'peak_mem': 3.6812081336975098, 'step_consumption': 313.44056129455566, 'epoch': 3.52}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 273.212194442749, 'epoch': 3.54}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 323.5800266265869, 'epoch': 3.56}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 342.29493141174316, 'epoch': 3.57}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 379.63271141052246, 'epoch': 3.59}
+
+{'peak_mem': 3.6812081336975098, 'step_consumption': 267.1666145324707, 'epoch': 3.6}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 325.8359432220459, 'epoch': 3.62}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 356.33087158203125, 'epoch': 3.63}
+{'loss': 0.8548, 'learning_rate': 0.01, 'epoch': 3.65}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 364.95375633239746, 'epoch': 3.65}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 323.06742668151855, 'epoch': 3.67}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 323.8651752471924, 'epoch': 3.68}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 281.4481258392334, 'epoch': 3.7}
+  1%|█▊                                                                                                                                                         | 237/20000 [01:26<1:44:28,  3.15it/s]
+{'peak_mem': 3.6812081336975098, 'step_consumption': 321.20776176452637, 'epoch': 3.71}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 349.19214248657227, 'epoch': 3.73}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 328.0010223388672, 'epoch': 3.75}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 285.1073741912842, 'epoch': 3.76}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 296.98872566223145, 'epoch': 3.78}
+
+  1%|█▉                                                                                                                                                         | 243/20000 [01:28<1:46:03,  3.10it/s]
+{'loss': 0.8315, 'learning_rate': 0.01, 'epoch': 3.81}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 314.41187858581543, 'epoch': 3.81}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 263.3013725280762, 'epoch': 3.83}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 267.261266708374, 'epoch': 3.84}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 384.1512203216553, 'epoch': 3.86}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 477.2987365722656, 'epoch': 3.87}
+
+  1%|█▉                                                                                                                                                         | 248/20000 [01:30<2:13:08,  2.47it/s]
+{'peak_mem': 3.6812081336975098, 'step_consumption': 410.3357791900635, 'epoch': 3.9}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 389.71710205078125, 'epoch': 3.92}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 428.42650413513184, 'epoch': 3.94}
+
+  1%|█▉                                                                                                                                                         | 252/20000 [01:32<2:38:24,  2.08it/s]
+{'loss': 0.7796, 'learning_rate': 0.01, 'epoch': 3.97}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 468.5235023498535, 'epoch': 3.97}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 791.6333675384521, 'epoch': 3.98}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 320.05929946899414, 'epoch': 4.0}
+-------------------------- Training Epoch 4 --------------------------
+
+  1%|█▉                                                                                                                                                         | 256/20000 [01:34<2:36:58,  2.10it/s]
+{'peak_mem': 3.6812081336975098, 'step_consumption': 522.9899883270264, 'epoch': 4.03}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 401.1516571044922, 'epoch': 4.05}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 492.2022819519043, 'epoch': 4.06}
+
+  1%|██                                                                                                                                                         | 259/20000 [01:36<3:03:25,  1.79it/s]
+{'peak_mem': 3.6812081336975098, 'step_consumption': 627.4700164794922, 'epoch': 4.1}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 521.4996337890625, 'epoch': 4.11}
+{'loss': 0.6764, 'learning_rate': 0.01, 'epoch': 4.13}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 378.28540802001953, 'epoch': 4.13}
+
+  1%|██                                                                                                                                                         | 263/20000 [01:38<2:37:14,  2.09it/s]
+{'peak_mem': 3.6812081336975098, 'step_consumption': 488.10267448425293, 'epoch': 4.16}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 438.62438201904297, 'epoch': 4.17}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 442.0144557952881, 'epoch': 4.19}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 499.7286796569824, 'epoch': 4.21}
+
+  1%|██                                                                                                                                                         | 267/20000 [01:39<2:35:14,  2.12it/s]
+{'peak_mem': 3.6812081336975098, 'step_consumption': 539.7403240203857, 'epoch': 4.24}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 307.72995948791504, 'epoch': 4.25}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 457.1244716644287, 'epoch': 4.27}
+{'loss': 0.7993, 'learning_rate': 0.01, 'epoch': 4.29}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 348.29211235046387, 'epoch': 4.29}
+
+  1%|██                                                                                                                                                         | 273/20000 [01:42<1:55:29,  2.85it/s]
+{'peak_mem': 3.6812081336975098, 'step_consumption': 330.5630683898926, 'epoch': 4.32}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 287.5504493713379, 'epoch': 4.33}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 289.5386219024658, 'epoch': 4.35}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 343.32966804504395, 'epoch': 4.37}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 360.16845703125, 'epoch': 4.38}
+
+  1%|██▏                                                                                                                                                        | 279/20000 [01:44<1:53:48,  2.89it/s]
+{'peak_mem': 3.6812081336975098, 'step_consumption': 337.19468116760254, 'epoch': 4.41}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 338.4702205657959, 'epoch': 4.43}
+{'loss': 1.0043, 'learning_rate': 0.01, 'epoch': 4.44}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 387.2077465057373, 'epoch': 4.44}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 295.4220771789551, 'epoch': 4.46}
+
+  1%|██▏                                                                                                                                                        | 285/20000 [01:46<1:52:04,  2.93it/s]
+{'peak_mem': 3.6812081336975098, 'step_consumption': 409.38591957092285, 'epoch': 4.49}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 325.57058334350586, 'epoch': 4.51}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 309.124231338501, 'epoch': 4.52}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 263.7004852294922, 'epoch': 4.54}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 315.2618408203125, 'epoch': 4.56}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 261.64889335632324, 'epoch': 4.57}
+
+  1%|██▎                                                                                                                                                        | 291/20000 [01:47<1:38:36,  3.33it/s]
+{'loss': 0.7644, 'learning_rate': 0.01, 'epoch': 4.6}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 340.2695655822754, 'epoch': 4.6}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 264.42742347717285, 'epoch': 4.62}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 300.22716522216797, 'epoch': 4.63}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 318.48645210266113, 'epoch': 4.65}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 312.18719482421875, 'epoch': 4.67}
+
+  1%|██▎                                                                                                                                                        | 298/20000 [01:50<1:40:39,  3.26it/s]
+{'peak_mem': 3.6812081336975098, 'step_consumption': 324.3529796600342, 'epoch': 4.7}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 310.5194568634033, 'epoch': 4.71}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 275.50721168518066, 'epoch': 4.73}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 336.0180854797363, 'epoch': 4.75}
+{'loss': 0.7894, 'learning_rate': 0.01, 'epoch': 4.76}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 277.8584957122803, 'epoch': 4.76}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 315.83452224731445, 'epoch': 4.78}
+
+  2%|██▎                                                                                                                                                        | 305/20000 [01:52<1:39:12,  3.31it/s]
+{'peak_mem': 3.6812081336975098, 'step_consumption': 278.8698673248291, 'epoch': 4.81}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 332.350492477417, 'epoch': 4.83}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 289.37268257141113, 'epoch': 4.84}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 302.8576374053955, 'epoch': 4.86}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 337.2945785522461, 'epoch': 4.87}
+
+  2%|██▍                                                                                                                                                        | 311/20000 [01:54<1:47:09,  3.06it/s]
+{'peak_mem': 3.6812081336975098, 'step_consumption': 331.84123039245605, 'epoch': 4.9}
+{'loss': 0.8797, 'learning_rate': 0.01, 'epoch': 4.92}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 335.36744117736816, 'epoch': 4.92}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 316.7722225189209, 'epoch': 4.94}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 253.30615043640137, 'epoch': 4.95}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 251.9512176513672, 'epoch': 4.97}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 335.9682559967041, 'epoch': 4.98}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 222.49698638916016, 'epoch': 5.0}
+
+  2%|██▍                                                                                                                                                        | 317/20000 [01:56<1:40:31,  3.26it/s]
+{'peak_mem': 3.6812081336975098, 'step_consumption': 254.52947616577148, 'epoch': 5.02}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 380.7063102722168, 'epoch': 5.03}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 393.6784267425537, 'epoch': 5.05}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 282.34076499938965, 'epoch': 5.06}
+{'loss': 0.8835, 'learning_rate': 0.01, 'epoch': 5.08}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 330.3077220916748, 'epoch': 5.08}
+
+  2%|██▌                                                                                                                                                        | 324/20000 [01:58<1:43:30,  3.17it/s]
+{'peak_mem': 3.6812081336975098, 'step_consumption': 281.3763618469238, 'epoch': 5.11}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 313.08507919311523, 'epoch': 5.13}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 325.50835609436035, 'epoch': 5.14}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 326.29847526550293, 'epoch': 5.16}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 339.601993560791, 'epoch': 5.17}
+
+  2%|██▌                                                                                                                                                        | 330/20000 [02:00<1:40:32,  3.26it/s]
+{'peak_mem': 3.6812081336975098, 'step_consumption': 337.53323554992676, 'epoch': 5.21}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 251.19876861572266, 'epoch': 5.22}
+{'loss': 0.87, 'learning_rate': 0.01, 'epoch': 5.24}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 319.720983505249, 'epoch': 5.24}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 336.2288475036621, 'epoch': 5.25}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 252.8398036956787, 'epoch': 5.27}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 337.6297950744629, 'epoch': 5.29}
+
+  2%|██▌                                                                                                                                                        | 337/20000 [02:02<1:39:14,  3.30it/s]
+{'peak_mem': 3.6812081336975098, 'step_consumption': 336.7137908935547, 'epoch': 5.32}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 276.29542350769043, 'epoch': 5.33}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 281.6901206970215, 'epoch': 5.35}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 409.7602367401123, 'epoch': 5.37}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 356.95695877075195, 'epoch': 5.38}
+{'loss': 0.7308, 'learning_rate': 0.01, 'epoch': 5.4}
+
+  2%|██▋                                                                                                                                                        | 342/20000 [02:04<1:53:07,  2.90it/s]
+{'peak_mem': 3.6812081336975098, 'step_consumption': 322.7651119232178, 'epoch': 5.41}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 323.44627380371094, 'epoch': 5.43}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 322.44300842285156, 'epoch': 5.44}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 271.4262008666992, 'epoch': 5.46}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 310.20164489746094, 'epoch': 5.48}
+
+  2%|██▋                                                                                                                                                        | 349/20000 [02:06<1:44:26,  3.14it/s]
+{'peak_mem': 3.6812081336975098, 'step_consumption': 329.0989398956299, 'epoch': 5.51}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 270.0064182281494, 'epoch': 5.52}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 317.58642196655273, 'epoch': 5.54}
+{'loss': 0.7932, 'learning_rate': 0.01, 'epoch': 5.56}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 342.5602912902832, 'epoch': 5.56}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 274.890661239624, 'epoch': 5.57}
+
+  2%|██▊                                                                                                                                                        | 355/20000 [02:08<1:46:15,  3.08it/s]
+{'peak_mem': 3.6812081336975098, 'step_consumption': 320.8494186401367, 'epoch': 5.6}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 316.8952465057373, 'epoch': 5.62}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 336.43198013305664, 'epoch': 5.63}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 316.87092781066895, 'epoch': 5.65}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 274.137020111084, 'epoch': 5.67}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 331.24375343322754, 'epoch': 5.68}
+
+  2%|██▊                                                                                                                                                        | 361/20000 [02:10<1:48:27,  3.02it/s]
+{'loss': 0.7995, 'learning_rate': 0.01, 'epoch': 5.71}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 338.3612632751465, 'epoch': 5.71}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 357.9692840576172, 'epoch': 5.73}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 343.40977668762207, 'epoch': 5.75}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 339.5860195159912, 'epoch': 5.76}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 319.4999694824219, 'epoch': 5.78}
+
+  2%|██▊                                                                                                                                                        | 367/20000 [02:12<1:47:26,  3.05it/s]
+{'peak_mem': 3.6812081336975098, 'step_consumption': 315.28544425964355, 'epoch': 5.81}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 309.9794387817383, 'epoch': 5.83}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 322.0510482788086, 'epoch': 5.84}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 318.5570240020752, 'epoch': 5.86}
+{'loss': 0.8755, 'learning_rate': 0.01, 'epoch': 5.87}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 300.45318603515625, 'epoch': 5.87}
+
+  2%|██▉                                                                                                                                                        | 374/20000 [02:14<1:39:52,  3.27it/s]
+{'peak_mem': 3.6812081336975098, 'step_consumption': 268.9206600189209, 'epoch': 5.9}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 326.30181312561035, 'epoch': 5.92}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 284.6670150756836, 'epoch': 5.94}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 339.30015563964844, 'epoch': 5.95}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 319.36049461364746, 'epoch': 5.97}
+
+  2%|██▉                                                                                                                                                        | 379/20000 [02:16<1:57:28,  2.78it/s]
+{'peak_mem': 3.6812081336975098, 'step_consumption': 413.15412521362305, 'epoch': 6.0}
+-------------------------- Training Epoch 6 --------------------------
+{'peak_mem': 3.6812081336975098, 'step_consumption': 333.1494331359863, 'epoch': 6.02}
+{'loss': 0.7565, 'learning_rate': 0.01, 'epoch': 6.03}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 359.3308925628662, 'epoch': 6.03}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 405.1694869995117, 'epoch': 6.05}
+
+  2%|██▉                                                                                                                                                        | 383/20000 [02:18<2:50:20,  1.92it/s]
+{'peak_mem': 3.6812081336975098, 'step_consumption': 747.7984428405762, 'epoch': 6.08}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 383.1789493560791, 'epoch': 6.1}
+
+  2%|██▉                                                                                                                                                        | 387/20000 [02:20<2:53:31,  1.88it/s]
+{'peak_mem': 3.6812081336975098, 'step_consumption': 535.6934070587158, 'epoch': 6.13}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 440.91081619262695, 'epoch': 6.14}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 363.95835876464844, 'epoch': 6.16}
+
+  2%|███                                                                                                                                                        | 391/20000 [02:22<2:43:15,  2.00it/s]
+{'loss': 0.773, 'learning_rate': 0.01, 'epoch': 6.19}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 658.2179069519043, 'epoch': 6.19}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 429.10265922546387, 'epoch': 6.21}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 395.45464515686035, 'epoch': 6.22}
+
+  2%|███                                                                                                                                                        | 395/20000 [02:24<2:53:33,  1.88it/s]
+{'peak_mem': 3.6812081336975098, 'step_consumption': 442.7375793457031, 'epoch': 6.25}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 656.4831733703613, 'epoch': 6.27}
+
+  2%|███                                                                                                                                                        | 398/20000 [02:26<3:03:00,  1.79it/s]
+{'peak_mem': 3.6812081336975098, 'step_consumption': 433.6509704589844, 'epoch': 6.3}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 553.0626773834229, 'epoch': 6.32}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 525.7267951965332, 'epoch': 6.33}
+{'loss': 0.8806, 'learning_rate': 0.01, 'epoch': 6.35}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 372.74765968322754, 'epoch': 6.35}
+
+  2%|███▏                                                                                                                                                       | 404/20000 [02:28<2:07:40,  2.56it/s]
+{'peak_mem': 3.6812081336975098, 'step_consumption': 337.3453617095947, 'epoch': 6.38}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 305.4697513580322, 'epoch': 6.4}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 373.92663955688477, 'epoch': 6.41}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 429.7189712524414, 'epoch': 6.43}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 382.49874114990234, 'epoch': 6.44}
+
+  2%|███▏                                                                                                                                                       | 410/20000 [02:30<1:52:02,  2.91it/s]
+{'peak_mem': 3.6812081336975098, 'step_consumption': 275.62665939331055, 'epoch': 6.48}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 349.95079040527344, 'epoch': 6.49}
+{'loss': 0.828, 'learning_rate': 0.01, 'epoch': 6.51}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 313.74216079711914, 'epoch': 6.51}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 274.3988037109375, 'epoch': 6.52}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 370.5029487609863, 'epoch': 6.54}
+
+  2%|███▏                                                                                                                                                       | 416/20000 [02:32<1:38:33,  3.31it/s]
+{'peak_mem': 3.6812081336975098, 'step_consumption': 297.6202964782715, 'epoch': 6.57}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 260.62846183776855, 'epoch': 6.59}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 309.2842102050781, 'epoch': 6.6}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 293.0464744567871, 'epoch': 6.62}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 293.6055660247803, 'epoch': 6.63}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 294.4455146789551, 'epoch': 6.65}
+{'loss': 0.7277, 'learning_rate': 0.01, 'epoch': 6.67}
+
+  2%|███▎                                                                                                                                                       | 423/20000 [02:34<1:37:23,  3.35it/s]
+{'peak_mem': 3.6812081336975098, 'step_consumption': 327.78310775756836, 'epoch': 6.68}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 268.4650421142578, 'epoch': 6.7}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 311.0930919647217, 'epoch': 6.71}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 270.6787586212158, 'epoch': 6.73}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 272.98450469970703, 'epoch': 6.75}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 313.82036209106445, 'epoch': 6.76}
+
+  2%|███▎                                                                                                                                                       | 430/20000 [02:36<1:38:53,  3.30it/s]
+{'peak_mem': 3.6812081336975098, 'step_consumption': 335.69931983947754, 'epoch': 6.79}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 250.16260147094727, 'epoch': 6.81}
+{'loss': 0.776, 'learning_rate': 0.01, 'epoch': 6.83}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 315.7463073730469, 'epoch': 6.83}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 314.342737197876, 'epoch': 6.84}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 315.31238555908203, 'epoch': 6.86}
+
+  2%|███▍                                                                                                                                                       | 436/20000 [02:38<1:39:41,  3.27it/s]
+{'peak_mem': 3.6812081336975098, 'step_consumption': 286.3800525665283, 'epoch': 6.89}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 333.0731391906738, 'epoch': 6.9}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 296.91290855407715, 'epoch': 6.92}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 375.4086494445801, 'epoch': 6.94}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 362.3659610748291, 'epoch': 6.95}
+
+  2%|███▍                                                                                                                                                       | 442/20000 [02:40<1:41:53,  3.20it/s]
+{'loss': 0.8404, 'learning_rate': 0.01, 'epoch': 6.98}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 359.47179794311523, 'epoch': 6.98}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 246.66237831115723, 'epoch': 7.0}
+-------------------------- Training Epoch 7 --------------------------
+{'peak_mem': 3.6812081336975098, 'step_consumption': 288.6970043182373, 'epoch': 7.02}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 338.8693332672119, 'epoch': 7.03}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 317.37780570983887, 'epoch': 7.05}
+
+  2%|███▍                                                                                                                                                       | 449/20000 [02:42<1:37:55,  3.33it/s]
+{'peak_mem': 3.6812081336975098, 'step_consumption': 315.9928321838379, 'epoch': 7.08}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 315.1383399963379, 'epoch': 7.1}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 273.7467288970947, 'epoch': 7.11}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 281.19897842407227, 'epoch': 7.13}
+{'loss': 0.8079, 'learning_rate': 0.01, 'epoch': 7.14}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 367.7656650543213, 'epoch': 7.14}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 247.33281135559082, 'epoch': 7.16}
+
+  2%|███▌                                                                                                                                                       | 455/20000 [02:44<1:47:33,  3.03it/s]
+{'peak_mem': 3.6812081336975098, 'step_consumption': 329.85806465148926, 'epoch': 7.19}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 385.91790199279785, 'epoch': 7.21}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 309.77702140808105, 'epoch': 7.22}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 273.2279300689697, 'epoch': 7.24}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 273.43225479125977, 'epoch': 7.25}
+
+  2%|███▌                                                                                                                                                       | 462/20000 [02:46<1:36:52,  3.36it/s]
+{'peak_mem': 3.6812081336975098, 'step_consumption': 316.1795139312744, 'epoch': 7.29}
+{'loss': 0.7813, 'learning_rate': 0.01, 'epoch': 7.3}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 276.9489288330078, 'epoch': 7.3}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 273.72026443481445, 'epoch': 7.32}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 314.41354751586914, 'epoch': 7.33}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 335.4811668395996, 'epoch': 7.35}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 317.305326461792, 'epoch': 7.37}
+
+  2%|███▋                                                                                                                                                       | 468/20000 [02:48<1:45:06,  3.10it/s]
+{'peak_mem': 3.6812081336975098, 'step_consumption': 303.4069538116455, 'epoch': 7.4}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 356.04095458984375, 'epoch': 7.41}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 303.77197265625, 'epoch': 7.43}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 395.5690860748291, 'epoch': 7.44}
+{'loss': 0.7367, 'learning_rate': 0.01, 'epoch': 7.46}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 371.2804317474365, 'epoch': 7.46}
+
+  2%|███▋                                                                                                                                                       | 474/20000 [02:50<1:42:20,  3.18it/s]
+{'peak_mem': 3.6812081336975098, 'step_consumption': 317.5480365753174, 'epoch': 7.49}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 337.6591205596924, 'epoch': 7.51}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 277.2326469421387, 'epoch': 7.52}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 335.91771125793457, 'epoch': 7.54}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 274.87778663635254, 'epoch': 7.56}
+
+  2%|███▋                                                                                                                                                       | 480/20000 [02:52<1:41:40,  3.20it/s]
+{'peak_mem': 3.6812081336975098, 'step_consumption': 330.5835723876953, 'epoch': 7.59}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 251.10602378845215, 'epoch': 7.6}
+{'loss': 0.7959, 'learning_rate': 0.01, 'epoch': 7.62}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 337.70036697387695, 'epoch': 7.62}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 396.94881439208984, 'epoch': 7.63}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 315.74034690856934, 'epoch': 7.65}
+
+  2%|███▊                                                                                                                                                       | 486/20000 [02:54<1:47:53,  3.01it/s]
+{'peak_mem': 3.6812081336975098, 'step_consumption': 361.7405891418457, 'epoch': 7.68}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 305.0546646118164, 'epoch': 7.7}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 345.2432155609131, 'epoch': 7.71}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 358.48236083984375, 'epoch': 7.73}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 340.9574031829834, 'epoch': 7.75}
+
+  2%|███▊                                                                                                                                                       | 492/20000 [02:56<1:49:41,  2.96it/s]
+{'loss': 0.901, 'learning_rate': 0.01, 'epoch': 7.78}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 347.8543758392334, 'epoch': 7.78}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 279.77776527404785, 'epoch': 7.79}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 347.9187488555908, 'epoch': 7.81}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 320.34969329833984, 'epoch': 7.83}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 287.89615631103516, 'epoch': 7.84}
+
+  2%|███▊                                                                                                                                                       | 499/20000 [02:58<1:43:24,  3.14it/s]
+{'peak_mem': 3.6812081336975098, 'step_consumption': 299.6411323547363, 'epoch': 7.87}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 315.43540954589844, 'epoch': 7.89}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 307.51752853393555, 'epoch': 7.9}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 320.115327835083, 'epoch': 7.92}
+{'loss': 0.7758, 'learning_rate': 0.01, 'epoch': 7.94}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 275.8476734161377, 'epoch': 7.94}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 309.21101570129395, 'epoch': 7.95}
+
+  3%|███▉                                                                                                                                                       | 505/20000 [03:00<1:53:41,  2.86it/s]
+{'peak_mem': 3.6812081336975098, 'step_consumption': 349.6067523956299, 'epoch': 7.98}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 352.54597663879395, 'epoch': 8.0}
+-------------------------- Training Epoch 8 --------------------------
+{'peak_mem': 3.6812081336975098, 'step_consumption': 374.035120010376, 'epoch': 8.02}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 400.55227279663086, 'epoch': 8.03}
+
+  3%|███▉                                                                                                                                                       | 508/20000 [03:02<2:31:07,  2.15it/s]
+{'peak_mem': 3.6812081336975098, 'step_consumption': 550.8537292480469, 'epoch': 8.06}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 797.5194454193115, 'epoch': 8.08}
+{'loss': 0.822, 'learning_rate': 0.01, 'epoch': 8.1}
+
+  3%|███▉                                                                                                                                                       | 512/20000 [03:04<2:58:53,  1.82it/s]
+{'peak_mem': 3.6812081336975098, 'step_consumption': 468.2421684265137, 'epoch': 8.11}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 626.1997222900391, 'epoch': 8.13}
+
+  3%|███▉                                                                                                                                                       | 515/20000 [03:06<3:16:55,  1.65it/s]
+{'peak_mem': 3.6812081336975098, 'step_consumption': 638.7417316436768, 'epoch': 8.16}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 617.7523136138916, 'epoch': 8.17}
+
+  3%|████                                                                                                                                                       | 519/20000 [03:08<2:48:22,  1.93it/s]
+{'peak_mem': 3.6812081336975098, 'step_consumption': 533.6658954620361, 'epoch': 8.21}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 488.67130279541016, 'epoch': 8.22}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 327.9428482055664, 'epoch': 8.24}
+{'loss': 0.7551, 'learning_rate': 0.01, 'epoch': 8.25}
+
+  3%|████                                                                                                                                                       | 522/20000 [03:10<2:59:48,  1.81it/s]
+{'peak_mem': 3.6812081336975098, 'step_consumption': 501.5552043914795, 'epoch': 8.27}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 413.53607177734375, 'epoch': 8.29}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 519.862174987793, 'epoch': 8.3}
+
+  3%|████                                                                                                                                                       | 526/20000 [03:12<2:36:50,  2.07it/s]
+{'peak_mem': 3.6812081336975098, 'step_consumption': 553.6768436431885, 'epoch': 8.33}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 348.86765480041504, 'epoch': 8.35}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 345.6602096557617, 'epoch': 8.37}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 320.89996337890625, 'epoch': 8.38}
+
+  3%|████                                                                                                                                                       | 532/20000 [03:14<1:51:02,  2.92it/s]
+{'loss': 0.6984, 'learning_rate': 0.01, 'epoch': 8.41}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 450.27828216552734, 'epoch': 8.41}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 308.26830863952637, 'epoch': 8.43}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 264.3864154815674, 'epoch': 8.44}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 259.93990898132324, 'epoch': 8.46}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 259.8876953125, 'epoch': 8.48}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 259.5508098602295, 'epoch': 8.49}
+
+  3%|████▏                                                                                                                                                      | 538/20000 [03:16<1:35:14,  3.41it/s]
+{'peak_mem': 3.6812081336975098, 'step_consumption': 294.142484664917, 'epoch': 8.52}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 308.6998462677002, 'epoch': 8.54}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 262.6016139984131, 'epoch': 8.56}
+{'loss': 0.794, 'learning_rate': 0.01, 'epoch': 8.57}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 322.2339153289795, 'epoch': 8.57}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 305.90295791625977, 'epoch': 8.59}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 325.76704025268555, 'epoch': 8.6}
+
+  3%|████▏                                                                                                                                                      | 544/20000 [03:18<1:43:44,  3.13it/s]
+{'peak_mem': 3.6812081336975098, 'step_consumption': 329.60987091064453, 'epoch': 8.63}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 312.4704360961914, 'epoch': 8.65}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 314.90445137023926, 'epoch': 8.67}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 318.4828758239746, 'epoch': 8.68}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 276.32641792297363, 'epoch': 8.7}
+
+  3%|████▎                                                                                                                                                      | 551/20000 [03:20<1:37:51,  3.31it/s]
+{'loss': 0.8271, 'learning_rate': 0.01, 'epoch': 8.73}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 286.55028343200684, 'epoch': 8.73}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 289.3645763397217, 'epoch': 8.75}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 294.7723865509033, 'epoch': 8.76}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 381.544828414917, 'epoch': 8.78}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 332.80181884765625, 'epoch': 8.79}
+
+  3%|████▎                                                                                                                                                      | 557/20000 [03:22<1:50:53,  2.92it/s]
+{'peak_mem': 3.6812081336975098, 'step_consumption': 360.08715629577637, 'epoch': 8.83}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 335.4654312133789, 'epoch': 8.84}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 315.11592864990234, 'epoch': 8.86}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 314.1357898712158, 'epoch': 8.87}
+{'loss': 0.7679, 'learning_rate': 0.01, 'epoch': 8.89}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 273.6468315124512, 'epoch': 8.89}
+
+  3%|████▎                                                                                                                                                      | 563/20000 [03:24<1:42:49,  3.15it/s]
+{'peak_mem': 3.6812081336975098, 'step_consumption': 330.96837997436523, 'epoch': 8.92}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 330.4257392883301, 'epoch': 8.94}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 385.6804370880127, 'epoch': 8.95}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 361.18602752685547, 'epoch': 8.97}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 272.81761169433594, 'epoch': 8.98}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 273.7851142883301, 'epoch': 9.0}
+-------------------------- Training Epoch 9 --------------------------
+
+  3%|████▍                                                                                                                                                      | 570/20000 [03:26<1:35:48,  3.38it/s]
+{'peak_mem': 3.6812081336975098, 'step_consumption': 314.1312599182129, 'epoch': 9.03}
+{'loss': 0.8143, 'learning_rate': 0.01, 'epoch': 9.05}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 274.20759201049805, 'epoch': 9.05}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 276.46470069885254, 'epoch': 9.06}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 314.50676918029785, 'epoch': 9.08}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 367.0661449432373, 'epoch': 9.1}
+
+  3%|████▍                                                                                                                                                      | 576/20000 [03:28<1:45:16,  3.08it/s]
+{'peak_mem': 3.6812081336975098, 'step_consumption': 313.0536079406738, 'epoch': 9.13}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 329.9753665924072, 'epoch': 9.14}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 278.3820629119873, 'epoch': 9.16}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 270.48730850219727, 'epoch': 9.17}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 326.310396194458, 'epoch': 9.19}
+{'loss': 0.7407, 'learning_rate': 0.01, 'epoch': 9.21}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 321.6407299041748, 'epoch': 9.21}
+
+  3%|████▌                                                                                                                                                      | 583/20000 [03:30<1:36:25,  3.36it/s]
+{'peak_mem': 3.6812081336975098, 'step_consumption': 260.5130672454834, 'epoch': 9.24}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 315.7958984375, 'epoch': 9.25}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 298.57373237609863, 'epoch': 9.27}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 330.13010025024414, 'epoch': 9.29}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 332.7977657318115, 'epoch': 9.3}
+
+  3%|████▌                                                                                                                                                      | 589/20000 [03:32<1:32:25,  3.50it/s]
+{'peak_mem': 3.6812081336975098, 'step_consumption': 272.65310287475586, 'epoch': 9.33}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 272.98521995544434, 'epoch': 9.35}
+{'loss': 0.8069, 'learning_rate': 0.01, 'epoch': 9.37}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 316.1144256591797, 'epoch': 9.37}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 332.88073539733887, 'epoch': 9.38}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 334.3031406402588, 'epoch': 9.4}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 281.9688320159912, 'epoch': 9.41}
+
+  3%|████▌                                                                                                                                                      | 596/20000 [03:34<1:41:53,  3.17it/s]
+{'peak_mem': 3.6812081336975098, 'step_consumption': 302.5226593017578, 'epoch': 9.44}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 347.9881286621094, 'epoch': 9.46}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 346.0216522216797, 'epoch': 9.48}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 346.3253974914551, 'epoch': 9.49}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 275.270938873291, 'epoch': 9.51}
+{'loss': 0.6631, 'learning_rate': 0.01, 'epoch': 9.52}
+
+  3%|████▋                                                                                                                                                      | 602/20000 [03:36<1:35:10,  3.40it/s]
+{'peak_mem': 3.6812081336975098, 'step_consumption': 263.00668716430664, 'epoch': 9.54}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 302.4113178253174, 'epoch': 9.56}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 372.09558486938477, 'epoch': 9.57}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 319.9741840362549, 'epoch': 9.59}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 320.9061622619629, 'epoch': 9.6}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 329.44750785827637, 'epoch': 9.62}
+
+  3%|████▋                                                                                                                                                      | 609/20000 [03:38<1:40:22,  3.22it/s]
+{'peak_mem': 3.6812081336975098, 'step_consumption': 334.2702388763428, 'epoch': 9.65}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 273.35429191589355, 'epoch': 9.67}
+{'loss': 0.7322, 'learning_rate': 0.01, 'epoch': 9.68}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 315.8717155456543, 'epoch': 9.68}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 314.4876956939697, 'epoch': 9.7}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 250.07963180541992, 'epoch': 9.71}
+
+  3%|████▊                                                                                                                                                      | 615/20000 [03:40<1:43:51,  3.11it/s]
+{'peak_mem': 3.6812081336975098, 'step_consumption': 334.0613842010498, 'epoch': 9.75}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 341.07208251953125, 'epoch': 9.76}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 325.9882926940918, 'epoch': 9.78}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 344.9404239654541, 'epoch': 9.79}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 274.3115425109863, 'epoch': 9.81}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 249.2084503173828, 'epoch': 9.83}
+{'loss': 0.7924, 'learning_rate': 0.01, 'epoch': 9.84}
+
+  3%|████▊                                                                                                                                                      | 621/20000 [03:42<1:36:10,  3.36it/s]
+{'peak_mem': 3.6812081336975098, 'step_consumption': 294.4035530090332, 'epoch': 9.86}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 367.034912109375, 'epoch': 9.87}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 349.9784469604492, 'epoch': 9.89}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 268.7375545501709, 'epoch': 9.9}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 332.4084281921387, 'epoch': 9.92}
+
+  3%|████▊                                                                                                                                                      | 628/20000 [03:44<1:48:17,  2.98it/s]
+{'peak_mem': 3.6812081336975098, 'step_consumption': 310.7190132141113, 'epoch': 9.95}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 362.6837730407715, 'epoch': 9.97}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 434.9513053894043, 'epoch': 9.98}
+{'loss': 0.7858, 'learning_rate': 0.01, 'epoch': 10.0}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 393.1543827056885, 'epoch': 10.0}
+-------------------------- Training Epoch 10 --------------------------
+
+  3%|████▉                                                                                                                                                      | 632/20000 [03:46<2:02:17,  2.64it/s]
+{'peak_mem': 3.6812081336975098, 'step_consumption': 396.533727645874, 'epoch': 10.03}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 525.6428718566895, 'epoch': 10.05}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 337.92686462402344, 'epoch': 10.06}
+
+  3%|████▉                                                                                                                                                      | 637/20000 [03:48<2:26:45,  2.20it/s]
+{'peak_mem': 3.6812081336975098, 'step_consumption': 432.6364994049072, 'epoch': 10.1}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 473.63948822021484, 'epoch': 10.11}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 439.1918182373047, 'epoch': 10.13}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 535.2320671081543, 'epoch': 10.14}
+{'loss': 0.6668, 'learning_rate': 0.01, 'epoch': 10.16}
+
+  3%|████▉                                                                                                                                                      | 641/20000 [03:50<2:45:10,  1.95it/s]
+{'peak_mem': 3.6812081336975098, 'step_consumption': 615.0882244110107, 'epoch': 10.17}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 516.7348384857178, 'epoch': 10.19}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 478.8978099822998, 'epoch': 10.21}
+
+  3%|████▉                                                                                                                                                      | 645/20000 [03:52<2:28:09,  2.18it/s]
+{'peak_mem': 3.6812081336975098, 'step_consumption': 445.2376365661621, 'epoch': 10.24}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 357.59854316711426, 'epoch': 10.25}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 342.21720695495605, 'epoch': 10.27}
+
+  3%|█████                                                                                                                                                      | 650/20000 [03:54<2:38:48,  2.03it/s]
+{'peak_mem': 3.6812081336975098, 'step_consumption': 608.7584495544434, 'epoch': 10.3}
+{'loss': 0.8815, 'learning_rate': 0.01, 'epoch': 10.32}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 569.861650466919, 'epoch': 10.32}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 291.8202877044678, 'epoch': 10.33}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 320.96028327941895, 'epoch': 10.35}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 289.54291343688965, 'epoch': 10.37}
+
+  3%|█████                                                                                                                                                      | 656/20000 [03:56<1:55:54,  2.78it/s]
+{'peak_mem': 3.6812081336975098, 'step_consumption': 336.5776538848877, 'epoch': 10.4}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 338.4425640106201, 'epoch': 10.41}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 350.3599166870117, 'epoch': 10.43}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 326.1690139770508, 'epoch': 10.44}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 291.6903495788574, 'epoch': 10.46}
+{'loss': 0.5733, 'learning_rate': 0.01, 'epoch': 10.48}
+
+  3%|█████▏                                                                                                                                                     | 662/20000 [03:58<1:52:31,  2.86it/s]
+{'peak_mem': 3.6812081336975098, 'step_consumption': 282.99832344055176, 'epoch': 10.49}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 447.80874252319336, 'epoch': 10.51}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 364.74013328552246, 'epoch': 10.52}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 354.3834686279297, 'epoch': 10.54}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 312.3795986175537, 'epoch': 10.56}
+
+  3%|█████▏                                                                                                                                                     | 668/20000 [04:00<1:50:03,  2.93it/s]
+{'peak_mem': 3.6812081336975098, 'step_consumption': 324.43904876708984, 'epoch': 10.59}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 350.7375717163086, 'epoch': 10.6}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 301.93281173706055, 'epoch': 10.62}
+{'loss': 0.8867, 'learning_rate': 0.01, 'epoch': 10.63}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 270.19453048706055, 'epoch': 10.63}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 312.05177307128906, 'epoch': 10.65}
+
+  3%|█████▏                                                                                                                                                     | 675/20000 [04:02<1:37:04,  3.32it/s]
+{'peak_mem': 3.6812081336975098, 'step_consumption': 277.38213539123535, 'epoch': 10.68}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 340.71874618530273, 'epoch': 10.7}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 264.2505168914795, 'epoch': 10.71}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 263.7200355529785, 'epoch': 10.73}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 327.58450508117676, 'epoch': 10.75}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 347.0902442932129, 'epoch': 10.76}
+
+  3%|█████▎                                                                                                                                                     | 681/20000 [04:04<1:45:31,  3.05it/s]
+{'loss': 0.8129, 'learning_rate': 0.01, 'epoch': 10.79}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 324.8715400695801, 'epoch': 10.79}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 337.6636505126953, 'epoch': 10.81}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 333.6050510406494, 'epoch': 10.83}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 348.7887382507324, 'epoch': 10.84}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 299.7915744781494, 'epoch': 10.86}
+
+  3%|█████▎                                                                                                                                                     | 687/20000 [04:06<1:45:40,  3.05it/s]
+{'peak_mem': 3.6812081336975098, 'step_consumption': 343.49989891052246, 'epoch': 10.89}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 308.3031177520752, 'epoch': 10.9}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 378.4348964691162, 'epoch': 10.92}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 278.6405086517334, 'epoch': 10.94}
+{'loss': 0.6705, 'learning_rate': 0.01, 'epoch': 10.95}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 268.39566230773926, 'epoch': 10.95}
+
+  3%|█████▍                                                                                                                                                     | 694/20000 [04:08<1:33:32,  3.44it/s]
+{'peak_mem': 3.6812081336975098, 'step_consumption': 312.2439384460449, 'epoch': 10.98}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 254.78696823120117, 'epoch': 11.0}
+-------------------------- Training Epoch 11 --------------------------
+{'peak_mem': 3.6812081336975098, 'step_consumption': 275.70652961730957, 'epoch': 11.02}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 306.1659336090088, 'epoch': 11.03}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 265.40613174438477, 'epoch': 11.05}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 297.3935604095459, 'epoch': 11.06}
+
+  4%|█████▍                                                                                                                                                     | 700/20000 [04:10<1:41:47,  3.16it/s]
+{'peak_mem': 3.6812081336975098, 'step_consumption': 304.87918853759766, 'epoch': 11.1}
+{'loss': 0.7987, 'learning_rate': 0.01, 'epoch': 11.11}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 356.2352657318115, 'epoch': 11.11}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 295.3200340270996, 'epoch': 11.13}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 300.229549407959, 'epoch': 11.14}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 260.70380210876465, 'epoch': 11.16}
+
+  4%|█████▍                                                                                                                                                     | 707/20000 [04:12<1:35:30,  3.37it/s]
+{'peak_mem': 3.6812081336975098, 'step_consumption': 278.77116203308105, 'epoch': 11.19}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 290.71855545043945, 'epoch': 11.21}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 278.02419662475586, 'epoch': 11.22}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 325.9408473968506, 'epoch': 11.24}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 451.0993957519531, 'epoch': 11.25}
+{'loss': 0.6777, 'learning_rate': 0.01, 'epoch': 11.27}
+
+  4%|█████▌                                                                                                                                                     | 711/20000 [04:14<2:19:19,  2.31it/s]
+{'peak_mem': 3.6812081336975098, 'step_consumption': 560.521125793457, 'epoch': 11.29}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 602.1895408630371, 'epoch': 11.3}
+
+  4%|█████▌                                                                                                                                                     | 714/20000 [04:16<3:03:49,  1.75it/s]
+{'peak_mem': 3.6812081336975098, 'step_consumption': 608.6263656616211, 'epoch': 11.33}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 441.6680335998535, 'epoch': 11.35}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 480.03149032592773, 'epoch': 11.37}
+
+  4%|█████▌                                                                                                                                                     | 718/20000 [04:18<2:49:27,  1.90it/s]
+{'peak_mem': 3.6812081336975098, 'step_consumption': 503.2339096069336, 'epoch': 11.4}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 502.2931098937988, 'epoch': 11.41}
+{'loss': 0.7337, 'learning_rate': 0.01, 'epoch': 11.43}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 566.3564205169678, 'epoch': 11.43}
+
+  4%|█████▌                                                                                                                                                     | 723/20000 [04:20<2:14:58,  2.38it/s]
+{'peak_mem': 3.6812081336975098, 'step_consumption': 420.30978202819824, 'epoch': 11.46}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 300.43792724609375, 'epoch': 11.48}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 584.2947959899902, 'epoch': 11.49}
+
+  4%|█████▋                                                                                                                                                     | 727/20000 [04:22<2:43:41,  1.96it/s]
+{'peak_mem': 3.6812081336975098, 'step_consumption': 399.28388595581055, 'epoch': 11.52}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 531.9457054138184, 'epoch': 11.54}
+
+  4%|█████▋                                                                                                                                                     | 730/20000 [04:24<2:46:42,  1.93it/s]
+{'peak_mem': 3.6812081336975098, 'step_consumption': 434.3709945678711, 'epoch': 11.57}
+{'loss': 0.6863, 'learning_rate': 0.01, 'epoch': 11.59}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 346.1322784423828, 'epoch': 11.59}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 397.9036808013916, 'epoch': 11.6}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 440.34624099731445, 'epoch': 11.62}
+
+  4%|█████▋                                                                                                                                                     | 735/20000 [04:26<2:22:41,  2.25it/s]
+{'peak_mem': 3.6812081336975098, 'step_consumption': 491.0264015197754, 'epoch': 11.65}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 395.15161514282227, 'epoch': 11.67}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 338.06872367858887, 'epoch': 11.68}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 376.0416507720947, 'epoch': 11.7}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 325.8695602416992, 'epoch': 11.71}
+
+  4%|█████▋                                                                                                                                                     | 741/20000 [04:28<1:47:44,  2.98it/s]
+{'loss': 0.702, 'learning_rate': 0.01, 'epoch': 11.75}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 305.3281307220459, 'epoch': 11.75}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 319.46492195129395, 'epoch': 11.76}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 365.27013778686523, 'epoch': 11.78}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 329.3416500091553, 'epoch': 11.79}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 313.9688968658447, 'epoch': 11.81}
+
+  4%|█████▊                                                                                                                                                     | 747/20000 [04:30<1:41:39,  3.16it/s]
+{'peak_mem': 3.6812081336975098, 'step_consumption': 305.5117130279541, 'epoch': 11.84}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 296.74744606018066, 'epoch': 11.86}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 358.6697578430176, 'epoch': 11.87}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 313.08722496032715, 'epoch': 11.89}
+{'loss': 0.8372, 'learning_rate': 0.01, 'epoch': 11.9}
+
+  4%|█████▊                                                                                                                                                     | 752/20000 [04:32<2:03:03,  2.61it/s]
+{'peak_mem': 3.6812081336975098, 'step_consumption': 429.01611328125, 'epoch': 11.92}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 419.10672187805176, 'epoch': 11.94}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 370.1648712158203, 'epoch': 11.95}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 394.1996097564697, 'epoch': 11.97}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 411.2708568572998, 'epoch': 11.98}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 272.4330425262451, 'epoch': 12.0}
+
+  4%|█████▊                                                                                                                                                     | 757/20000 [04:34<2:17:03,  2.34it/s]
+{'peak_mem': 3.6812081336975098, 'step_consumption': 572.1731185913086, 'epoch': 12.02}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 801.4523983001709, 'epoch': 12.03}
+
+  4%|█████▉                                                                                                                                                     | 760/20000 [04:36<3:11:02,  1.68it/s]
+{'loss': 0.6697, 'learning_rate': 0.01, 'epoch': 12.06}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 651.4163017272949, 'epoch': 12.06}
+
+  4%|█████▉                                                                                                                                                     | 762/20000 [04:38<3:43:27,  1.43it/s]
+{'peak_mem': 3.6812081336975098, 'step_consumption': 849.9903678894043, 'epoch': 12.1}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 776.8023014068604, 'epoch': 12.11}
+
+  4%|█████▉                                                                                                                                                     | 764/20000 [04:39<3:54:31,  1.37it/s]
+{'peak_mem': 3.6812081336975098, 'step_consumption': 1256.2732696533203, 'epoch': 12.14}
+
+  4%|█████▉                                                                                                                                                     | 767/20000 [04:42<3:52:47,  1.38it/s]
+{'peak_mem': 3.6812081336975098, 'step_consumption': 609.7540855407715, 'epoch': 12.17}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 828.3026218414307, 'epoch': 12.19}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 573.0774402618408, 'epoch': 12.21}
+{'loss': 0.7491, 'learning_rate': 0.01, 'epoch': 12.22}
+
+  4%|█████▉                                                                                                                                                     | 772/20000 [04:44<2:54:11,  1.84it/s]
+{'peak_mem': 3.6812081336975098, 'step_consumption': 306.4851760864258, 'epoch': 12.24}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 558.8905811309814, 'epoch': 12.25}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 339.8585319519043, 'epoch': 12.27}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 315.05799293518066, 'epoch': 12.29}
+
+  4%|██████                                                                                                                                                     | 778/20000 [04:46<1:51:16,  2.88it/s]
+{'peak_mem': 3.6812081336975098, 'step_consumption': 297.0237731933594, 'epoch': 12.32}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 333.30345153808594, 'epoch': 12.33}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 302.4578094482422, 'epoch': 12.35}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 369.5387840270996, 'epoch': 12.37}
+{'loss': 0.7018, 'learning_rate': 0.01, 'epoch': 12.38}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 312.6089572906494, 'epoch': 12.38}
+
+  4%|██████                                                                                                                                                     | 784/20000 [04:48<1:37:18,  3.29it/s]
+{'peak_mem': 3.6812081336975098, 'step_consumption': 300.6932735443115, 'epoch': 12.41}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 305.6337833404541, 'epoch': 12.43}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 267.1382427215576, 'epoch': 12.44}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 315.9677982330322, 'epoch': 12.46}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 312.0136260986328, 'epoch': 12.48}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 318.29118728637695, 'epoch': 12.49}
+
+  4%|██████▏                                                                                                                                                    | 791/20000 [04:50<1:35:53,  3.34it/s]
+{'peak_mem': 3.6812081336975098, 'step_consumption': 331.1581611633301, 'epoch': 12.52}
+{'loss': 0.7656, 'learning_rate': 0.01, 'epoch': 12.54}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 323.51112365722656, 'epoch': 12.54}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 263.5457515716553, 'epoch': 12.56}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 266.65616035461426, 'epoch': 12.57}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 273.64563941955566, 'epoch': 12.59}
+
+  4%|██████▏                                                                                                                                                    | 795/20000 [04:52<1:44:51,  3.05it/s]
+{'peak_mem': 3.6812081336975098, 'step_consumption': 329.51998710632324, 'epoch': 12.62}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 385.0879669189453, 'epoch': 12.63}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 297.5783348083496, 'epoch': 12.65}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 373.2280731201172, 'epoch': 12.67}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 430.0246238708496, 'epoch': 12.68}
+{'loss': 0.793, 'learning_rate': 0.01, 'epoch': 12.7}
+
+  4%|██████▏                                                                                                                                                    | 801/20000 [04:54<2:00:19,  2.66it/s]
+{'peak_mem': 3.6812081336975098, 'step_consumption': 373.90780448913574, 'epoch': 12.71}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 699.9893188476562, 'epoch': 12.73}
+
+  4%|██████▏                                                                                                                                                    | 804/20000 [04:56<2:42:11,  1.97it/s]
+{'peak_mem': 3.6812081336975098, 'step_consumption': 400.4499912261963, 'epoch': 12.76}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 735.4047298431396, 'epoch': 12.78}
+
+  4%|██████▎                                                                                                                                                    | 807/20000 [04:58<3:17:51,  1.62it/s]
+{'peak_mem': 3.6812081336975098, 'step_consumption': 609.2820167541504, 'epoch': 12.81}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 700.3998756408691, 'epoch': 12.83}
+
+  4%|██████▎                                                                                                                                                    | 810/20000 [05:00<3:32:23,  1.51it/s]
+{'loss': 0.6549, 'learning_rate': 0.01, 'epoch': 12.86}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 691.4854049682617, 'epoch': 12.86}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 651.1569023132324, 'epoch': 12.87}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 429.6252727508545, 'epoch': 12.89}
+
+  4%|██████▎                                                                                                                                                    | 814/20000 [05:02<2:57:19,  1.80it/s]
+{'peak_mem': 3.6812081336975098, 'step_consumption': 519.0856456756592, 'epoch': 12.92}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 379.40216064453125, 'epoch': 12.94}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 666.644811630249, 'epoch': 12.95}
+
+  4%|██████▎                                                                                                                                                    | 817/20000 [05:04<2:52:19,  1.86it/s]
+{'peak_mem': 3.6812081336975098, 'step_consumption': 590.2013778686523, 'epoch': 12.98}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 441.11037254333496, 'epoch': 13.0}
+-------------------------- Training Epoch 13 --------------------------
+{'loss': 0.7141, 'learning_rate': 0.01, 'epoch': 13.02}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 415.1287078857422, 'epoch': 13.02}
+
+  4%|██████▍                                                                                                                                                    | 823/20000 [05:06<2:01:44,  2.63it/s]
+{'peak_mem': 3.6812081336975098, 'step_consumption': 297.77002334594727, 'epoch': 13.05}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 314.2430782318115, 'epoch': 13.06}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 271.6403007507324, 'epoch': 13.08}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 329.13756370544434, 'epoch': 13.1}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 323.98390769958496, 'epoch': 13.11}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 301.8026351928711, 'epoch': 13.13}
+
+  4%|██████▍                                                                                                                                                    | 829/20000 [05:08<1:42:24,  3.12it/s]
+{'peak_mem': 3.6812081336975098, 'step_consumption': 313.4472370147705, 'epoch': 13.16}
+{'loss': 0.6768, 'learning_rate': 0.01, 'epoch': 13.17}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 313.58957290649414, 'epoch': 13.17}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 314.8527145385742, 'epoch': 13.19}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 312.6497268676758, 'epoch': 13.21}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 308.6373805999756, 'epoch': 13.22}
+
+  4%|██████▍                                                                                                                                                    | 835/20000 [05:10<1:38:37,  3.24it/s]
+{'peak_mem': 3.6812081336975098, 'step_consumption': 298.94208908081055, 'epoch': 13.25}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 301.04660987854004, 'epoch': 13.27}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 334.8526954650879, 'epoch': 13.29}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 366.58525466918945, 'epoch': 13.3}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 324.67174530029297, 'epoch': 13.32}
+{'loss': 0.7164, 'learning_rate': 0.01, 'epoch': 13.33}
+
+  4%|██████▌                                                                                                                                                    | 841/20000 [05:12<1:53:00,  2.83it/s]
+{'peak_mem': 3.6812081336975098, 'step_consumption': 400.9995460510254, 'epoch': 13.35}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 344.41590309143066, 'epoch': 13.37}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 493.6954975128174, 'epoch': 13.38}
+
+  4%|██████▌                                                                                                                                                    | 845/20000 [05:14<2:27:24,  2.17it/s]
+{'peak_mem': 3.6812081336975098, 'step_consumption': 551.5775680541992, 'epoch': 13.41}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 786.6175174713135, 'epoch': 13.43}
+
+  4%|██████▌                                                                                                                                                    | 848/20000 [05:16<3:34:25,  1.49it/s]
+{'peak_mem': 3.6812081336975098, 'step_consumption': 677.2725582122803, 'epoch': 13.46}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 695.5065727233887, 'epoch': 13.48}
+{'loss': 0.8455, 'learning_rate': 0.01, 'epoch': 13.49}
+
+  4%|██████▌                                                                                                                                                    | 850/20000 [05:18<3:34:40,  1.49it/s]
+{'peak_mem': 3.6812081336975098, 'step_consumption': 723.4957218170166, 'epoch': 13.51}
+
+  4%|██████▌                                                                                                                                                    | 853/20000 [05:20<4:21:50,  1.22it/s]
+{'peak_mem': 3.6812081336975098, 'step_consumption': 1086.3633155822754, 'epoch': 13.54}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 489.8390769958496, 'epoch': 13.56}
+
+  4%|██████▋                                                                                                                                                    | 856/20000 [05:22<3:38:06,  1.46it/s]
+{'peak_mem': 3.6812081336975098, 'step_consumption': 748.633623123169, 'epoch': 13.59}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 584.1488838195801, 'epoch': 13.6}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 678.4985065460205, 'epoch': 13.62}
+
+  4%|██████▋                                                                                                                                                    | 861/20000 [05:24<2:27:09,  2.17it/s]
+{'loss': 0.7952, 'learning_rate': 0.01, 'epoch': 13.65}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 367.917537689209, 'epoch': 13.65}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 280.4875373840332, 'epoch': 13.67}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 259.51218605041504, 'epoch': 13.68}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 266.57938957214355, 'epoch': 13.7}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 296.2675094604492, 'epoch': 13.71}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 328.3717632293701, 'epoch': 13.73}
+
+  4%|██████▋                                                                                                                                                    | 867/20000 [05:26<1:36:34,  3.30it/s]
+{'peak_mem': 3.6812081336975098, 'step_consumption': 268.8148021697998, 'epoch': 13.76}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 374.21464920043945, 'epoch': 13.78}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 271.5604305267334, 'epoch': 13.79}
+{'loss': 0.7097, 'learning_rate': 0.01, 'epoch': 13.81}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 266.2057876586914, 'epoch': 13.81}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 247.5433349609375, 'epoch': 13.83}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 307.2810173034668, 'epoch': 13.84}
+
+  4%|██████▊                                                                                                                                                    | 874/20000 [05:28<1:37:28,  3.27it/s]
+{'peak_mem': 3.6812081336975098, 'step_consumption': 312.5436305999756, 'epoch': 13.87}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 269.150972366333, 'epoch': 13.89}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 311.69772148132324, 'epoch': 13.9}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 327.79574394226074, 'epoch': 13.92}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 266.01290702819824, 'epoch': 13.94}
+
+  4%|██████▊                                                                                                                                                    | 881/20000 [05:30<1:42:14,  3.12it/s]
+{'loss': 0.5667, 'learning_rate': 0.01, 'epoch': 13.97}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 319.97084617614746, 'epoch': 13.97}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 306.4436912536621, 'epoch': 13.98}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 242.7847385406494, 'epoch': 14.0}
+-------------------------- Training Epoch 14 --------------------------
+{'peak_mem': 3.6812081336975098, 'step_consumption': 400.04515647888184, 'epoch': 14.02}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 365.3905391693115, 'epoch': 14.03}
+
+  4%|██████▊                                                                                                                                                    | 886/20000 [05:32<2:04:11,  2.57it/s]
+{'peak_mem': 3.6812081336975098, 'step_consumption': 472.90730476379395, 'epoch': 14.06}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 338.0928039550781, 'epoch': 14.08}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 407.1962833404541, 'epoch': 14.1}
+
+  4%|██████▉                                                                                                                                                    | 889/20000 [05:34<2:39:57,  1.99it/s]
+{'loss': 0.7192, 'learning_rate': 0.01, 'epoch': 14.13}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 894.5736885070801, 'epoch': 14.13}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 513.2458209991455, 'epoch': 14.14}
+
+  4%|██████▉                                                                                                                                                    | 892/20000 [05:36<3:11:58,  1.66it/s]
+{'peak_mem': 3.6812081336975098, 'step_consumption': 782.0608615875244, 'epoch': 14.17}
+
+  4%|██████▉                                                                                                                                                    | 895/20000 [05:38<3:33:42,  1.49it/s]
+{'peak_mem': 3.6812081336975098, 'step_consumption': 718.8656330108643, 'epoch': 14.21}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 720.4668521881104, 'epoch': 14.22}
+
+  4%|██████▉                                                                                                                                                    | 898/20000 [05:40<3:29:59,  1.52it/s]
+{'peak_mem': 3.6812081336975098, 'step_consumption': 439.42809104919434, 'epoch': 14.25}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 704.9291133880615, 'epoch': 14.27}
+{'loss': 0.709, 'learning_rate': 0.01, 'epoch': 14.29}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 438.33136558532715, 'epoch': 14.29}
+
+  5%|██████▉                                                                                                                                                    | 903/20000 [05:42<2:30:18,  2.12it/s]
+{'peak_mem': 3.6812081336975098, 'step_consumption': 556.3666820526123, 'epoch': 14.32}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 276.37672424316406, 'epoch': 14.33}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 438.54308128356934, 'epoch': 14.35}
+
+  5%|███████                                                                                                                                                    | 906/20000 [05:44<2:43:32,  1.95it/s]
+{'peak_mem': 3.6812081336975098, 'step_consumption': 505.0961971282959, 'epoch': 14.38}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 559.450626373291, 'epoch': 14.4}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 284.13844108581543, 'epoch': 14.41}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 310.98222732543945, 'epoch': 14.43}
+{'loss': 0.742, 'learning_rate': 0.01, 'epoch': 14.44}
+
+  5%|███████                                                                                                                                                    | 913/20000 [05:46<1:50:36,  2.88it/s]
+{'peak_mem': 3.6812081336975098, 'step_consumption': 373.57044219970703, 'epoch': 14.46}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 276.5460014343262, 'epoch': 14.48}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 321.7885494232178, 'epoch': 14.49}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 308.46238136291504, 'epoch': 14.51}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 303.7714958190918, 'epoch': 14.52}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 302.43515968322754, 'epoch': 14.54}
+
+  5%|███████▏                                                                                                                                                   | 920/20000 [05:49<1:31:40,  3.47it/s]
+{'peak_mem': 3.6812081336975098, 'step_consumption': 271.2841033935547, 'epoch': 14.57}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 270.4596519470215, 'epoch': 14.59}
+{'loss': 0.6189, 'learning_rate': 0.01, 'epoch': 14.6}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 272.08971977233887, 'epoch': 14.6}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 271.95262908935547, 'epoch': 14.62}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 253.36694717407227, 'epoch': 14.63}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 382.0936679840088, 'epoch': 14.65}
+
+  5%|███████▏                                                                                                                                                   | 925/20000 [05:50<1:50:51,  2.87it/s]
+{'peak_mem': 3.6812081336975098, 'step_consumption': 428.194522857666, 'epoch': 14.68}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 362.46180534362793, 'epoch': 14.7}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 360.9118461608887, 'epoch': 14.71}
+
+  5%|███████▏                                                                                                                                                   | 930/20000 [05:52<2:22:45,  2.23it/s]
+{'peak_mem': 3.6812081336975098, 'step_consumption': 531.5737724304199, 'epoch': 14.75}
+{'loss': 0.7217, 'learning_rate': 0.01, 'epoch': 14.76}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 478.38783264160156, 'epoch': 14.76}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 360.46910285949707, 'epoch': 14.78}
+
+  5%|███████▏                                                                                                                                                   | 933/20000 [05:54<2:54:32,  1.82it/s]
+{'peak_mem': 3.6812081336975098, 'step_consumption': 678.1086921691895, 'epoch': 14.81}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 606.8356037139893, 'epoch': 14.83}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 527.2829532623291, 'epoch': 14.84}
+
+  5%|███████▎                                                                                                                                                   | 937/20000 [05:56<2:55:59,  1.81it/s]
+{'peak_mem': 3.6812081336975098, 'step_consumption': 574.4400024414062, 'epoch': 14.87}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 541.3579940795898, 'epoch': 14.89}
+
+  5%|███████▎                                                                                                                                                   | 941/20000 [05:58<2:53:32,  1.83it/s]
+{'loss': 0.7318, 'learning_rate': 0.01, 'epoch': 14.92}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 612.1089458465576, 'epoch': 14.92}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 515.0594711303711, 'epoch': 14.94}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 791.1932468414307, 'epoch': 14.95}
+
+  5%|███████▎                                                                                                                                                   | 944/20000 [06:00<3:04:01,  1.73it/s]
+{'peak_mem': 3.6812081336975098, 'step_consumption': 589.9672508239746, 'epoch': 14.98}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 656.1052799224854, 'epoch': 15.0}
+-------------------------- Training Epoch 15 --------------------------
+
+  5%|███████▎                                                                                                                                                   | 948/20000 [06:02<2:36:57,  2.02it/s]
+{'peak_mem': 3.6812081336975098, 'step_consumption': 453.13477516174316, 'epoch': 15.03}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 402.51636505126953, 'epoch': 15.05}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 308.3186149597168, 'epoch': 15.06}
+{'loss': 0.7088, 'learning_rate': 0.01, 'epoch': 15.08}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 453.1879425048828, 'epoch': 15.08}
+
+  5%|███████▍                                                                                                                                                   | 954/20000 [06:05<1:53:40,  2.79it/s]
+{'peak_mem': 3.6812081336975098, 'step_consumption': 399.2486000061035, 'epoch': 15.11}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 317.17443466186523, 'epoch': 15.13}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 263.7171745300293, 'epoch': 15.14}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 296.2939739227295, 'epoch': 15.16}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 296.65541648864746, 'epoch': 15.17}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 306.438684463501, 'epoch': 15.19}
+
+  5%|███████▍                                                                                                                                                   | 960/20000 [06:06<1:41:01,  3.14it/s]
+{'peak_mem': 3.6812081336975098, 'step_consumption': 305.84716796875, 'epoch': 15.22}
+{'loss': 0.6618, 'learning_rate': 0.01, 'epoch': 15.24}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 320.93024253845215, 'epoch': 15.24}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 373.2438087463379, 'epoch': 15.25}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 308.43544006347656, 'epoch': 15.27}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 347.9897975921631, 'epoch': 15.29}
+
+  5%|███████▍                                                                                                                                                   | 967/20000 [06:09<1:38:39,  3.22it/s]
+{'peak_mem': 3.6812081336975098, 'step_consumption': 326.51758193969727, 'epoch': 15.32}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 327.9087543487549, 'epoch': 15.33}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 277.5614261627197, 'epoch': 15.35}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 275.00319480895996, 'epoch': 15.37}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 315.43993949890137, 'epoch': 15.38}
+{'loss': 0.7446, 'learning_rate': 0.01, 'epoch': 15.4}
+
+  5%|███████▌                                                                                                                                                   | 973/20000 [06:11<1:40:29,  3.16it/s]
+{'peak_mem': 3.6812081336975098, 'step_consumption': 359.4839572906494, 'epoch': 15.41}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 316.28942489624023, 'epoch': 15.43}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 284.9593162536621, 'epoch': 15.44}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 354.18081283569336, 'epoch': 15.46}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 333.6491584777832, 'epoch': 15.48}
+
+  5%|███████▌                                                                                                                                                   | 978/20000 [06:12<1:59:13,  2.66it/s]
+{'peak_mem': 3.6812081336975098, 'step_consumption': 368.6203956604004, 'epoch': 15.51}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 390.8214569091797, 'epoch': 15.52}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 330.34276962280273, 'epoch': 15.54}
+{'loss': 0.6418, 'learning_rate': 0.01, 'epoch': 15.56}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 342.1952724456787, 'epoch': 15.56}
+
+  5%|███████▌                                                                                                                                                   | 983/20000 [06:15<2:16:07,  2.33it/s]
+{'peak_mem': 3.6812081336975098, 'step_consumption': 401.1049270629883, 'epoch': 15.59}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 535.290002822876, 'epoch': 15.6}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 401.3669490814209, 'epoch': 15.62}
+
+  5%|███████▋                                                                                                                                                   | 987/20000 [06:17<2:37:50,  2.01it/s]
+{'peak_mem': 3.6812081336975098, 'step_consumption': 607.8498363494873, 'epoch': 15.65}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 457.57055282592773, 'epoch': 15.67}
+
+  5%|███████▋                                                                                                                                                   | 990/20000 [06:18<2:47:12,  1.89it/s]
+{'peak_mem': 3.6812081336975098, 'step_consumption': 714.7862911224365, 'epoch': 15.7}
+{'loss': 0.6878, 'learning_rate': 0.01, 'epoch': 15.71}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 427.70934104919434, 'epoch': 15.71}
+
+  5%|███████▋                                                                                                                                                   | 993/20000 [06:20<2:49:34,  1.87it/s]
+{'peak_mem': 3.6812081336975098, 'step_consumption': 663.0041599273682, 'epoch': 15.75}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 451.0946273803711, 'epoch': 15.76}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 405.8570861816406, 'epoch': 15.78}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 710.3149890899658, 'epoch': 15.79}
+
+  5%|███████▋                                                                                                                                                   | 998/20000 [06:22<2:20:29,  2.25it/s]
+{'peak_mem': 3.6812081336975098, 'step_consumption': 494.07052993774414, 'epoch': 15.83}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 310.59980392456055, 'epoch': 15.84}
+  5%|███████▋                                                                                                                                                   | 999/20000 [06:23<2:57:20,  1.79it/s]2025-04-12 17:05:40,964 - INFO - There are 0 training samples and 500 validation samples
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+2025-04-12 17:06:21,012 - INFO - There are 0 training samples and 872 validation samples████████████████████████████████████████████████████████████████████████████| 500/500 [00:40<00:00,  4.48it/s]
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ 99%|████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████▉  | 861/872 [01:23<00:00, 13.00it/s]
+{'test_acc': 0.6192660550458715, 'val_acc': 0.644, 'epoch': 15.86}
+  5%|███████▌                                                                                                                                                | 1000/20000 [08:28<200:04:02, 37.91s/it]
+  6%|████████▊                                                                                                                                                        | 6/109 [00:00<00:05, 19.42it/s]
+
+
+
+ 98%|████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████   | 107/109 [00:06<00:00, 20.79it/s]
+
+{'eval_loss': 0.7705078125, 'eval_runtime': 6.5132, 'eval_samples_per_second': 133.881, 'eval_steps_per_second': 16.735, 'epoch': 15.87}
+
+  5%|███████▌                                                                                                                                                | 1002/20000 [08:48<120:42:49, 22.87s/it]
+{'peak_mem': 3.6812081336975098, 'step_consumption': 342.5760269165039, 'epoch': 15.89}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 392.3213481903076, 'epoch': 15.9}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 414.86096382141113, 'epoch': 15.92}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 338.3791446685791, 'epoch': 15.94}
+
+  5%|███████▋                                                                                                                                                 | 1007/20000 [08:50<22:07:18,  4.19s/it]
+{'peak_mem': 3.6812081336975098, 'step_consumption': 385.3585720062256, 'epoch': 15.97}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 480.2258014678955, 'epoch': 15.98}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 366.7154312133789, 'epoch': 16.0}
+-------------------------- Training Epoch 16 --------------------------
+{'peak_mem': 3.6812081336975098, 'step_consumption': 484.6065044403076, 'epoch': 16.02}
+{'loss': 0.7464, 'learning_rate': 0.01, 'epoch': 16.03}
+
+  5%|███████▊                                                                                                                                                  | 1012/20000 [08:52<5:28:56,  1.04s/it]
+{'peak_mem': 3.6812081336975098, 'step_consumption': 402.2812843322754, 'epoch': 16.05}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 364.23444747924805, 'epoch': 16.06}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 426.87201499938965, 'epoch': 16.08}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 384.9067687988281, 'epoch': 16.1}
+
+  5%|███████▊                                                                                                                                                  | 1018/20000 [08:55<2:16:18,  2.32it/s]
+{'peak_mem': 3.6812081336975098, 'step_consumption': 284.6841812133789, 'epoch': 16.13}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 331.5279483795166, 'epoch': 16.14}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 362.1041774749756, 'epoch': 16.16}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 373.84486198425293, 'epoch': 16.17}
+{'loss': 0.6962, 'learning_rate': 0.01, 'epoch': 16.19}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 277.7554988861084, 'epoch': 16.19}
+
+  5%|███████▉                                                                                                                                                  | 1024/20000 [08:57<1:56:44,  2.71it/s]
+{'peak_mem': 3.6812081336975098, 'step_consumption': 345.4000949859619, 'epoch': 16.22}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 287.7805233001709, 'epoch': 16.24}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 412.2343063354492, 'epoch': 16.25}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 524.3048667907715, 'epoch': 16.27}
+
+  5%|███████▉                                                                                                                                                  | 1029/20000 [08:59<1:49:58,  2.88it/s]
+{'peak_mem': 3.6812081336975098, 'step_consumption': 290.58265686035156, 'epoch': 16.3}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 339.36524391174316, 'epoch': 16.32}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 290.1499271392822, 'epoch': 16.33}
+{'loss': 0.6846, 'learning_rate': 0.01, 'epoch': 16.35}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 329.3600082397461, 'epoch': 16.35}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 345.5348014831543, 'epoch': 16.37}
+
+  5%|███████▉                                                                                                                                                  | 1035/20000 [09:01<1:47:38,  2.94it/s]
+{'peak_mem': 3.6812081336975098, 'step_consumption': 278.57303619384766, 'epoch': 16.4}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 300.9331226348877, 'epoch': 16.41}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 389.7421360015869, 'epoch': 16.43}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 311.495304107666, 'epoch': 16.44}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 319.17309761047363, 'epoch': 16.46}
+
+  5%|████████                                                                                                                                                  | 1042/20000 [09:03<1:34:15,  3.35it/s]
+{'peak_mem': 3.6812081336975098, 'step_consumption': 319.166898727417, 'epoch': 16.49}
+{'loss': 0.6699, 'learning_rate': 0.01, 'epoch': 16.51}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 263.5774612426758, 'epoch': 16.51}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 310.2426528930664, 'epoch': 16.52}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 272.2914218902588, 'epoch': 16.54}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 310.3344440460205, 'epoch': 16.56}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 270.4355716705322, 'epoch': 16.57}
+
+  5%|████████                                                                                                                                                  | 1048/20000 [09:05<1:33:06,  3.39it/s]
+{'peak_mem': 3.6812081336975098, 'step_consumption': 308.2907199859619, 'epoch': 16.6}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 274.749755859375, 'epoch': 16.62}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 292.6018238067627, 'epoch': 16.63}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 369.33255195617676, 'epoch': 16.65}
+{'loss': 0.7068, 'learning_rate': 0.01, 'epoch': 16.67}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 340.181827545166, 'epoch': 16.67}
+
+  5%|████████                                                                                                                                                  | 1053/20000 [09:06<2:05:21,  2.52it/s]
+{'peak_mem': 3.6812081336975098, 'step_consumption': 390.66267013549805, 'epoch': 16.7}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 486.1264228820801, 'epoch': 16.71}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 400.26116371154785, 'epoch': 16.73}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 456.6655158996582, 'epoch': 16.75}
+
+  5%|████████▏                                                                                                                                                 | 1057/20000 [09:08<2:20:09,  2.25it/s]
+{'peak_mem': 3.6812081336975098, 'step_consumption': 441.96391105651855, 'epoch': 16.78}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 787.8782749176025, 'epoch': 16.79}
+
+  5%|████████▏                                                                                                                                                 | 1061/20000 [09:11<2:57:43,  1.78it/s]
+{'loss': 0.606, 'learning_rate': 0.01, 'epoch': 16.83}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 661.4730358123779, 'epoch': 16.83}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 485.2631092071533, 'epoch': 16.84}
+
+  5%|████████▏                                                                                                                                                 | 1064/20000 [09:13<3:07:55,  1.68it/s]
+{'peak_mem': 3.6812081336975098, 'step_consumption': 718.7931537628174, 'epoch': 16.87}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 611.9513511657715, 'epoch': 16.89}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 504.5909881591797, 'epoch': 16.9}
+
+  5%|████████▏                                                                                                                                                 | 1068/20000 [09:15<2:40:40,  1.96it/s]
+{'peak_mem': 3.6812081336975098, 'step_consumption': 403.1562805175781, 'epoch': 16.94}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 495.1341152191162, 'epoch': 16.95}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 663.0818843841553, 'epoch': 16.97}
+{'loss': 0.6821, 'learning_rate': 0.01, 'epoch': 16.98}
+
+  5%|████████▏                                                                                                                                                 | 1071/20000 [09:16<2:39:30,  1.98it/s]
+{'peak_mem': 3.6812081336975098, 'step_consumption': 380.0387382507324, 'epoch': 17.0}
+-------------------------- Training Epoch 17 --------------------------
+
+  5%|████████▎                                                                                                                                                 | 1074/20000 [09:19<3:35:35,  1.46it/s]
+{'peak_mem': 3.6812081336975098, 'step_consumption': 467.7438735961914, 'epoch': 17.03}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 644.2701816558838, 'epoch': 17.05}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 434.2844486236572, 'epoch': 17.06}
+
+  5%|████████▎                                                                                                                                                 | 1077/20000 [09:21<3:28:45,  1.51it/s]
+{'peak_mem': 3.6812081336975098, 'step_consumption': 750.5042552947998, 'epoch': 17.1}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 458.9393138885498, 'epoch': 17.11}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 291.03803634643555, 'epoch': 17.13}
+{'loss': 0.795, 'learning_rate': 0.01, 'epoch': 17.14}
+
+  5%|████████▎                                                                                                                                                 | 1083/20000 [09:23<2:03:04,  2.56it/s]
+{'peak_mem': 3.6812081336975098, 'step_consumption': 444.455623626709, 'epoch': 17.16}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 306.4117431640625, 'epoch': 17.17}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 316.56789779663086, 'epoch': 17.19}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 262.5749111175537, 'epoch': 17.21}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 262.2511386871338, 'epoch': 17.22}
+
+  5%|████████▍                                                                                                                                                 | 1089/20000 [09:25<1:46:59,  2.95it/s]
+{'peak_mem': 3.6812081336975098, 'step_consumption': 307.36470222473145, 'epoch': 17.25}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 332.6451778411865, 'epoch': 17.27}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 379.26220893859863, 'epoch': 17.29}
+{'loss': 0.6409, 'learning_rate': 0.01, 'epoch': 17.3}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 289.9806499481201, 'epoch': 17.3}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 315.93775749206543, 'epoch': 17.32}
+
+  5%|████████▍                                                                                                                                                 | 1095/20000 [09:27<1:45:10,  3.00it/s]
+{'peak_mem': 3.6812081336975098, 'step_consumption': 347.26715087890625, 'epoch': 17.35}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 264.0838623046875, 'epoch': 17.37}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 395.8771228790283, 'epoch': 17.38}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 351.73869132995605, 'epoch': 17.4}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 438.1990432739258, 'epoch': 17.41}
+
+  6%|████████▍                                                                                                                                                 | 1100/20000 [09:29<2:17:04,  2.30it/s]
+{'peak_mem': 3.6812081336975098, 'step_consumption': 461.83204650878906, 'epoch': 17.44}
+{'loss': 0.6115, 'learning_rate': 0.01, 'epoch': 17.46}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 517.2262191772461, 'epoch': 17.46}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 361.2833023071289, 'epoch': 17.48}
+
+  6%|████████▌                                                                                                                                                 | 1104/20000 [09:31<2:50:59,  1.84it/s]
+{'peak_mem': 3.6812081336975098, 'step_consumption': 543.2515144348145, 'epoch': 17.51}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 692.8188800811768, 'epoch': 17.52}
+
+  6%|████████▌                                                                                                                                                 | 1106/20000 [09:32<3:15:41,  1.61it/s]
+{'peak_mem': 3.6812081336975098, 'step_consumption': 543.0903434753418, 'epoch': 17.56}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 703.9411067962646, 'epoch': 17.57}
+
+  6%|████████▌                                                                                                                                                 | 1110/20000 [09:35<3:17:12,  1.60it/s]
+{'peak_mem': 3.6812081336975098, 'step_consumption': 645.195484161377, 'epoch': 17.6}
+{'loss': 0.751, 'learning_rate': 0.01, 'epoch': 17.62}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 592.7543640136719, 'epoch': 17.62}
+
+  6%|████████▌                                                                                                                                                 | 1113/20000 [09:37<2:55:36,  1.79it/s]
+{'peak_mem': 3.6812081336975098, 'step_consumption': 678.2963275909424, 'epoch': 17.65}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 435.69111824035645, 'epoch': 17.67}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 826.4882564544678, 'epoch': 17.68}
+
+  6%|████████▌                                                                                                                                                 | 1117/20000 [09:39<2:57:03,  1.78it/s]
+{'peak_mem': 3.6812081336975098, 'step_consumption': 521.3041305541992, 'epoch': 17.71}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 494.33088302612305, 'epoch': 17.73}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 378.9105415344238, 'epoch': 17.75}
+
+  6%|████████▋                                                                                                                                                 | 1123/20000 [09:41<1:46:49,  2.95it/s]
+{'loss': 0.6667, 'learning_rate': 0.01, 'epoch': 17.78}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 278.7609100341797, 'epoch': 17.78}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 298.77710342407227, 'epoch': 17.79}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 313.7543201446533, 'epoch': 17.81}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 263.49782943725586, 'epoch': 17.83}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 379.6119689941406, 'epoch': 17.84}
+
+  6%|████████▋                                                                                                                                                 | 1129/20000 [09:43<1:39:19,  3.17it/s]
+{'peak_mem': 3.6812081336975098, 'step_consumption': 297.64556884765625, 'epoch': 17.87}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 379.1651725769043, 'epoch': 17.89}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 305.68504333496094, 'epoch': 17.9}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 267.05098152160645, 'epoch': 17.92}
+{'loss': 0.5984, 'learning_rate': 0.01, 'epoch': 17.94}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 271.3325023651123, 'epoch': 17.94}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 377.63452529907227, 'epoch': 17.95}
+
+  6%|████████▋                                                                                                                                                 | 1136/20000 [09:45<1:29:14,  3.52it/s]
+{'peak_mem': 3.6812081336975098, 'step_consumption': 317.64817237854004, 'epoch': 17.98}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 223.70386123657227, 'epoch': 18.0}
+-------------------------- Training Epoch 18 --------------------------
+{'peak_mem': 3.6812081336975098, 'step_consumption': 276.61991119384766, 'epoch': 18.02}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 272.77374267578125, 'epoch': 18.03}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 315.5093193054199, 'epoch': 18.05}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 304.182767868042, 'epoch': 18.06}
+
+  6%|████████▊                                                                                                                                                 | 1141/20000 [09:47<1:52:49,  2.79it/s]
+{'loss': 0.5605, 'learning_rate': 0.01, 'epoch': 18.1}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 318.25971603393555, 'epoch': 18.1}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 455.45411109924316, 'epoch': 18.11}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 389.1263008117676, 'epoch': 18.13}
+
+  6%|████████▊                                                                                                                                                 | 1146/20000 [09:49<2:02:49,  2.56it/s]
+{'peak_mem': 3.6812081336975098, 'step_consumption': 466.30001068115234, 'epoch': 18.16}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 468.5344696044922, 'epoch': 18.17}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 267.3914432525635, 'epoch': 18.19}
+
+  6%|████████▊                                                                                                                                                 | 1149/20000 [09:51<3:03:04,  1.72it/s]
+{'peak_mem': 3.6812081336975098, 'step_consumption': 704.5121192932129, 'epoch': 18.22}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 759.2036724090576, 'epoch': 18.24}
+{'loss': 0.6529, 'learning_rate': 0.01, 'epoch': 18.25}
+
+  6%|████████▊                                                                                                                                                 | 1151/20000 [09:52<3:34:20,  1.47it/s]
+{'peak_mem': 3.6812081336975098, 'step_consumption': 667.3128604888916, 'epoch': 18.27}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 485.02087593078613, 'epoch': 18.29}
+
+  6%|████████▉                                                                                                                                                 | 1154/20000 [09:54<3:18:20,  1.58it/s]
+{'peak_mem': 3.6812081336975098, 'step_consumption': 606.2700748443604, 'epoch': 18.32}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 838.8419151306152, 'epoch': 18.33}
+
+  6%|████████▉                                                                                                                                                 | 1157/20000 [09:56<3:42:39,  1.41it/s]
+{'peak_mem': 3.6812081336975098, 'step_consumption': 757.258415222168, 'epoch': 18.37}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 374.9058246612549, 'epoch': 18.38}
+
+  6%|████████▉                                                                                                                                                 | 1161/20000 [09:59<2:53:13,  1.81it/s]
+{'loss': 0.7242, 'learning_rate': 0.01, 'epoch': 18.41}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 424.4661331176758, 'epoch': 18.41}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 416.46575927734375, 'epoch': 18.43}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 294.12341117858887, 'epoch': 18.44}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 480.96442222595215, 'epoch': 18.46}
+
+  6%|████████▉                                                                                                                                                 | 1166/20000 [10:01<2:13:48,  2.35it/s]
+{'peak_mem': 3.6812081336975098, 'step_consumption': 386.3992691040039, 'epoch': 18.49}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 331.52294158935547, 'epoch': 18.51}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 450.31189918518066, 'epoch': 18.52}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 323.03881645202637, 'epoch': 18.54}
+
+  6%|█████████                                                                                                                                                 | 1171/20000 [10:02<1:57:13,  2.68it/s]
+{'loss': 0.6306, 'learning_rate': 0.01, 'epoch': 18.57}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 338.20247650146484, 'epoch': 18.57}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 318.1450366973877, 'epoch': 18.59}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 263.5784149169922, 'epoch': 18.6}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 300.8086681365967, 'epoch': 18.62}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 296.69928550720215, 'epoch': 18.63}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 268.54515075683594, 'epoch': 18.65}
+
+  6%|█████████                                                                                                                                                 | 1178/20000 [10:05<1:34:40,  3.31it/s]
+{'peak_mem': 3.6812081336975098, 'step_consumption': 311.2597465515137, 'epoch': 18.68}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 274.9176025390625, 'epoch': 18.7}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 272.98712730407715, 'epoch': 18.71}
+{'loss': 0.6684, 'learning_rate': 0.01, 'epoch': 18.73}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 347.86057472229004, 'epoch': 18.73}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 264.5986080169678, 'epoch': 18.75}
+
+  6%|█████████                                                                                                                                                 | 1185/20000 [10:07<1:38:29,  3.18it/s]
+{'peak_mem': 3.6812081336975098, 'step_consumption': 272.1688747406006, 'epoch': 18.78}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 373.110294342041, 'epoch': 18.79}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 279.7083854675293, 'epoch': 18.81}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 489.40563201904297, 'epoch': 18.83}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 333.38427543640137, 'epoch': 18.84}
+
+  6%|█████████▏                                                                                                                                                | 1189/20000 [10:09<2:12:03,  2.37it/s]
+{'peak_mem': 3.6812081336975098, 'step_consumption': 454.9746513366699, 'epoch': 18.87}
+{'loss': 0.5689, 'learning_rate': 0.01, 'epoch': 18.89}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 409.4216823577881, 'epoch': 18.89}
+
+  6%|█████████▏                                                                                                                                                | 1193/20000 [10:11<2:46:45,  1.88it/s]
+{'peak_mem': 3.6812081336975098, 'step_consumption': 653.799295425415, 'epoch': 18.92}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 578.627347946167, 'epoch': 18.94}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 662.4429225921631, 'epoch': 18.95}
+
+  6%|█████████▏                                                                                                                                                | 1196/20000 [10:12<2:46:51,  1.88it/s]
+{'peak_mem': 3.6812081336975098, 'step_consumption': 457.8123092651367, 'epoch': 18.98}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 490.31853675842285, 'epoch': 19.0}
+-------------------------- Training Epoch 19 --------------------------
+{'peak_mem': 3.6812081336975098, 'step_consumption': 410.62307357788086, 'epoch': 19.02}
+
+  6%|█████████▏                                                                                                                                                | 1200/20000 [10:15<3:08:32,  1.66it/s]
+{'loss': 0.6791, 'learning_rate': 0.01, 'epoch': 19.05}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 739.4046783447266, 'epoch': 19.05}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 1063.0543231964111, 'epoch': 19.06}
+
+  6%|█████████▎                                                                                                                                                | 1204/20000 [10:17<2:37:59,  1.98it/s]
+{'peak_mem': 3.6812081336975098, 'step_consumption': 346.9076156616211, 'epoch': 19.1}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 436.8095397949219, 'epoch': 19.11}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 597.4140167236328, 'epoch': 19.13}
+
+  6%|█████████▎                                                                                                                                                | 1207/20000 [10:18<2:34:17,  2.03it/s]
+{'peak_mem': 3.6812081336975098, 'step_consumption': 434.8130226135254, 'epoch': 19.16}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 669.9485778808594, 'epoch': 19.17}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 477.2932529449463, 'epoch': 19.19}
+{'loss': 0.5879, 'learning_rate': 0.01, 'epoch': 19.21}
+
+  6%|█████████▎                                                                                                                                                | 1212/20000 [10:21<2:18:17,  2.26it/s]
+{'peak_mem': 3.6812081336975098, 'step_consumption': 384.7308158874512, 'epoch': 19.22}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 359.38334465026855, 'epoch': 19.24}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 326.36475563049316, 'epoch': 19.25}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 266.2787437438965, 'epoch': 19.27}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 243.84379386901855, 'epoch': 19.29}
+
+  6%|█████████▍                                                                                                                                                | 1219/20000 [10:23<1:33:04,  3.36it/s]
+{'peak_mem': 3.6812081336975098, 'step_consumption': 318.2966709136963, 'epoch': 19.32}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 305.6309223175049, 'epoch': 19.33}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 250.0741481781006, 'epoch': 19.35}
+{'loss': 0.6056, 'learning_rate': 0.01, 'epoch': 19.37}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 305.462121963501, 'epoch': 19.37}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 323.2150077819824, 'epoch': 19.38}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 349.1215705871582, 'epoch': 19.4}
+
+  6%|█████████▍                                                                                                                                                | 1225/20000 [10:25<1:42:55,  3.04it/s]
+{'peak_mem': 3.6812081336975098, 'step_consumption': 373.23927879333496, 'epoch': 19.43}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 312.30664253234863, 'epoch': 19.44}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 313.41004371643066, 'epoch': 19.46}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 276.02672576904297, 'epoch': 19.48}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 329.0278911590576, 'epoch': 19.49}
+
+  6%|█████████▍                                                                                                                                                | 1231/20000 [10:27<1:37:40,  3.20it/s]
+{'loss': 0.588, 'learning_rate': 0.01, 'epoch': 19.52}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 322.98731803894043, 'epoch': 19.52}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 314.4185543060303, 'epoch': 19.54}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 341.97425842285156, 'epoch': 19.56}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 351.66263580322266, 'epoch': 19.57}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 349.70951080322266, 'epoch': 19.59}
+
+  6%|█████████▌                                                                                                                                                | 1237/20000 [10:29<1:49:07,  2.87it/s]
+{'peak_mem': 3.6812081336975098, 'step_consumption': 384.8252296447754, 'epoch': 19.62}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 306.8251609802246, 'epoch': 19.63}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 411.1475944519043, 'epoch': 19.65}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 492.4478530883789, 'epoch': 19.67}
+{'loss': 0.6965, 'learning_rate': 0.01, 'epoch': 19.68}
+
+  6%|█████████▌                                                                                                                                                | 1241/20000 [10:31<2:25:03,  2.16it/s]
+{'peak_mem': 3.6812081336975098, 'step_consumption': 532.353401184082, 'epoch': 19.7}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 676.2993335723877, 'epoch': 19.71}
+
+  6%|█████████▌                                                                                                                                                | 1244/20000 [10:33<3:07:05,  1.67it/s]
+{'peak_mem': 3.6812081336975098, 'step_consumption': 719.7582721710205, 'epoch': 19.75}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 522.5939750671387, 'epoch': 19.76}
+
+  6%|█████████▌                                                                                                                                                | 1247/20000 [10:34<3:02:51,  1.71it/s]
+{'peak_mem': 3.6812081336975098, 'step_consumption': 642.9779529571533, 'epoch': 19.79}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 692.4827098846436, 'epoch': 19.81}
+
+  6%|█████████▋                                                                                                                                                | 1250/20000 [10:36<3:17:19,  1.58it/s]
+{'loss': 0.6563, 'learning_rate': 0.01, 'epoch': 19.84}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 515.5069828033447, 'epoch': 19.84}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 773.2644081115723, 'epoch': 19.86}
+
+  6%|█████████▋                                                                                                                                                | 1253/20000 [10:39<4:02:01,  1.29it/s]
+{'peak_mem': 3.6812081336975098, 'step_consumption': 911.473274230957, 'epoch': 19.89}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 465.50703048706055, 'epoch': 19.9}
+
+  6%|█████████▋                                                                                                                                                | 1256/20000 [10:41<3:40:03,  1.42it/s]
+{'peak_mem': 3.6812081336975098, 'step_consumption': 841.9580459594727, 'epoch': 19.94}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 548.168420791626, 'epoch': 19.95}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 283.3080291748047, 'epoch': 19.97}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 387.87198066711426, 'epoch': 19.98}
+{'loss': 0.6791, 'learning_rate': 0.01, 'epoch': 20.0}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 226.61161422729492, 'epoch': 20.0}
+
+  6%|█████████▋                                                                                                                                                | 1262/20000 [10:43<1:57:21,  2.66it/s]
+{'peak_mem': 3.6812081336975098, 'step_consumption': 290.75026512145996, 'epoch': 20.02}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 352.7400493621826, 'epoch': 20.03}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 327.930212020874, 'epoch': 20.05}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 319.108247756958, 'epoch': 20.06}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 263.2453441619873, 'epoch': 20.08}
+
+  6%|█████████▊                                                                                                                                                | 1268/20000 [10:45<1:38:19,  3.17it/s]
+{'peak_mem': 3.6812081336975098, 'step_consumption': 316.303014755249, 'epoch': 20.11}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 296.1723804473877, 'epoch': 20.13}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 360.6994152069092, 'epoch': 20.14}
+{'loss': 0.5813, 'learning_rate': 0.01, 'epoch': 20.16}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 276.9796848297119, 'epoch': 20.16}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 313.6169910430908, 'epoch': 20.17}
+
+  6%|█████████▊                                                                                                                                                | 1275/20000 [10:47<1:40:18,  3.11it/s]
+{'peak_mem': 3.6812081336975098, 'step_consumption': 315.5655860900879, 'epoch': 20.21}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 366.5041923522949, 'epoch': 20.22}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 291.0017967224121, 'epoch': 20.24}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 317.8882598876953, 'epoch': 20.25}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 252.88152694702148, 'epoch': 20.27}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 337.475061416626, 'epoch': 20.29}
+
+  6%|█████████▊                                                                                                                                                | 1281/20000 [10:49<1:46:23,  2.93it/s]
+{'loss': 0.7759, 'learning_rate': 0.01, 'epoch': 20.32}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 417.72961616516113, 'epoch': 20.32}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 305.0198554992676, 'epoch': 20.33}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 512.1653079986572, 'epoch': 20.35}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 374.2663860321045, 'epoch': 20.37}
+
+  6%|█████████▉                                                                                                                                                | 1285/20000 [10:51<2:20:09,  2.23it/s]
+{'peak_mem': 3.6812081336975098, 'step_consumption': 581.9976329803467, 'epoch': 20.4}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 530.1089286804199, 'epoch': 20.41}
+
+  6%|█████████▉                                                                                                                                                | 1289/20000 [10:53<2:39:13,  1.96it/s]
+{'peak_mem': 3.6812081336975098, 'step_consumption': 539.7257804870605, 'epoch': 20.44}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 517.2891616821289, 'epoch': 20.46}
+{'loss': 0.5867, 'learning_rate': 0.01, 'epoch': 20.48}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 301.5899658203125, 'epoch': 20.48}
+
+  6%|█████████▉                                                                                                                                                | 1293/20000 [10:55<2:39:17,  1.96it/s]
+{'peak_mem': 3.6812081336975098, 'step_consumption': 697.6010799407959, 'epoch': 20.51}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 434.25607681274414, 'epoch': 20.52}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 383.5275173187256, 'epoch': 20.54}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 310.35685539245605, 'epoch': 20.56}
+
+  6%|██████████                                                                                                                                                | 1299/20000 [10:57<1:57:21,  2.66it/s]
+{'peak_mem': 3.6812081336975098, 'step_consumption': 310.9164237976074, 'epoch': 20.59}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 350.1114845275879, 'epoch': 20.6}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 358.104944229126, 'epoch': 20.62}
+{'loss': 0.5832, 'learning_rate': 0.01, 'epoch': 20.63}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 404.36649322509766, 'epoch': 20.63}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 383.7754726409912, 'epoch': 20.65}
+
+  7%|██████████                                                                                                                                                | 1304/20000 [10:59<1:55:08,  2.71it/s]
+{'peak_mem': 3.6812081336975098, 'step_consumption': 375.7505416870117, 'epoch': 20.68}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 338.0410671234131, 'epoch': 20.7}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 295.07946968078613, 'epoch': 20.71}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 309.7200393676758, 'epoch': 20.73}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 326.6730308532715, 'epoch': 20.75}
+
+  7%|██████████                                                                                                                                                | 1310/20000 [11:01<1:51:17,  2.80it/s]
+{'peak_mem': 3.6812081336975098, 'step_consumption': 448.78172874450684, 'epoch': 20.78}
+{'loss': 0.6384, 'learning_rate': 0.01, 'epoch': 20.79}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 366.1918640136719, 'epoch': 20.79}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 484.4350814819336, 'epoch': 20.81}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 333.4372043609619, 'epoch': 20.83}
+
+  7%|██████████▏                                                                                                                                               | 1315/20000 [11:03<1:59:52,  2.60it/s]
+{'peak_mem': 3.6812081336975098, 'step_consumption': 343.72806549072266, 'epoch': 20.86}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 339.4591808319092, 'epoch': 20.87}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 346.3621139526367, 'epoch': 20.89}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 375.6744861602783, 'epoch': 20.9}
+
+  7%|██████████▏                                                                                                                                               | 1321/20000 [11:05<1:47:19,  2.90it/s]
+{'peak_mem': 3.6812081336975098, 'step_consumption': 328.3119201660156, 'epoch': 20.94}
+{'loss': 0.6222, 'learning_rate': 0.01, 'epoch': 20.95}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 356.6138744354248, 'epoch': 20.95}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 331.44307136535645, 'epoch': 20.97}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 424.6945381164551, 'epoch': 20.98}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 240.08631706237793, 'epoch': 21.0}
+-------------------------- Training Epoch 21 --------------------------
+
+  7%|██████████▏                                                                                                                                               | 1327/20000 [11:07<1:47:36,  2.89it/s]
+{'peak_mem': 3.6812081336975098, 'step_consumption': 327.8524875640869, 'epoch': 21.03}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 267.627477645874, 'epoch': 21.05}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 400.99310874938965, 'epoch': 21.06}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 318.5257911682129, 'epoch': 21.08}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 317.9454803466797, 'epoch': 21.1}
+{'loss': 0.6257, 'learning_rate': 0.01, 'epoch': 21.11}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 247.28775024414062, 'epoch': 21.11}
+
+  7%|██████████▎                                                                                                                                               | 1333/20000 [11:09<1:37:07,  3.20it/s]
+{'peak_mem': 3.6812081336975098, 'step_consumption': 308.4146976470947, 'epoch': 21.14}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 307.9814910888672, 'epoch': 21.16}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 268.1572437286377, 'epoch': 21.17}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 305.7260513305664, 'epoch': 21.19}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 304.964542388916, 'epoch': 21.21}
+
+  7%|██████████▎                                                                                                                                               | 1340/20000 [11:11<1:31:31,  3.40it/s]
+{'peak_mem': 3.6812081336975098, 'step_consumption': 273.8537788391113, 'epoch': 21.24}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 311.9208812713623, 'epoch': 21.25}
+{'loss': 0.6268, 'learning_rate': 0.01, 'epoch': 21.27}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 277.144193649292, 'epoch': 21.27}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 272.57609367370605, 'epoch': 21.29}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 267.00353622436523, 'epoch': 21.3}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 301.5482425689697, 'epoch': 21.32}
+
+  7%|██████████▎                                                                                                                                               | 1346/20000 [11:13<1:48:50,  2.86it/s]
+{'peak_mem': 3.6812081336975098, 'step_consumption': 276.2417793273926, 'epoch': 21.35}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 442.3201084136963, 'epoch': 21.37}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 408.4756374359131, 'epoch': 21.38}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 415.28916358947754, 'epoch': 21.4}
+
+  7%|██████████▍                                                                                                                                               | 1351/20000 [11:15<2:07:58,  2.43it/s]
+{'loss': 0.607, 'learning_rate': 0.01, 'epoch': 21.43}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 407.1662425994873, 'epoch': 21.43}
+{'peak_mem': 3.6812081336975098, 'step_consumption': 371.6094493865967, 'epoch': 21.44}
+  7%|██████████▍                                                                                                                                               | 1352/20000 [11:16<2:10:53,  2.37it/s]Traceback (most recent call last):
+  File "/home/rinya/ZO-LLM-main/zo-bench/run.py", line 736, in <module>
+    main()
+  File "/home/rinya/ZO-LLM-main/zo-bench/run.py", line 688, in main
+    framework.train(train_samples, dev_samples if dev_samples is not None else eval_samples, eval_samples)
+  File "/home/rinya/ZO-LLM-main/zo-bench/run.py", line 573, in train
+    trainer.train(resume_from_checkpoint=last_checkpoint)
+  File "/home/rinya/anaconda3/envs/zollm/lib/python3.10/site-packages/transformers/trainer.py", line 1662, in train
+    return inner_training_loop(
+  File "/home/rinya/ZO-LLM-main/zo-bench/trainer.py", line 544, in _inner_training_loop
+    tr_loss_step = self.zo_muon_step(model, inputs)
+  File "/home/rinya/anaconda3/envs/zollm/lib/python3.10/site-packages/torch/utils/_contextlib.py", line 115, in decorate_context
+    return func(*args, **kwargs)
+  File "/home/rinya/ZO-LLM-main/zo-bench/trainer.py", line 1147, in zo_muon_step
+    g_ortho = zeropower_via_newtonschulz5(g, steps=10)
+  File "/home/rinya/ZO-LLM-main/zo-bench/trainer.py", line 147, in zeropower_via_newtonschulz5
+    X = a * X + B @ X
+KeyboardInterrupt
