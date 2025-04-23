@@ -149,6 +149,135 @@ def zeropower_via_newtonschulz5(G, steps=10, eps=1e-7):
         X = X.T
     return X
 
+def generate_rotation_matrix(d, num_rotations=None, device='cpu'):
+    if num_rotations is None:
+        num_rotations = d
+    Q = torch.eye(d, device=device)
+    for _ in range(num_rotations):
+        i, j = torch.randint(0, d, (2,), device=device)
+        while i == j:
+            j = torch.randint(0, d, (1,), device=device)
+            j = j.item()
+        theta = torch.rand(1, device=device) * 2 * math.pi
+        c = torch.cos(theta)
+        s = torch.sin(theta)
+        col_i = Q[:, i].clone()
+        col_j = Q[:, j].clone()
+        Q[:, i] = c * col_i - s * col_j
+        Q[:, j] = s * col_i + c * col_j
+    return Q
+
+def generate_orthogonal_matrix(d, num_rotations=None, device='cpu'):
+    Q = generate_rotation_matrix(d, num_rotations, device=device)
+    if torch.rand(1, device=device) < 0.5:
+        Q[0, :] = -Q[0, :]
+    return Q
+
+def generate_orthogonal_approx(G, device='cpu'):
+    """
+    Generates an orthogonal matrix approximating the Newton-Schulz transformation of G.
+    Returns U_e * V_e^T, where U_e and V_e are random orthogonal matrices, to approximate UV^T.
+    Optimized for time and memory by avoiding explicit SVD or iterative methods.
+    
+    Args:
+        G (torch.Tensor): Input gradient matrix of shape (m, n).
+        device (str): Device to perform computations on (default: 'cpu').
+    
+    Returns:
+        torch.Tensor: Orthogonal approximation of shape compatible with G.
+    """
+    assert len(G.shape) == 2, "Input must be a 2D tensor"
+    m, n = G.shape
+    
+    # Generate U_e (m x m orthogonal matrix)
+    U_e = generate_orthogonal_matrix(m, device=device)
+    
+    # Generate V_e (n x n orthogonal matrix)
+    V_e = generate_orthogonal_matrix(n, device=device)
+    
+    # Compute U_e * V_e^T directly
+    # Shape: (m x m) @ (n x n).T -> (m x m) @ (n x n) -> (m x n)
+    approx = U_e @ V_e.T
+    
+    return approx
+
+# ТО ЖЕ САМОЕ ДЛЯ ПОЛУОРТОГОНАЛЬНЫХ
+
+def generate_semi_rotation_matrix(m, n, num_rotations=None, device='cpu'):
+    """
+    Generates a semi-orthogonal rotation matrix of shape (m, n) where m <= n implies V_e V_e^T = I
+    and m >= n implies V_e^T V_e = I. This is a pure rotation (det = +1 for square matrices).
+    
+    Args:
+        m (int): Number of rows.
+        n (int): Number of columns.
+        num_rotations (int, optional): Number of random plane rotations. Defaults to min(m, n).
+        device (str): Device to perform computations on (default: 'cpu').
+    
+    Returns:
+        torch.Tensor: Semi-orthogonal matrix of shape (m, n).
+    """
+    if num_rotations is None:
+        num_rotations = min(m, n)
+
+    k = min(m, n)
+    V = torch.zeros((m, n), device=device)
+    for i in range(min(m, k)):
+        V[i, i] = 1.0
+
+    for _ in range(num_rotations):
+        i, j = torch.randint(0, k, (2,), device=device)
+        while i == j:
+            j = torch.randint(0, k, (1,), device=device)
+            j = j.item()
+
+        theta = torch.rand(1, device=device) * 2 * math.pi
+        c = torch.cos(theta)
+        s = torch.sin(theta)
+
+        col_i = V[:, i].clone()
+        col_j = V[:, j].clone()
+        V[:, i] = c * col_i - s * col_j
+        V[:, j] = s * col_i + c * col_j
+
+    return V
+
+def generate_semi_orthogonal_matrix(m, n, num_rotations=None, device='cpu'):
+    """
+    Generates a semi-orthogonal matrix of shape (m, n). With probability 1/2, it is a rotation matrix.
+    With probability 1/2, it includes a reflection (negating the first row).
+    
+    Args:
+        m (int): Number of rows.
+        n (int): Number of columns.
+        num_rotations (int, optional): Number of random plane rotations. Defaults to min(m, n).
+        device (str): Device to perform computations on (default: 'cpu').
+    
+    Returns:
+        torch.Tensor: Semi-orthogonal matrix of shape (m, n).
+    """
+    V = generate_semi_rotation_matrix(m, n, num_rotations, device)
+    if torch.rand(1, device=device) < 0.5:
+        V[0, :] = -V[0, :]
+    return V
+
+def generate_semi_orthogonal_approx(G, device='cpu'):
+    """
+    Generates a semi-orthogonal approximation for the Newton-Schulz transformation of G.
+    Returns a matrix V_e of shape (m, n) such that V_e V_e^T = I (if m <= n) or V_e^T V_e = I (if m >= n).
+    
+    Args:
+        G (torch.Tensor): Input gradient matrix of shape (m, n).
+        device (str): Device to perform computations on (default: 'cpu').
+    
+    Returns:
+        torch.Tensor: Semi-orthogonal matrix of shape (m, n).
+    """
+    assert len(G.shape) == 2, "Input must be a 2D tensor"
+    m, n = G.shape
+    V_e = generate_semi_orthogonal_matrix(m, n, device=device)
+    return V_e
+
 
 class OurTrainer(Trainer):
 
@@ -1069,9 +1198,90 @@ class OurTrainer(Trainer):
         tau_update_vector[selected_rows[:, None], selected_cols] = tau  
         # Обновляем параметры: param = param + scaling_factor * tau_update_vector
         param.data = param.data + scaling_factor * tau_update_vector
-
-    @torch.no_grad()
+    
+    # МОДИФИЦИРУЕМ МЮОН:
     def zo_muon_step(self, model, inputs):
+        """
+        Реализация модифицированного ZO Muon шага.
+        
+        Использует случайную полуортогональную матрицу V_e с диагональной Sigma_e
+        для аппроксимации гауссовской матрицы E, избегая итерации Ньютона-Шульца.
+        
+        Возвращает значение функции потерь для первого вызова (f(theta + tau E)).
+        """
+        args = self.args
+
+        self.named_parameters_to_optim = []
+        for name, param in model.named_parameters():
+            if param.requires_grad:
+                self.named_parameters_to_optim.append((name, param))
+                param.grad = None 
+
+        self.zo_random_seed = np.random.randint(1000000000)
+
+        self.zo_perturb_parameters(scaling_factor=1)
+        loss1 = self.zo_forward(model, inputs)
+
+        self.zo_perturb_parameters(scaling_factor=-2)
+        loss2 = self.zo_forward(model, inputs)
+        self.projected_grad = ((loss1 - loss2) / (2 * args.zo_eps)).item()
+        self.zo_perturb_parameters(scaling_factor=1)
+
+        torch.manual_seed(self.zo_random_seed)
+        if hasattr(self, 'sparse_grad_rng'):
+            self.sparse_grad_rng.manual_seed(self.sparse_grad_random_seed)
+
+        for name, param in self.named_parameters_to_optim:
+            if param.ndim >= 2 and param.size(0) < 10000:
+                m, n = param.shape
+                device = param.data.device
+
+                # V_e
+                V_e = generate_semi_orthogonal_approx(param, device=device)
+
+                # Sigma_e
+                loss_diff = loss1 - loss2
+                sigma_scale = abs(2 * args.zo_eps / loss_diff) if loss_diff != 0 else 1.0
+
+                # Применяем знак и масштаб
+                sign = np.sign(self.projected_grad)
+                grad_update = sign * sigma_scale * V_e
+
+                grad_update_final = grad_update.to(param.data.dtype)
+            else:
+                # Для меньших или 1D параметров используем обычный подход
+                z = torch.normal(
+                    mean=0,
+                    std=1,
+                    size=param.data.size(),
+                    device=param.data.device,
+                    dtype=param.data.dtype,
+                )
+                grad_sparsity = self.get_grad_sparsity_by_name(name)
+                if grad_sparsity is not None:
+                    z[fast_random_mask_like(z, grad_sparsity, generator=self.sparse_grad_rng)] = 0
+
+                if args.trainer == "zo_sign_opt":
+                    grad_update = np.sign(self.projected_grad) * z
+                else:
+                    grad_update = self.projected_grad * z
+
+                grad_update_final = grad_update
+
+            param.grad = grad_update_final
+            self.optimizer.step()
+            param.grad = None
+
+        for _, param in self.named_parameters_to_optim:
+            param.grad = None
+
+        assert args.gradient_accumulation_steps == 1
+
+        return loss1
+    
+    # ЗАМЕНИЛ НА НОВЫЙ ВАРИАНТ ГЕНЕРАЦИИ
+    @torch.no_grad()
+    def zo_muon_step_old(self, model, inputs):
         """
         Реализация ZO Muon.
         
@@ -1131,7 +1341,8 @@ class OurTrainer(Trainer):
                 original_shape = g.shape
                 if g.ndim > 2:
                     g = g.view(g.size(0), -1)  
-                g_ortho = zeropower_via_newtonschulz5(g, steps=10)
+                # g_ortho = zeropower_via_newtonschulz5(g, steps=10)
+                g_ortho = generate_orthogonal_approx(g, device=g.device)
                 if len(original_shape) > 2:
                     g_ortho = g_ortho.view(original_shape)
                 grad_update_final = g_ortho.to(param.data.dtype)
@@ -1151,7 +1362,7 @@ class OurTrainer(Trainer):
         return loss1
 
 
-        @torch.no_grad()
+    @torch.no_grad()
     def zo_jaguar_step(self, model, inputs, debug=False):
         """
         Эффективный шаг JAGUAR с одновременным искажением всех параметров, оптимизированный по памяти.
@@ -1239,7 +1450,6 @@ class OurTrainer(Trainer):
                     param.grad[selected_rows[:, None], selected_cols] = beta * param.grad[selected_rows[:, None], selected_cols] + (1 - beta) * grad_update
                 else:
                     param.grad[selected_rows[:, None], selected_cols] = grad_update
-
 
         self.optimizer.step()
         # param.grad = None
