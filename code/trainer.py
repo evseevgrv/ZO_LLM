@@ -1255,7 +1255,7 @@ class OurTrainer(Trainer):
     
     # МОДИФИЦИРУЕМ МЮОН:
     @torch.no_grad()
-    def zo_muon_step_fast(self, model, inputs, debug=False):
+    def zo_muon_step(self, model, inputs, debug=False):
         args = self.args
         tau = args.zo_tau
 
@@ -1285,13 +1285,16 @@ class OurTrainer(Trainer):
                         z[fast_random_mask_like(z, mask, generator=self.sparse_grad_rng)] = 0
                     param.data.add_(tau * scaling_factor * z)
 
-        zo_muon_pertrub(1)
+        # f(z_+)
+        zo_muon_perturb_parameters(1)
         loss1 = self.zo_forward(model, inputs)
-        zo_muon_perturb(-2)
+        # f(z_-)
+        zo_muon_perturb_parameters(-2)
         loss2 = self.zo_forward(model, inputs)
-        zo_muon_pertrub(1)
+        zo_muon_perturb_parameters(1)
 
         delta = (loss1 - loss2) / (2 * args.zo_eps)
+        # rho = sign(f(z_+) - f(z_-))
         rho = torch.sign(loss1 - loss2)
 
         self.optimizer.zero_grad()
