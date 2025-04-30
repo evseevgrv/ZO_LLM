@@ -195,6 +195,29 @@ def create_random_matrix(n, m, device='cpu'):
     
     return U @ S @ V.T, U, V, S
 
+
+######### FAST ONE ###########
+
+def create_random_matrix_fast(param_shapes, device='cpu'):
+    max_n = max(n for _, (n, m) in param_shapes)
+    max_m = max(m for _, (n, m) in param_shapes)
+
+    U_big = generate_orthogonal_matrix(max_n, device=device)
+    V_big = generate_orthogonal_matrix(max_m, device=device)
+
+    E_dict = {}
+    for name, (n, m) in param_shapes:
+        k = min(n, m)
+        U_slice = U_big[:n, :k]      # n x k
+        V_slice = V_big[:m, :k]      # m x k
+        # E = U @ I_nm @ V.T
+        E = U_slice @ V_slice.T
+        E_dict[name] = (E, U_slice, V_slice)
+    return E_dict
+
+
+############################
+
 def generate_orthogonal_approx(G, device='cpu'):
     """
     Generates an orthogonal matrix approximating the Newton-Schulz transformation of G.
@@ -1232,93 +1255,65 @@ class OurTrainer(Trainer):
     
     # МОДИФИЦИРУЕМ МЮОН:
     @torch.no_grad()
-    def zo_muon_step(self, model, inputs, debug=False):
-        """
-        Эффективный ZO Muon шаг с полуортогональными матрицами для параметров.
-        """
+    def zo_muon_step_fast(self, model, inputs, debug=False):
         args = self.args
         tau = args.zo_tau
-        eps = args.zo_eps
 
-        # Подготовка параметров
-        self.named_parameters_to_optim = [(name, param) for name, param in model.named_parameters() if param.requires_grad]
-        for _, param in self.named_parameters_to_optim:
-            param.grad = None
+        named = [(n, p) for n, p in model.named_parameters() if p.requires_grad]
+        for _, p in named:
+            p.grad = None
 
-        self.zo_random_seed = np.random.randint(1_000_000_000)
-        torch.manual_seed(self.zo_random_seed)
+        seed = np.random.randint(1_000_000_000)
+        torch.manual_seed(seed)
         if hasattr(self, 'sparse_grad_rng'):
-            self.sparse_grad_rng.manual_seed(self.sparse_grad_random_seed)
+            self.sparse_grad_rng.manual_seed(seed)
 
-        # Генерация матриц E
-        E_dict = {}
-        for name, param in self.named_parameters_to_optim:
-            if param.ndim >= 2 and param.size(0) < 10000:
-                n, m = param.shape
-                E, U_e, V_e, _ = create_random_matrix(n, m, device=param.device)
-                E_dict[name] = (E, U_e, V_e)
+        # E
+        shapes = [(name, tuple(param.shape)) for name, param in named if param.ndim >= 2 and param.size(0) < 10000]
+        E_dict = create_random_matrix_fast(shapes, device=model.device)
 
-        # Внутренняя функция для возмущений
-        def muon_perturb_parameters(scaling_factor=1):
-            for name, param in self.named_parameters_to_optim:
+        # Perturb
+        def zo_muon_perturb_parameters(scaling_factor=1):
+            for name, param in named:
                 if name in E_dict:
                     E, _, _ = E_dict[name]
-                    param.data.add_(scaling_factor * tau * E)
+                    param.data.add_(tau * scaling_factor * E)
                 else:
-                    z = torch.normal(mean=0., std=1., size=param.shape, device=param.device, dtype=param.dtype)
-                    grad_sparsity = getattr(self, 'get_grad_sparsity_by_name', lambda x: None)(name)
-                    if grad_sparsity is not None:
-                        mask = fast_random_mask_like(z, grad_sparsity, generator=self.sparse_grad_rng)
-                        z[mask] = 0
-                    param.data.add_(scaling_factor * tau * z)
+                    z = torch.randn_like(param)
+                    mask = getattr(self, 'get_grad_sparsity_by_name', lambda x: None)(name)
+                    if mask is not None:
+                        z[fast_random_mask_like(z, mask, generator=self.sparse_grad_rng)] = 0
+                    param.data.add_(tau * scaling_factor * z)
 
-        # Пошаговые возмущения и подсчёт лоссов
-        muon_perturb_parameters(scaling_factor=1)
+        zo_muon_pertrub(1)
         loss1 = self.zo_forward(model, inputs)
-
-        muon_perturb_parameters(scaling_factor=-2)
+        zo_muon_perturb(-2)
         loss2 = self.zo_forward(model, inputs)
+        zo_muon_pertrub(1)
 
-        muon_perturb_parameters(scaling_factor=1)
+        delta = (loss1 - loss2) / (2 * args.zo_eps)
+        rho = torch.sign(loss1 - loss2)
 
-        # Сохраняем оценку проектированного градиента
-        self.projected_grad = ((loss1 - loss2) / (2 * eps)).item()
-        rho = torch.sign(loss1 - loss2).item()
-
-        # Выставляем градиенты
         self.optimizer.zero_grad()
-        for name, param in self.named_parameters_to_optim:
+        for name, param in named:
             if name in E_dict:
-                _, U_e, V_e = E_dict[name]
-                # Дополнительно введем матрицу I_nm, которая соединит нам размерности
-                n, m = U_e.size(0), V_e.size(0)
-                k = min(n, m)
-                I_nm = torch.zeros((n, m), device=U_e.device, dtype=U_e.dtype)
-                I_nm[torch.arange(k), torch.arange(k)] = 1
-                # В градиент запишем sign(L() - L()) * U_e @ I_nm @ V_e.T
-                grad_update = rho * (U_e @ I_nm @ V_e.T)
-                param.grad = grad_update.to(dtype=param.dtype)
+                _, U, V = E_dict[name]
+                grad = rho * (U @ V.T)
             else:
-                z = torch.normal(mean=0., std=1., size=param.shape, device=param.device, dtype=param.dtype)
-                grad_sparsity = getattr(self, 'get_grad_sparsity_by_name', lambda x: None)(name)
-                if grad_sparsity is not None:
-                    mask = fast_random_mask_like(z, grad_sparsity, generator=self.sparse_grad_rng)
-                    z[mask] = 0
-                if args.trainer == 'zo_sign_opt':
-                    grad_update = rho * z
-                else:
-                    grad_update = self.projected_grad * z
-                param.grad = grad_update
+                z = torch.randn_like(param)
+                mask = getattr(self, 'get_grad_sparsity_by_name', lambda x: None)(name)
+                if mask is not None:
+                    z[fast_random_mask_like(z, mask, generator=self.sparse_grad_rng)] = 0
+                grad = (rho if args.trainer=='zo_sign_opt' else delta) * z
+            param.grad = grad.to(param.dtype)
 
-        # Шаг оптимизации
         self.optimizer.step()
 
         if debug:
-            print(f"loss1 = {loss1.item():.6f}, loss2 = {loss2.item():.6f}, projected_grad = {self.projected_grad:.6f}, rho = {rho:.2f}")
-
-        assert args.gradient_accumulation_steps == 1
+            print(f"loss1={loss1:.6f}, loss2={loss2:.6f}, delta={delta:.6f}, rho={rho:.2f}")
 
         return loss1
+
     
     # ЗАМЕНИЛ НА НОВЫЙ ВАРИАНТ ГЕНЕРАЦИИ
     @torch.no_grad()
