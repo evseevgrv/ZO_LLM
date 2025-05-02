@@ -16,13 +16,16 @@
 The Trainer class, to easily train a 🤗 Transformers from scratch or finetune it on a new task.
 """
 
+from collections import defaultdict
 import inspect
 import math
 import os
 import re
+import random
 import shutil
 import sys
 import scipy.stats as sps
+from scipy.stats import ortho_group
 import time
 from functools import partial
 from pathlib import Path
@@ -174,6 +177,12 @@ def generate_orthogonal_matrix(d, num_rotations=None, device='cpu'):
         Q[0, :] = -Q[0, :]
     return Q
 
+def generate_reflection_matrix(d, device='cpu'):
+    Q = torch.eye(d, device=device)
+    idx = random.randint(0, d - 1)
+    Q[idx, idx] = -1
+    return Q
+
 def generate_semi_diagonal(n, m, distribution=sps.norm, device='cpu', dtype=torch.float32):
     p = min(n, m)
 
@@ -195,15 +204,49 @@ def create_random_matrix(n, m, device='cpu'):
     
     return U @ S @ V.T, U, V, S
 
+def torch_ortho_rvs(dim: int, device="cpu", dtype=torch.float32):
+    """
+    Возвращает ортогональную матрицу из O(N), равномерно распределённую
+    по мере Хаара (аналог scipy.stats.ortho_group.rvs(dim)).
+
+    Parameters:
+        dim (int): размерность матрицы
+        device (str or torch.device): 'cpu' или 'cuda'
+        dtype (torch.dtype): тип данных (например, float32 или float64)
+
+    Returns:
+        torch.Tensor: ортогональная матрица размерности (dim, dim)
+    """
+    z = torch.randn(dim, dim, device=device, dtype=dtype)
+
+    q, r = torch.linalg.qr(z)
+
+    d = torch.diagonal(r, 0)
+    ph = d.sign()
+    q *= ph.unsqueeze(0)
+
+    return q
+
 
 ######### FAST ONE ###########
 
-def create_random_matrix_fast(param_shapes, device='cpu'):
+def create_random_matrix_fast_big_matrix(param_shapes, device='cpu'):
     max_n = max(n for _, (n, m) in param_shapes)
     max_m = max(m for _, (n, m) in param_shapes)
 
-    U_big = generate_orthogonal_matrix(max_n, device=device)
-    V_big = generate_orthogonal_matrix(max_m, device=device)
+    # U_big = generate_orthogonal_matrix(max_n, device=device)  107 sec / iter
+    # V_big = generate_orthogonal_matrix(max_m, device=device)
+
+
+    # U_big = generate_reflection_matrix(max_n, device=device)  0.1 sec / iter
+    # V_big = generate_reflection_matrix(max_m, device=device)
+
+    # U_big = torch.FloatTensor(ortho_group.rvs(max_n)).to(device)  8 sec / iter
+    # V_big = torch.FloatTensor(ortho_group.rvs(max_m)).to(device)
+
+
+    U_big = torch_ortho_rvs(max_n, device=device)  # 0.2 sec / iter ----> GREAT
+    V_big = torch_ortho_rvs(max_n, device=device)
 
     E_dict = {}
     for name, (n, m) in param_shapes:
@@ -213,6 +256,54 @@ def create_random_matrix_fast(param_shapes, device='cpu'):
         # E = U @ I_nm @ V.T
         E = U_slice @ V_slice.T
         E_dict[name] = (E, U_slice, V_slice)
+    return E_dict
+
+def create_random_matrix_fast_per_param(param_shapes, device='cpu'):
+
+    # U_big = generate_orthogonal_matrix(max_n, device=device)  107 sec / iter
+    # V_big = generate_orthogonal_matrix(max_m, device=device)
+
+
+    # U_big = generate_reflection_matrix(max_n, device=device)  0.1 sec / iter
+    # V_big = generate_reflection_matrix(max_m, device=device)
+
+    # U_big = torch.FloatTensor(ortho_group.rvs(max_n)).to(device)  8 sec / iter
+    # V_big = torch.FloatTensor(ortho_group.rvs(max_m)).to(device)
+
+
+    # U_big = torch_ortho_rvs(max_n, device=device)  # 0.2 sec / iter ----> GREAT
+    # V_big = torch_ortho_rvs(max_n, device=device)
+
+    E_dict = {}
+    for name, (n, m) in param_shapes:
+        k = min(n, m)
+
+        U = torch_ortho_rvs(n, device=device)
+        V = torch_ortho_rvs(m, device=device)
+
+        U_slice = U[:, :k]  # (n x k)
+        V_slice = V[:, :k]  # (m x k)
+
+        E = U_slice @ V_slice.T  # (n x m)
+        E_dict[name] = (E, U_slice, V_slice)
+
+    return E_dict
+
+def create_random_matrix_fast(param_shapes, device='cpu'):
+    shape_to_names = defaultdict(list)
+    for name, shape in param_shapes:
+        shape_to_names[shape].append(name)
+
+    E_dict = {}
+    for (n, m), names in shape_to_names.items():
+        k = min(n, m)
+        U = torch_ortho_rvs(n, device=device)
+        V = torch_ortho_rvs(m, device=device)
+        U_k = U[:, :k]
+        V_k = V[:, :k]
+        E = U_k @ V_k.T
+        for name in names:
+            E_dict[name] = (E.clone(), U_k.clone(), V_k.clone())
     return E_dict
 
 
@@ -1254,6 +1345,7 @@ class OurTrainer(Trainer):
             param.data.add(scaling_factor * E * self.args.zo_tau)
     
     # МОДИФИЦИРУЕМ МЮОН:
+    # @torch.compile()
     @torch.no_grad()
     def zo_muon_step(self, model, inputs, debug=False):
         args = self.args
@@ -1380,7 +1472,7 @@ class OurTrainer(Trainer):
                 original_shape = g.shape
                 if g.ndim > 2:
                     g = g.view(g.size(0), -1)  
-                g_ortho = zeropower_via_newtonschulz5(g, steps=10)
+                g_ortho = zeropower_via_newtonschulz5(g, steps=5)
                 # g_ortho = generate_orthogonal_approx(g, device=g.device)
                 if len(original_shape) > 2:
                     g_ortho = g_ortho.view(original_shape)
