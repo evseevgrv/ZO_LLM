@@ -227,6 +227,88 @@ def torch_ortho_rvs(dim: int, device="cpu", dtype=torch.float32):
 
     return q
 
+def generate_micola_matrix(
+    dim,
+    num_blocks: int = 10,
+    use_PL: bool = True,
+    use_P:  bool = True,
+    use_PR: bool = True,
+    device='cpu',
+):
+    base = d // num_blocks
+    rem  = d %  num_blocks
+    blocks = [base + (1 if i < rem else 0) for i in range(num_blocks)]
+    block_sizes_L = blocks
+    block_sizes_R = blocks
+
+
+    if block_sizes_L:
+        bsL = block_sizes_L
+        maxL = max(bsL)
+        L_blocks = []
+        for b in bsL:
+            X = torch.randn(b, b, device=device)
+            Qb, Rb = torch.linalg.qr(X)
+            sign = torch.sign(torch.diagonal(Rb, 0))
+            Qb *= sign
+            if torch.det(Qb) < 0:
+                Qb[:, 0] *= -1
+            L_blocks.append(Qb)
+        L = torch.block_diag(*L_blocks).to(device)
+    else:
+        L = torch.eye(dim, device=device)
+
+    if block_sizes_R:
+        bsR = block_sizes_R
+        R_blocks = []
+        for b in bsR:
+            X = torch.randn(b, b, device=device)
+            Qb, Rb = torch.linalg.qr(X)
+            sign = torch.sign(torch.diagonal(Rb, 0))
+            Qb *= sign
+            if torch.det(Qb) < 0:
+                Qb[:, 0] *= -1
+            R_blocks.append(Qb)
+        R = torch.block_diag(*R_blocks).to(device)
+    else:
+        R = torch.eye(dim, device=device)
+
+    idx_PL = torch.randperm(dim, device=device) if use_PL else torch.arange(dim, device=device)
+    idx_P  = torch.randperm(dim, device=device) if use_P  else torch.arange(dim, device=device)
+    idx_PR = torch.randperm(dim, device=device) if use_PR else torch.arange(dim, device=device)
+
+    M1 = R[:, idx_PR]
+    M2 = M1[idx_P, :]
+    M3 = L @ M2
+    A  = M3[idx_PL, :]
+
+    return A
+
+def generate_reflection_matrix(d, device='cpu'):
+    Q = torch.eye(d, device=device)
+    i = torch.randint(0, d, (1,), device=device).item()
+    Q[i, i] = -1
+    return Q
+
+def generate_rotation_via_householders(d, device='cpu'):
+    v1 = torch.randn(d, device=device)
+    v1 /= v1.norm()
+
+    v2 = torch.randn(d, device=device)
+    v2 -= (v1 * v2).sum() * v1
+    v2 /= v2.norm()
+
+    I = torch.eye(d, device=device)
+    H1 = I - 2.0 * v1.unsqueeze(1) @ v1.unsqueeze(0)
+    H2 = I - 2.0 * v2.unsqueeze(1) @ v2.unsqueeze(0)
+    Q = H2 @ H1
+    return Q
+
+def generate_housholder_and_reflection_matrix(d, device='cpu'):
+    Q = generate_rotation_via_householders(d, device=device)
+    if torch.rand(1, device=device) < 0.5:
+        Q[0, :] = -Q[0, :]
+    return Q
 
 ######### FAST ONE ###########
 
@@ -297,8 +379,10 @@ def create_random_matrix_fast(param_shapes, device='cpu'):
     E_dict = {}
     for (n, m), names in shape_to_names.items():
         k = min(n, m)
-        U = torch_ortho_rvs(n, device=device)
-        V = torch_ortho_rvs(m, device=device)
+        # U = torch_ortho_rvs(n, device=device)
+        # V = torch_ortho_rvs(m, device=device)
+        U = generate_micola_matrix(n, device=device)
+        V = generate_micola_matrix(m, device=device)
         U_k = U[:, :k]
         V_k = V[:, :k]
         E = U_k @ V_k.T
