@@ -448,6 +448,16 @@ def generate_semi_orthogonal_approx(G, device='cpu'):
     V_e = generate_semi_orthogonal_matrix(m, n, device=device)
     return V_e
 
+######## ФУНКЦИЯ ДЛЯ СОЗДАНИЯ ОДНОЙ "ОРТОГОНАЛЬНОЙ" МАТРИЦЫ ЗАДАННОГО РАЗМЕРА #########
+
+def sample_ortho_approx(shape, device='cpu'):
+    assert len(shape) == 2, "Input dimension must be 2D"
+    m, n = shape
+    p = max(m, n)
+    E = torch_ortho_rvs(p, device=device)
+    return E[:m, :n]
+
+########################################################################################
 
 class OurTrainer(Trainer):
 
@@ -1406,14 +1416,15 @@ class OurTrainer(Trainer):
             self.sparse_grad_rng.manual_seed(seed)
 
         # E
-        shapes = [(name, tuple(param.shape)) for name, param in named if param.ndim >= 2 and param.size(0) < 10000]
-        E_dict = create_random_matrix_fast(shapes, device=model.device)
+        # shapes = [(name, tuple(param.shape)) for name, param in named if param.ndim >= 2 and param.size(0) < 10000]
+        # E_dict = create_random_matrix_fast(shapes, device=model.device)
 
         # Perturb
         def zo_muon_perturb_parameters(scaling_factor=1):
             for name, param in named:
-                if name in E_dict:
-                    E, _, _ = E_dict[name]
+                # if name in E_dict:
+                if param.ndim >= 2 and param.size(0) < 10000:
+                    E = sample_ortho_approx(param.data.shape, device=model.device)
                     param.data.add_(tau * scaling_factor * E)
                 else:
                     z = torch.randn_like(param)
@@ -1436,9 +1447,11 @@ class OurTrainer(Trainer):
 
         self.optimizer.zero_grad()
         for name, param in named:
-            if name in E_dict:
-                _, U, V = E_dict[name]
-                grad = rho * (U @ V.T)
+            # if name in E_dict:
+            if param.ndim >= 2 and param.size(0) < 10000:
+                # _, U, V = E_dict[name]
+                E = sample_ortho_approx(param.data.shape, device=model.device)
+                grad = rho * E
             else:
                 z = torch.randn_like(param)
                 mask = getattr(self, 'get_grad_sparsity_by_name', lambda x: None)(name)
@@ -1604,7 +1617,9 @@ class OurTrainer(Trainer):
                 param.data[selected_rows[:, None], selected_cols] = original_values[name]
 
         # rho = sign(f(z_+) - f(z_-))
-        rho = torch.sign(loss1 - loss2).item()
+        # ПРАВКА1: убрали знак, оставив только разность лоссов
+        # rho = torch.sign(loss1 - loss2).item()
+        rho = (loss1 - loss2).item() / (2 * tau)
 
         # Обновляем градиенты
         for name, param in self.named_parameters_to_optim:
@@ -1626,6 +1641,9 @@ class OurTrainer(Trainer):
                     param.grad[selected_rows[:, None], selected_cols] = beta * param.grad[selected_rows[:, None], selected_cols] + (1 - beta) * grad_update
                 else:
                     param.grad[selected_rows[:, None], selected_cols] = grad_update
+            
+            # ПРАВКА2: строки ниже не было в предыдущих версиях, исправляем несоответствие
+            param.grad = torch.sign(param.grad)
 
         self.optimizer.step()
         # param.grad = None
@@ -1699,7 +1717,9 @@ class OurTrainer(Trainer):
                 param.data[selected_rows[:, None], selected_cols] = original_values[name]
 
         # rho = sign(f(z_+) - f(z_-))
-        rho = torch.sign(loss1 - loss2).item()
+        # ПРАВКА1:
+        # rho = torch.sign(loss1 - loss2).item()
+        rho = (loss1 - loss2).item() / (2 * tau)
 
         # Обновляем градиенты
         for name, param in self.named_parameters_to_optim:
@@ -1721,7 +1741,8 @@ class OurTrainer(Trainer):
                     param.grad[selected_rows[:, None], selected_cols] = beta * param.grad[selected_rows[:, None], selected_cols] + (1 - beta) * grad_update
                 else:
                     param.grad[selected_rows[:, None], selected_cols] = grad_update
-
+            
+            # ВОПРОС: нужен ли тут знак?
             param.grad = zeropower_via_newtonschulz5(param.grad, steps=10).to(param.data.dtype)
 
         self.optimizer.step()
