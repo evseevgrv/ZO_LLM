@@ -1743,7 +1743,10 @@ class OurTrainer(Trainer):
                     param.grad[selected_rows[:, None], selected_cols] = grad_update
             
             # ВОПРОС: нужен ли тут знак?
-            param.grad = zeropower_via_newtonschulz5(param.grad, steps=10).to(param.data.dtype)
+            if len(param.data.shape) > 1:
+                param.grad = zeropower_via_newtonschulz5(param.grad, steps=10).to(param.data.dtype)
+            else:
+                param.grad = torch.sign(param.grad)
 
         self.optimizer.step()
         # param.grad = None
