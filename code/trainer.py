@@ -884,7 +884,7 @@ class OurTrainer(Trainer):
                         and (step + 1) == steps_in_epoch
                 ):
                     # MeZO added: update model with the estimated gradient
-                    # Добавил zo_jaguar
+                    # Added our algorithms
                     if args.trainer in ["zo_sgd", "zo_adam", "zo_sign_opt", "zo_conserv", "zo_jaguar", "zo_muon", "zo_muon_sampling"]:
                         self.zo_update(model)
                     elif args.trainer == "forward_grad":
@@ -1477,7 +1477,7 @@ class OurTrainer(Trainer):
                 self.projected_grad = ((loss1 - loss2) / (2 * args.zo_eps)).item()
                 self.zo_perturb_parameters(scaling_factor=1)
         else:
-            raise NotImplementedError("Поддержка q > 1 не реализована.")
+            raise NotImplementedError("q > 1 is not implemented.")
 
         torch.manual_seed(self.zo_random_seed)
         self.sparse_grad_rng.manual_seed(self.sparse_grad_random_seed)
