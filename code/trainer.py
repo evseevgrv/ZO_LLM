@@ -227,7 +227,7 @@ def torch_ortho_rvs(dim: int, device="cpu", dtype=torch.float32):
 
     return q
 
-def generate_micola_matrix(
+def generate_gs_matrix(
     dim,
     num_blocks: int = 10,
     use_PL: bool = True,
@@ -381,8 +381,8 @@ def create_random_matrix_fast(param_shapes, device='cpu'):
         k = min(n, m)
         # U = torch_ortho_rvs(n, device=device)
         # V = torch_ortho_rvs(m, device=device)
-        U = generate_micola_matrix(n, device=device)
-        V = generate_micola_matrix(m, device=device)
+        U = generate_gs_matrix(n, device=device)
+        V = generate_gs_matrix(m, device=device)
         U_k = U[:, :k]
         V_k = V[:, :k]
         E = U_k @ V_k.T
