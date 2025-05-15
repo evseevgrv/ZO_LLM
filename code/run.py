@@ -245,9 +245,9 @@ class Framework:
                     torch_dtype = torch.float16
                 elif self.args.load_bfloat16:
                     torch_dtype = torch.bfloat16
-                # Добавил offload_folder zo_jaguar
+                # Added offload_folder zo_jaguar
                 # offload_folder="./offload_folder"
-                # было device_map='auto', стало device_map=6
+                # was device_map='auto', now device_map=6
                 model = AutoModelForCausalLM.from_pretrained(self.args.model_name, config=config, device_map='auto',
                                                              torch_dtype=torch_dtype,
                                                              max_memory={i: f'{free_in_GB - 5}GB' for i in
