@@ -1,5 +1,21 @@
-# Zeroth-Order Muon and Jaguar for PEFT
+# Leveraging Coordinate Momentum in SignSGD and Muon: Memory-Optimized Zero-Order LLM Fine-Tuning
 
-## Abstract
+This repository contains the code for experiments applying ZO JAGUAR SignSGD and ZO JAGUAR Muon methods for different LLM Fine-Tuning tasks.
 
-Fine-tuning large language models (LLMs) is a critical step in adapting pre-trained models to specific tasks, but the computational cost of traditional gradient-based optimization methods, such as stochastic gradient descent (SGD) and its variants, grows significantly with model size. In this work, we explore zero-order (ZO) optimization as an efficient alternative for fine-tuning LLMs, particularly in the context of parameter-efficient fine-tuning (PEFT) methods like LoRA. We focus on zeroth-order approximations of the gradient, which eliminate the need for costly backpropagation, and propose novel enhancements to improve memory and computational efficiency. Specifically, we introduce the matrix-efficient JAGUAR to incorporate momentum into ZO-based SGD and Sign-SGD, achieving performance gains at negligible cost. Additionally, we introduce the ZO-MUON method, containing key features of zero-order optimization and proven to be effective MUON algorithm. Moreover, we provide a smart sampling strategy for Gaussian matrices in ZO gradient estimation that provides a way to avoid the iterative Newton-Schultz procedure performed at each iteration of the conventional method, due to the zero-order specificity. Our empirical results demonstrate that these techniques significantly improve competitive performance, while maintaining computational efficiency. This work advances the field of ZO optimization for LLMs, offering practical and theoretically grounded methods for resource-constrained environments.
+The code is based on the [benchmark](https://github.com/ZO-Bench)
+
+## Requirements
+
+To install requirements:
+
+```setup
+pip install -r requirements.txt
+```
+
+## Training and Evaluation
+
+To train and evaluate the model in the paper, run this command:
+
+```
+./run_script.sh
+```
