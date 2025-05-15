@@ -196,7 +196,7 @@ def generate_semi_diagonal(n, m, distribution=sps.norm, device='cpu', dtype=torc
     return Sigma
 
 def create_random_matrix(n, m, device='cpu'):
-    """Создает случайную матрицу в стиле SVD: U @ diag(S) @ V.T"""
+    """Creates a random matrix in the style of SVD: U @ diag(S) @ V.T"""
     U = generate_rotation_matrix(n, device=device)
     V = generate_rotation_matrix(m, device=device)
     
@@ -206,16 +206,16 @@ def create_random_matrix(n, m, device='cpu'):
 
 def torch_ortho_rvs(dim: int, device="cpu", dtype=torch.float32):
     """
-    Возвращает ортогональную матрицу из O(N), равномерно распределённую
-    по мере Хаара (аналог scipy.stats.ortho_group.rvs(dim)).
+    Returns an orthogonal matrix from O(N), uniformly distributed
+    over the Haar measure (analogous to scipy.stats.ortho_group.rvs(dim)).
 
     Parameters:
-        dim (int): размерность матрицы
-        device (str or torch.device): 'cpu' или 'cuda'
-        dtype (torch.dtype): тип данных (например, float32 или float64)
+        dim (int): dimension of the matrix
+        device (str or torch.device): 'cpu' or 'cuda'
+        dtype (torch.dtype): data type (e.g. float32 or float64)
 
     Returns:
-        torch.Tensor: ортогональная матрица размерности (dim, dim)
+        torch.Tensor: orthogonal matrix dimension (dim, dim)
     """
     z = torch.randn(dim, dim, device=device, dtype=dtype)
 
@@ -393,22 +393,7 @@ def create_random_matrix_fast(param_shapes, device='cpu'):
 
 ############################
 
-def generate_orthogonal_approx(G, device='cpu'):
-    assert len(G.shape) == 2, "Input must be a 2D tensor"
-    m, n = G.shape
-    
-    # U_e m x m
-    U_e = generate_orthogonal_matrix(m, device=device)
-    
-    #V_e n x n
-    V_e = generate_orthogonal_matrix(n, device=device)
-    
-    # U_e * V_e^T --- СЕЙЧАС РАБОТАЕТ ТОЛЬКО В СЛУЧАЕ m == n
-    approx = U_e @ V_e.T
-    
-    return approx
-
-# ТО ЖЕ САМОЕ ДЛЯ ПОЛУОРТОГОНАЛЬНЫХ
+# SAME FOR SEMI-ORTHOGONAL
 
 def generate_semi_rotation_matrix(m, n, num_rotations=None, device='cpu'):
     if num_rotations is None:
@@ -448,7 +433,7 @@ def generate_semi_orthogonal_approx(G, device='cpu'):
     V_e = generate_semi_orthogonal_matrix(m, n, device=device)
     return V_e
 
-######## ФУНКЦИЯ ДЛЯ СОЗДАНИЯ ОДНОЙ "ОРТОГОНАЛЬНОЙ" МАТРИЦЫ ЗАДАННОГО РАЗМЕРА #########
+######## FUNCTION TO CREATE ONE “ORTHOGONAL” MATRIX OF A GIVEN SIZE #########
 
 def sample_ortho_approx(shape, device='cpu'):
     assert len(shape) == 2, "Input dimension must be 2D"
@@ -646,7 +631,7 @@ class OurTrainer(Trainer):
         self._load_optimizer_and_scheduler(resume_from_checkpoint)
 
         # overload the optimizer here
-        # Добавил zo_jaguar
+        # Added zo_jaguar
         if args.trainer == "zo_adam":
             self.optimizer = Adam(self.model.parameters(), lr=args.learning_rate)
             # self.optimizer = {name: Adam([param], lr=args.learning_rate) for name, param in self.model.named_parameters()}
@@ -839,7 +824,7 @@ class OurTrainer(Trainer):
                     self.control = self.callback_handler.on_step_begin(args, self.state, self.control)
 
                 # MeZO added: estimate gradient
-                # Добавление zo_jaguar
+                # Added zo_jaguar
                 if args.trainer in ["zo_sgd", "zo_adam", "zo_sign_opt"]:
                     if args.module_wise_perturbation:
                         assert args.q == 1, "module-wise perturbation only supports q=1"
@@ -1386,20 +1371,10 @@ class OurTrainer(Trainer):
         tau_update_vector = torch.zeros_like(param.data)
         # tau_update_vector[r, c] = τ
         tau_update_vector[selected_rows[:, None], selected_cols] = tau  
-        # Обновляем параметры: param = param + scaling_factor * tau_update_vector
+        # param = param + scaling_factor * tau_update_vector
         param.data = param.data + scaling_factor * tau_update_vector
-    
-    def zo_muon_pertrub_parameters(self, E, scaling_factor=1):
-        torch.manual_seed(random_seed if random_seed is not None else self.zo_random_seed)
-        self.sparse_grad_rng.manual_seed(self.sparse_grad_random_seed)
-        for name, param in self.named_parameters_to_optim:
-            # grad_sparsity = self.get_grad_sparsity_by_name(name)
-            # z = torch.normal(mean=0, std=1, size=param.data.size(), device=param.data.device, dtype=param.data.dtype)
-            # if grad_sparsity is not None:
-                # z[fast_random_mask_like(z, grad_sparsity, generator=self.sparse_grad_rng)] = 0
-            param.data.add(scaling_factor * E * self.args.zo_tau)
-    
-    # МОДИФИЦИРУЕМ МЮОН:
+       
+    # MODIFY MUON:
     # @torch.compile()
     @torch.no_grad()
     def zo_muon_sampling_step(self, model, inputs, debug=False):
@@ -1415,6 +1390,7 @@ class OurTrainer(Trainer):
         if hasattr(self, 'sparse_grad_rng'):
             self.sparse_grad_rng.manual_seed(seed)
 
+        # This allows a faster version, but more memory consuming:
         # E
         # shapes = [(name, tuple(param.shape)) for name, param in named if param.ndim >= 2 and param.size(0) < 10000]
         # E_dict = create_random_matrix_fast(shapes, device=model.device)
@@ -1467,17 +1443,15 @@ class OurTrainer(Trainer):
 
         return loss1
 
-    
-    # ЗАМЕНИЛ НА НОВЫЙ ВАРИАНТ ГЕНЕРАЦИИ
     @torch.no_grad()
     def zo_muon_step(self, model, inputs):
         """
-        Реализация ZO Muon.
+        ZO Muon implementation.
         
-        Оценивает градиент методом как в MeZO и затем обновляет параметры модели, используя
-        ортогонализацию обновлений через итерации Newton–Schulz, аналогично Muon.
+        Estimates the gradient using the method as in MeZO and then updates the model parameters using
+        orthogonalization of updates through Newton-Schulz iterations, similar to Muon.
         
-        Возвращает значение функции (loss) для первого вызова (f(theta + z)).
+        Returns the function value (loss) for the first call (f(theta + z)).
         """
         args = self.args
 
@@ -1554,7 +1528,7 @@ class OurTrainer(Trainer):
     @torch.no_grad()
     def zo_jaguar_step(self, model, inputs, debug=False):
         """
-        Эффективный шаг JAGUAR с одновременным искажением всех параметров, оптимизированный по памяти.
+        JAGUAR's effective step.
         """
         args = self.args
         tau = args.zo_tau
@@ -1566,11 +1540,11 @@ class OurTrainer(Trainer):
         self.zo_random_seed = np.random.randint(1_000_000_000)
         torch.manual_seed(self.zo_random_seed)
 
-        # Словари для хранения выбранных индексов и начальных значений
+        # Dictionaries for storing selected indexes and initial values
         selected_indices = {}
         original_values = {}
 
-        # Выбираем индексы и сохраняем начальные значения
+        # Select the indices and save the initial values
         for name, param in self.named_parameters_to_optim:
             if len(param.data.shape) == 1:
                 n_elements = param.data.shape[0]
@@ -1587,7 +1561,7 @@ class OurTrainer(Trainer):
                 selected_indices[name] = (selected_rows, selected_cols)
                 original_values[name] = param.data[selected_rows[:, None], selected_cols].clone()
 
-        # Обновляем параметры для z_+
+        # Updating parameters for z_+
         for name, param in self.named_parameters_to_optim:
             if len(param.data.shape) == 1:
                 indices = selected_indices[name]
@@ -1597,7 +1571,7 @@ class OurTrainer(Trainer):
                 param.data[selected_rows[:, None], selected_cols] += tau
         loss1 = self.zo_forward(model, inputs)
 
-        # Обновляем параметры для z_-
+        # Updating the parameters for z_-
         for name, param in self.named_parameters_to_optim:
             if len(param.data.shape) == 1:
                 indices = selected_indices[name]
@@ -1607,7 +1581,7 @@ class OurTrainer(Trainer):
                 param.data[selected_rows[:, None], selected_cols] = original_values[name] - tau
         loss2 = self.zo_forward(model, inputs)
 
-        # Восстанавливаем оригинальные параметры
+        # Restore the original parameters
         for name, param in self.named_parameters_to_optim:
             if len(param.data.shape) == 1:
                 indices = selected_indices[name]
@@ -1616,12 +1590,11 @@ class OurTrainer(Trainer):
                 selected_rows, selected_cols = selected_indices[name]
                 param.data[selected_rows[:, None], selected_cols] = original_values[name]
 
-        # rho = sign(f(z_+) - f(z_-))
-        # ПРАВКА1: убрали знак, оставив только разность лоссов
+        # rho = (f(z_+) - f(z_-)) / (2 tau)
         # rho = torch.sign(loss1 - loss2).item()
         rho = (loss1 - loss2).item() / (2 * tau)
 
-        # Обновляем градиенты
+        # Updating gradients
         for name, param in self.named_parameters_to_optim:
             if param.grad is None:
                 param.grad = torch.zeros_like(param)
@@ -1642,7 +1615,6 @@ class OurTrainer(Trainer):
                 else:
                     param.grad[selected_rows[:, None], selected_cols] = grad_update
             
-            # ПРАВКА2: строки ниже не было в предыдущих версиях, исправляем несоответствие
             param.grad = torch.sign(param.grad)
 
         self.optimizer.step()
@@ -1666,11 +1638,11 @@ class OurTrainer(Trainer):
         self.zo_random_seed = np.random.randint(1_000_000_000)
         torch.manual_seed(self.zo_random_seed)
 
-        # Словари для хранения выбранных индексов и начальных значений
+        # Dictionaries for storing selected indexes and initial values
         selected_indices = {}
         original_values = {}
 
-        # Выбираем индексы и сохраняем начальные значения
+        # Select the indices and save the initial values
         for name, param in self.named_parameters_to_optim:
             if len(param.data.shape) == 1:
                 n_elements = param.data.shape[0]
@@ -1687,7 +1659,7 @@ class OurTrainer(Trainer):
                 selected_indices[name] = (selected_rows, selected_cols)
                 original_values[name] = param.data[selected_rows[:, None], selected_cols].clone()
 
-        # Обновляем параметры для z_+
+        # Updating parameters for z_+
         for name, param in self.named_parameters_to_optim:
             if len(param.data.shape) == 1:
                 indices = selected_indices[name]
@@ -1697,7 +1669,7 @@ class OurTrainer(Trainer):
                 param.data[selected_rows[:, None], selected_cols] += tau
         loss1 = self.zo_forward(model, inputs)
 
-        # Обновляем параметры для z_-
+        # Updating the parameters for z_-
         for name, param in self.named_parameters_to_optim:
             if len(param.data.shape) == 1:
                 indices = selected_indices[name]
@@ -1707,7 +1679,7 @@ class OurTrainer(Trainer):
                 param.data[selected_rows[:, None], selected_cols] = original_values[name] - tau
         loss2 = self.zo_forward(model, inputs)
 
-        # Восстанавливаем оригинальные параметры
+        # Restore the original parameters
         for name, param in self.named_parameters_to_optim:
             if len(param.data.shape) == 1:
                 indices = selected_indices[name]
@@ -1716,12 +1688,10 @@ class OurTrainer(Trainer):
                 selected_rows, selected_cols = selected_indices[name]
                 param.data[selected_rows[:, None], selected_cols] = original_values[name]
 
-        # rho = sign(f(z_+) - f(z_-))
-        # ПРАВКА1:
-        # rho = torch.sign(loss1 - loss2).item()
+        # rho = (f(z_+) - f(z_-)) / (2 / tau)
         rho = (loss1 - loss2).item() / (2 * tau)
 
-        # Обновляем градиенты
+        # Updating gradients
         for name, param in self.named_parameters_to_optim:
             if param.grad is None:
                 param.grad = torch.zeros_like(param)
@@ -1742,7 +1712,6 @@ class OurTrainer(Trainer):
                 else:
                     param.grad[selected_rows[:, None], selected_cols] = grad_update
             
-            # ВОПРОС: нужен ли тут знак?
             if len(param.data.shape) > 1:
                 param.grad = zeropower_via_newtonschulz5(param.grad, steps=10).to(param.data.dtype)
             else:
