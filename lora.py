@@ -195,6 +195,22 @@ class LoRA:
                         attn.v_proj.half()
                     attn.q_proj.weight.data = original_q_weight
                     attn.v_proj.weight.data = original_v_weight
+                elif model.config.model_type == 'roberta':
+                    original_q_weight = attn.self.query.weight.data
+                    original_q_bias = attn.self.query.bias.data
+                    original_v_weight = attn.self.value.weight.data
+                    original_v_bias = attn.self.value.bias.data
+                    attn.self.query = LoRALinear(model.config.hidden_size, model.config.hidden_size, r=8, lora_alpha=0.1,
+                                             bias=True).to(original_q_weight.device)
+                    attn.self.value = LoRALinear(model.config.hidden_size, model.config.hidden_size, r=8, lora_alpha=0.1,
+                                             bias=True).to(original_v_weight.device)
+                    if float16:
+                        attn.self.query.half()
+                        attn.self.value.half()
+                    attn.self.query.weight.data = original_q_weight
+                    attn.self.query.bias.data = original_q_bias
+                    attn.self.value.weight.data = original_v_weight
+                    attn.self.value.bias.data = original_v_bias
                 else:
                     raise NotImplementedError
 
