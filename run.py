@@ -245,9 +245,7 @@ class Framework:
                     torch_dtype = torch.float16
                 elif self.args.load_bfloat16:
                     torch_dtype = torch.bfloat16
-                # Added offload_folder zo_jaguar
                 # offload_folder="./offload_folder"
-                # was device_map='auto', now device_map=6
                 model = AutoModelForCausalLM.from_pretrained(self.args.model_name, config=config, device_map='auto',
                                                              torch_dtype=torch_dtype,
                                                              max_memory={i: f'{free_in_GB - 5}GB' for i in
@@ -555,6 +553,12 @@ class Framework:
                              evaluate_func=self.evaluate,
                              perturb_module_regex=perturb_module_regex,
                              )
+        # scheduler = get_cosine_schedule_with_warmup(
+        #     trainer.optimizer,
+        #     num_warmup_steps=self.args.warmup_steps,
+        #     num_training_steps=trainer.get_train_dataloader().__len__()
+        # )
+        # trainer.lr_scheduler = scheduler
         if self.args.save_on_interrupt:
             trainer.add_callback(SIGUSR1Callback())
 
