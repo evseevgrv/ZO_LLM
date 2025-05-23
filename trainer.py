@@ -31,6 +31,11 @@ from functools import partial
 from pathlib import Path
 from typing import Dict, Union, Any
 from typing import TYPE_CHECKING, Optional, Iterable
+from transformers.optimization import (
+    get_cosine_schedule_with_warmup, 
+    get_linear_schedule_with_warmup,
+    get_polynomial_decay_schedule_with_warmup,
+)
 
 import numpy as np
 import torch
@@ -40,6 +45,7 @@ from sklearn.linear_model import LogisticRegressionCV
 from torch import nn
 from torch.func import functional_call, jvp
 from torch.optim import SGD, Adam
+from torch.optim.lr_scheduler import CosineAnnealingLR, ReduceLROnPlateau
 from torch.utils.data import DataLoader, RandomSampler
 from torch.utils.data.distributed import DistributedSampler
 from tqdm.auto import tqdm
@@ -152,6 +158,7 @@ def zeropower_via_newtonschulz5(G, steps=10, eps=1e-7):
     if G.size(0) > G.size(1):
         X = X.T
     return X
+        
 
 def generate_rotation_matrix(d, num_rotations=None, device='cpu'):
     if num_rotations is None:
@@ -196,7 +203,6 @@ def generate_semi_diagonal(n, m, distribution=sps.norm, device='cpu', dtype=torc
     return Sigma
 
 def create_random_matrix(n, m, device='cpu'):
-    """Creates a random matrix in the style of SVD: U @ diag(S) @ V.T"""
     U = generate_rotation_matrix(n, device=device)
     V = generate_rotation_matrix(m, device=device)
     
@@ -205,18 +211,6 @@ def create_random_matrix(n, m, device='cpu'):
     return U @ S @ V.T, U, V, S
 
 def torch_ortho_rvs(dim: int, device="cpu", dtype=torch.float32):
-    """
-    Returns an orthogonal matrix from O(N), uniformly distributed
-    over the Haar measure (analogous to scipy.stats.ortho_group.rvs(dim)).
-
-    Parameters:
-        dim (int): dimension of the matrix
-        device (str or torch.device): 'cpu' or 'cuda'
-        dtype (torch.dtype): data type (e.g. float32 or float64)
-
-    Returns:
-        torch.Tensor: orthogonal matrix dimension (dim, dim)
-    """
     z = torch.randn(dim, dim, device=device, dtype=dtype)
 
     q, r = torch.linalg.qr(z)
@@ -227,7 +221,7 @@ def torch_ortho_rvs(dim: int, device="cpu", dtype=torch.float32):
 
     return q
 
-def generate_gs_matrix(
+def generate_micola_matrix(
     dim,
     num_blocks: int = 10,
     use_PL: bool = True,
@@ -381,8 +375,8 @@ def create_random_matrix_fast(param_shapes, device='cpu'):
         k = min(n, m)
         # U = torch_ortho_rvs(n, device=device)
         # V = torch_ortho_rvs(m, device=device)
-        U = generate_gs_matrix(n, device=device)
-        V = generate_gs_matrix(m, device=device)
+        U = generate_micola_matrix(n, device=device)
+        V = generate_micola_matrix(m, device=device)
         U_k = U[:, :k]
         V_k = V[:, :k]
         E = U_k @ V_k.T
@@ -393,7 +387,21 @@ def create_random_matrix_fast(param_shapes, device='cpu'):
 
 ############################
 
-# SAME FOR SEMI-ORTHOGONAL
+def generate_orthogonal_approx(G, device='cpu'):
+    assert len(G.shape) == 2, "Input must be a 2D tensor"
+    m, n = G.shape
+    
+    # U_e m x m
+    U_e = generate_orthogonal_matrix(m, device=device)
+    
+    #V_e n x n
+    V_e = generate_orthogonal_matrix(n, device=device)
+    
+    approx = U_e @ V_e.T
+    
+    return approx
+
+# Semiorthogonal setup
 
 def generate_semi_rotation_matrix(m, n, num_rotations=None, device='cpu'):
     if num_rotations is None:
@@ -433,7 +441,7 @@ def generate_semi_orthogonal_approx(G, device='cpu'):
     V_e = generate_semi_orthogonal_matrix(m, n, device=device)
     return V_e
 
-######## FUNCTION TO CREATE ONE “ORTHOGONAL” MATRIX OF A GIVEN SIZE #########
+###################
 
 def sample_ortho_approx(shape, device='cpu'):
     assert len(shape) == 2, "Input dimension must be 2D"
@@ -453,6 +461,12 @@ class OurTrainer(Trainer):
         self.dev_samples = dev_samples
         self.eval_samples = eval_samples
         self.perturb_module_regex = perturb_module_regex
+
+    # def create_optimizer_and_scheduler(self, num_training_steps):
+        # self.optimizer = SGD(self.model.parameters(), lr=self.args.learning_rate,)
+        # self.lr_scheduler = get_linear_schedule_with_warmup(self.optimizer, num_training_steps=self.args.max_steps, num_warmup_steps=1000)
+        # self.lr_scheduler = get_polynomial_decay_schedule_with_warmup(self.optimizer, num_warmup_steps=100, num_training_steps=self.args.max_steps, power=4)
+    # #     # self.lr_scheduler = get_cosine_schedule_with_warmup(self.optimizer, num_warmup_steps=1000, num_training_steps=self.args.max_steps)
 
     def _inner_training_loop(
             self, batch_size=None, args=None, resume_from_checkpoint=None, trial=None, ignore_keys_for_eval=None
@@ -636,18 +650,18 @@ class OurTrainer(Trainer):
             self.optimizer = Adam(self.model.parameters(), lr=args.learning_rate)
             # self.optimizer = {name: Adam([param], lr=args.learning_rate) for name, param in self.model.named_parameters()}
             # assert args.lr_scheduler
-            assert args.lr_scheduler_type == 'constant', "we did not implement lr_schedule."
+            # assert args.lr_scheduler_type == 'constant', "we did not implement lr_schedule."
         elif args.trainer == "zo_sgd":
             self.optimizer = SGD(self.model.parameters(), lr=args.learning_rate, momentum=args.momentum)
             # self.optimizer = {name: SGD([param], lr=args.learning_rate) for name, param in self.model.named_parameters()}
             # print(f"### args.lr_scheduler: {args.lr_scheduler_type}")
-            assert args.lr_scheduler_type == 'constant', "we did not implement lr_schedule."
+            # assert args.lr_scheduler_type == 'constant', "we did not implement lr_schedule."
         elif args.trainer == "zo_jaguar":
             self.optimizer = SGD(self.model.parameters(), lr=args.learning_rate, momentum=args.momentum)
             # self.optimizer = SGD(self.model.parameters(), lr=args.learning_rate)
             # self.optimizer = {name: SGD([param], lr=args.learning_rate) for name, param in self.model.named_parameters()}
             # print(f"### args.lr_scheduler: {args.lr_scheduler_type}")
-            assert args.lr_scheduler_type == 'constant', "we did not implement lr_schedule."
+            # assert args.lr_scheduler_type == 'constant', "we did not implement lr_schedule."
         elif args.trainer == "zo_muon":
             self.optimizer = SGD(self.model.parameters(), lr=args.learning_rate, momentum=args.momentum)
             # self.optimizer = SGD(self.model.parameters(), lr=args.learning_rate)
@@ -657,12 +671,13 @@ class OurTrainer(Trainer):
         elif args.trainer == "zo_ns_jaguar":
             self.optimizer = SGD(self.model.parameters(), lr=args.learning_rate, momentum=args.momentum)
         else:
-            assert args.lr_scheduler_type == 'constant', "we did not implement lr_schedule."
+            # assert args.lr_scheduler_type == 'constant', "we did not implement lr_schedule."
             if args.optimizer == "adam":
                 self.optimizer = Adam(self.model.parameters(), lr=args.learning_rate)
             elif args.optimizer == "sgd":
                 self.optimizer = SGD(self.model.parameters(), lr=args.learning_rate, momentum=args.momentum)
 
+        # self.scheduler = CosineAnnealingLR(self.optimizer, T_max=self.args.max_steps, eta_min=1e-8)
         # important: at this point:
         # self.model         is the Transformers Model
         # self.model_wrapped is DDP(Transformers Model), Deepspeed(Transformers Model), etc.
@@ -840,6 +855,7 @@ class OurTrainer(Trainer):
                         raise ValueError(f"q={args.q} is not supported.")
                 elif args.trainer == "zo_jaguar":
                     tr_loss_step = self.zo_jaguar_step(model, inputs)
+                    self.tr_loss_step = tr_loss_step
                 elif args.trainer == "zo_muon":
                     tr_loss_step = self.zo_muon_step(model, inputs)
                 elif args.trainer == "zo_muon_sampling":
@@ -884,7 +900,7 @@ class OurTrainer(Trainer):
                         and (step + 1) == steps_in_epoch
                 ):
                     # MeZO added: update model with the estimated gradient
-                    # Added our algorithms
+                    # Added zo_jaguar
                     if args.trainer in ["zo_sgd", "zo_adam", "zo_sign_opt", "zo_conserv", "zo_jaguar", "zo_muon", "zo_muon_sampling"]:
                         self.zo_update(model)
                     elif args.trainer == "forward_grad":
@@ -1371,10 +1387,19 @@ class OurTrainer(Trainer):
         tau_update_vector = torch.zeros_like(param.data)
         # tau_update_vector[r, c] = τ
         tau_update_vector[selected_rows[:, None], selected_cols] = tau  
-        # param = param + scaling_factor * tau_update_vector
         param.data = param.data + scaling_factor * tau_update_vector
-       
-    # MODIFY MUON:
+    
+    def zo_muon_pertrub_parameters(self, E, scaling_factor=1, random_seed=None):
+        torch.manual_seed(random_seed if random_seed is not None else self.zo_random_seed)
+        self.sparse_grad_rng.manual_seed(self.sparse_grad_random_seed)
+        for name, param in self.named_parameters_to_optim:
+            # grad_sparsity = self.get_grad_sparsity_by_name(name)
+            # z = torch.normal(mean=0, std=1, size=param.data.size(), device=param.data.device, dtype=param.data.dtype)
+            # if grad_sparsity is not None:
+                # z[fast_random_mask_like(z, grad_sparsity, generator=self.sparse_grad_rng)] = 0
+            param.data.add(scaling_factor * E * self.args.zo_tau)
+    
+    # Muon:
     # @torch.compile()
     @torch.no_grad()
     def zo_muon_sampling_step(self, model, inputs, debug=False):
@@ -1390,7 +1415,6 @@ class OurTrainer(Trainer):
         if hasattr(self, 'sparse_grad_rng'):
             self.sparse_grad_rng.manual_seed(seed)
 
-        # This allows a faster version, but more memory consuming:
         # E
         # shapes = [(name, tuple(param.shape)) for name, param in named if param.ndim >= 2 and param.size(0) < 10000]
         # E_dict = create_random_matrix_fast(shapes, device=model.device)
@@ -1443,16 +1467,10 @@ class OurTrainer(Trainer):
 
         return loss1
 
+    
+    # Base ZO-MUON
     @torch.no_grad()
     def zo_muon_step(self, model, inputs):
-        """
-        ZO Muon implementation.
-        
-        Estimates the gradient using the method as in MeZO and then updates the model parameters using
-        orthogonalization of updates through Newton-Schulz iterations, similar to Muon.
-        
-        Returns the function value (loss) for the first call (f(theta + z)).
-        """
         args = self.args
 
         self.named_parameters_to_optim = []
@@ -1477,7 +1495,7 @@ class OurTrainer(Trainer):
                 self.projected_grad = ((loss1 - loss2) / (2 * args.zo_eps)).item()
                 self.zo_perturb_parameters(scaling_factor=1)
         else:
-            raise NotImplementedError("q > 1 is not implemented.")
+            raise NotImplementedError("q > 1 is not implemented")
 
         torch.manual_seed(self.zo_random_seed)
         self.sparse_grad_rng.manual_seed(self.sparse_grad_random_seed)
@@ -1526,25 +1544,26 @@ class OurTrainer(Trainer):
 
 
     @torch.no_grad()
-    def zo_jaguar_step(self, model, inputs, debug=False):
-        """
-        JAGUAR's effective step.
-        """
+    def zo_jaguar_step(self, model, inputs, debug=True):
         args = self.args
-        tau = args.zo_tau
         beta = args.zo_beta
         use_smoothing = args.zo_use_smoothing
-
+        tau = args.zo_tau
+        # lr = self._get_learning_rate()
+        # if lr != 0:
+        #     tau = lr
+        # else:
+        #     tau = args.zo_tau
+        # print(tau)
         self.named_parameters_to_optim = [(name, param) for name, param in model.named_parameters() if param.requires_grad]
 
         self.zo_random_seed = np.random.randint(1_000_000_000)
         torch.manual_seed(self.zo_random_seed)
 
-        # Dictionaries for storing selected indexes and initial values
         selected_indices = {}
         original_values = {}
 
-        # Select the indices and save the initial values
+        self.optimizer.zero_grad()
         for name, param in self.named_parameters_to_optim:
             if len(param.data.shape) == 1:
                 n_elements = param.data.shape[0]
@@ -1561,7 +1580,6 @@ class OurTrainer(Trainer):
                 selected_indices[name] = (selected_rows, selected_cols)
                 original_values[name] = param.data[selected_rows[:, None], selected_cols].clone()
 
-        # Updating parameters for z_+
         for name, param in self.named_parameters_to_optim:
             if len(param.data.shape) == 1:
                 indices = selected_indices[name]
@@ -1571,7 +1589,6 @@ class OurTrainer(Trainer):
                 param.data[selected_rows[:, None], selected_cols] += tau
         loss1 = self.zo_forward(model, inputs)
 
-        # Updating the parameters for z_-
         for name, param in self.named_parameters_to_optim:
             if len(param.data.shape) == 1:
                 indices = selected_indices[name]
@@ -1581,7 +1598,6 @@ class OurTrainer(Trainer):
                 param.data[selected_rows[:, None], selected_cols] = original_values[name] - tau
         loss2 = self.zo_forward(model, inputs)
 
-        # Restore the original parameters
         for name, param in self.named_parameters_to_optim:
             if len(param.data.shape) == 1:
                 indices = selected_indices[name]
@@ -1590,18 +1606,16 @@ class OurTrainer(Trainer):
                 selected_rows, selected_cols = selected_indices[name]
                 param.data[selected_rows[:, None], selected_cols] = original_values[name]
 
-        # rho = (f(z_+) - f(z_-)) / (2 tau)
-        # rho = torch.sign(loss1 - loss2).item()
+        # rho = sign(f(z_+) - f(z_-))
         rho = (loss1 - loss2).item() / (2 * tau)
 
-        # Updating gradients
         for name, param in self.named_parameters_to_optim:
             if param.grad is None:
                 param.grad = torch.zeros_like(param)
             else:
                 param.grad.zero_()
 
-            grad_update = rho * tau
+            grad_update = rho
             if len(param.data.shape) == 1:
                 indices = selected_indices[name]
                 if use_smoothing:
@@ -1614,11 +1628,11 @@ class OurTrainer(Trainer):
                     param.grad[selected_rows[:, None], selected_cols] = beta * param.grad[selected_rows[:, None], selected_cols] + (1 - beta) * grad_update
                 else:
                     param.grad[selected_rows[:, None], selected_cols] = grad_update
-            
+
             param.grad = torch.sign(param.grad)
 
         self.optimizer.step()
-        # param.grad = None
+        
 
         if debug:
             print(f"loss1={loss1.item():.4f}, loss2={loss2.item():.4f}, rho={rho:.2f}")
@@ -1638,11 +1652,9 @@ class OurTrainer(Trainer):
         self.zo_random_seed = np.random.randint(1_000_000_000)
         torch.manual_seed(self.zo_random_seed)
 
-        # Dictionaries for storing selected indexes and initial values
         selected_indices = {}
         original_values = {}
 
-        # Select the indices and save the initial values
         for name, param in self.named_parameters_to_optim:
             if len(param.data.shape) == 1:
                 n_elements = param.data.shape[0]
@@ -1659,7 +1671,6 @@ class OurTrainer(Trainer):
                 selected_indices[name] = (selected_rows, selected_cols)
                 original_values[name] = param.data[selected_rows[:, None], selected_cols].clone()
 
-        # Updating parameters for z_+
         for name, param in self.named_parameters_to_optim:
             if len(param.data.shape) == 1:
                 indices = selected_indices[name]
@@ -1669,7 +1680,6 @@ class OurTrainer(Trainer):
                 param.data[selected_rows[:, None], selected_cols] += tau
         loss1 = self.zo_forward(model, inputs)
 
-        # Updating the parameters for z_-
         for name, param in self.named_parameters_to_optim:
             if len(param.data.shape) == 1:
                 indices = selected_indices[name]
@@ -1679,7 +1689,6 @@ class OurTrainer(Trainer):
                 param.data[selected_rows[:, None], selected_cols] = original_values[name] - tau
         loss2 = self.zo_forward(model, inputs)
 
-        # Restore the original parameters
         for name, param in self.named_parameters_to_optim:
             if len(param.data.shape) == 1:
                 indices = selected_indices[name]
@@ -1688,34 +1697,30 @@ class OurTrainer(Trainer):
                 selected_rows, selected_cols = selected_indices[name]
                 param.data[selected_rows[:, None], selected_cols] = original_values[name]
 
-        # rho = (f(z_+) - f(z_-)) / (2 / tau)
         rho = (loss1 - loss2).item() / (2 * tau)
 
-        # Updating gradients
         for name, param in self.named_parameters_to_optim:
             if param.grad is None:
                 param.grad = torch.zeros_like(param)
             else:
                 param.grad.zero_()
 
-            grad_update = rho * tau
+            grad_update = rho
             if len(param.data.shape) == 1:
                 indices = selected_indices[name]
                 if use_smoothing:
                     param.grad[indices] = beta * param.grad[indices] + (1 - beta) * grad_update
                 else:
                     param.grad[indices] = grad_update
+                param.grad[indices] = torch.sign(param.grad[indices])
             else:
                 selected_rows, selected_cols = selected_indices[name]
                 if use_smoothing:
                     param.grad[selected_rows[:, None], selected_cols] = beta * param.grad[selected_rows[:, None], selected_cols] + (1 - beta) * grad_update
                 else:
                     param.grad[selected_rows[:, None], selected_cols] = grad_update
-            
-            if len(param.data.shape) > 1:
+
                 param.grad = zeropower_via_newtonschulz5(param.grad, steps=10).to(param.data.dtype)
-            else:
-                param.grad = torch.sign(param.grad)
 
         self.optimizer.step()
         # param.grad = None
