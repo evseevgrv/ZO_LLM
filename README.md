@@ -1,6 +1,6 @@
 # Leveraging Coordinate Momentum in SignSGD and Muon: Memory-Optimized Zero-Order LLM Fine-Tuning
 
-This repository contains the code for experiments applying JAGUAR SignSGD, JAGUAR Muon and ZO-Muon methods for different LLM Fine-Tuning tasks.
+This repository contains the code for experiments applying Jaguar SignSGD, Jaguar Muon and ZO-Muon methods for different LLM Fine-Tuning tasks.
 
 The code is based on the [benchmark](https://github.com/ZO-Bench)
 
