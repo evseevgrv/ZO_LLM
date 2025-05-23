@@ -22,6 +22,6 @@ To train and evaluate the model in the paper, run this command:
 
 ## Methods 
 
-* `zo_ns_jaguar` is ZO Jaguar Muon
-* `zo_jaguar` is ZO Jaguar SignSGD
+* `zo_ns_jaguar` is Jaguar Muon
+* `zo_jaguar` is Jaguar SignSGD
 * `zo_muon` is ZO Muon
