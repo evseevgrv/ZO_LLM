@@ -19,3 +19,9 @@ To train and evaluate the model in the paper, run this command:
 ```
 ./run_script.sh
 ```
+
+## Methods 
+
+* `zo_ns_jaguar` is ZO Jaguar Muon
+* `zo_jaguar` is ZO Jaguar SignSGD
+* `zo_muon` is ZO Jaguar Muon
