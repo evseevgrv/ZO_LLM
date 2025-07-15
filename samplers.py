@@ -42,7 +42,7 @@ class Sampler:
             S = self.Sigma(n, m)
             U = self.sampler(n)
             V = self.sampler(m)
-            S_k = S[:, :k]
+            S_k = S[:k, :k]
             U_k = U[:, :k]
             V_k = V[:, :k]
             E_k = U_k @ S_k @ V_k.T
