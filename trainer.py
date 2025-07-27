@@ -1645,8 +1645,13 @@ class OurTrainer(Trainer):
                     param.grad[indices] = grad_update
             else:
                 selected_rows, selected_cols = selected_indices[name]
+                print(f"Selected rows shape: {selected_rows.shape}")
+                print(f"Selected cols shape: {selected_cols.shape}")
                 if use_smoothing:
+                    print("IN USE SMOOTHING")
+                    print("SELECTED PARAM GRAD ", param.grad[selected_rows[:, None], selected_cols])
                     param.grad[selected_rows[:, None], selected_cols] = beta * param.grad[selected_rows[:, None], selected_cols] + (1 - beta) * grad_update
+                    print("SELECTED PARAM GRAD AFTER UPDATE")
                 else:
                     param.grad[selected_rows[:, None], selected_cols] = grad_update
 
