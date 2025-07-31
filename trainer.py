@@ -84,7 +84,7 @@ from transformers.utils import (
 )
 
 # from torch.optim.optimizer import StateDict, params_t
-# import wandb
+import wandb
 from clearml import Task
 from gradient_pruning.pruning_utils import (
     fast_random_mask_like,
@@ -462,10 +462,9 @@ class OurTrainer(Trainer):
         self.dev_samples = dev_samples
         self.eval_samples = eval_samples
         self.perturb_module_regex = perturb_module_regex
-        self.gradients = {}
 
-        # self.name = None 
-
+        self.name = None 
+        self.gradients = None
     # def create_optimizer_and_scheduler(self, num_training_steps):
         # self.optimizer = SGD(self.model.parameters(), lr=self.args.learning_rate,)
         # self.lr_scheduler = get_linear_schedule_with_warmup(self.optimizer, num_training_steps=self.args.max_steps, num_warmup_steps=1000)
@@ -484,7 +483,7 @@ class OurTrainer(Trainer):
         train_dataloader = self.get_train_dataloader()
         eval_dataloader = self.get_eval_dataloader()  # ----newly-added
 
-        clearml_task = Task.current_task()
+        # clearml_task = Task.current_task()
 
         # MeZO added: Linear probing
         if self.args.linear_probing:
@@ -859,14 +858,14 @@ class OurTrainer(Trainer):
                         tr_loss_step = self.zo_step_v1(model, inputs)
                     else:
                         raise ValueError(f"q={args.q} is not supported.")
-                elif args.trainer == "zo_jaguar":
+                elif args.trainer == "zo_jaguar" or args.trainer == "jaguar_signsgd":
                     tr_loss_step = self.zo_jaguar_step(model, inputs)
                     self.tr_loss_step = tr_loss_step
                 elif args.trainer == "zo_muon":
                     tr_loss_step = self.zo_muon_step(model, inputs)
                 elif args.trainer == "zo_muon_sampling":
                     tr_loss_step = self.zo_muon_sampling_step(model, inputs)
-                elif args.trainer == "zo_ns_jaguar":
+                elif args.trainer == "zo_ns_jaguar" or args.trainer == "jaguar_muon":
                     tr_loss_step = self.zo_ns_jaguar_step(model, inputs)
                 elif args.trainer == "zo_conserv":
                     tr_loss_step = self.zo_conserv_step(model, inputs)
@@ -935,12 +934,12 @@ class OurTrainer(Trainer):
                     test_metrics = self.evaluate_func([], self.eval_samples)
                     if "accuracy" in test_metrics:
                         self.log({"test_acc": test_metrics["accuracy"], "val_acc": val_metrics["accuracy"]})
-                        # wandb.log({"test_acc": test_metrics["accuracy"], "val_acc": val_metrics["accuracy"]})
-                        if clearml_task:
-                            clearml_task.get_logger().report_scalar(
-                                "Accuracy", "test", test_metrics["accuracy"], total_steps + 1)
-                            clearml_task.get_logger().report_scalar(
-                                "Accuracy", "val", val_metrics["accuracy"], total_steps + 1)
+                        wandb.log({"test_acc": test_metrics["accuracy"], "val_acc": val_metrics["accuracy"]})
+                        # if clearml_task:
+                        #     clearml_task.get_logger().report_scalar(
+                        #         "Accuracy", "test", test_metrics["accuracy"], total_steps + 1)
+                        #     clearml_task.get_logger().report_scalar(
+                        #         "Accuracy", "val", val_metrics["accuracy"], total_steps + 1)
                     else:
                         keys = list(test_metrics.keys())
                         log_dict = {}
@@ -948,11 +947,11 @@ class OurTrainer(Trainer):
                             log_dict['test_' + k] = test_metrics[k]
                             log_dict['val_' + k] = val_metrics[k]
                         self.log(log_dict)
-                        # wandb.log(log_dict)
-                        if clearml_task:
-                            for k, v in log_dict.items():
-                                clearml_task.get_logger().report_scalar(
-                                    k.split('_')[0], k, v, total_steps + 1)
+                        wandb.log(log_dict)
+                        # if clearml_task:
+                        #     for k, v in log_dict.items():
+                        #         clearml_task.get_logger().report_scalar(
+                        #             k.split('_')[0], k, v, total_steps + 1)
 
                 max_memory_allocated = 0
                 for device_id in range(torch.cuda.device_count()):
@@ -960,13 +959,13 @@ class OurTrainer(Trainer):
                     max_memory_allocated += torch.cuda.max_memory_allocated(device_id)
                 self.log({"peak_mem": max_memory_allocated / 1024 ** 3,
                           "step_consumption": train_step_duration * 1000})
-                # wandb.log({"peak_mem": max_memory_allocated / 1024 ** 3,
-                #            "step_consumption": train_step_duration * 1000})
-                if clearml_task:
-                    clearml_task.get_logger().report_scalar(
-                        "Memory", "peak_mem", max_memory_allocated / 1024 ** 3, total_steps)
-                    clearml_task.get_logger().report_scalar(
-                        "Time", "step_consumption", train_step_duration * 1000, total_steps)
+                wandb.log({"peak_mem": max_memory_allocated / 1024 ** 3,
+                           "step_consumption": train_step_duration * 1000})
+                # if clearml_task:
+                #     clearml_task.get_logger().report_scalar(
+                #         "Memory", "peak_mem", max_memory_allocated / 1024 ** 3, total_steps)
+                #     clearml_task.get_logger().report_scalar(
+                #         "Time", "step_consumption", train_step_duration * 1000, total_steps)
 
             if step < 0:
                 # Why would this happen? I don't know, but let's be safe.
@@ -1021,12 +1020,12 @@ class OurTrainer(Trainer):
 
         self._memory_tracker.stop_and_update_metrics(metrics)
 
-        # wandb.log(metrics)
         self.log(metrics)
-        if clearml_task:
-            for key, value in metrics.items():
-                clearml_task.get_logger().report_scalar(
-                    "Training", key, value, self.state.global_step)
+        wandb.log(metrics)
+        # if clearml_task:
+        #     for key, value in metrics.items():
+        #         clearml_task.get_logger().report_scalar(
+        #             "Training", key, value, self.state.global_step)
 
         run_dir = self._get_output_dir(trial)
         checkpoints_sorted = self._sorted_checkpoints(use_mtime=False, output_dir=run_dir)
@@ -1541,7 +1540,8 @@ class OurTrainer(Trainer):
             else:
                 grad_update = self.projected_grad * z
 
-            if param.ndim >= 2 and param.size(0) < 10000:
+            # if param.ndim >= 2 and param.size(0) < 10000:
+            if param.ndim >= 2:
                 g = grad_update.to(torch.bfloat16)
                 original_shape = g.shape
                 if g.ndim > 2:
@@ -1556,11 +1556,11 @@ class OurTrainer(Trainer):
 
             param.grad = grad_update_final
             self.optimizer.step()
-            param.grad = None
-            # param.data.add_(grad_update_final, alpha=-self._get_learning_rate())
+            # param.data.add_(param.grad, alpha=-self._get_learning_rate())
+            param.grad.zero_()
 
         for _, param in self.named_parameters_to_optim:
-            param.grad = None
+            param.grad.zero_()
 
         assert args.gradient_accumulation_steps == 1
 
@@ -1756,6 +1756,7 @@ class OurTrainer(Trainer):
                     param.data[selected_rows[:, None], selected_cols] = original_values[name]
 
         rho = (loss1 - loss2).item() / (2 * tau)
+
         for name, param in self.named_parameters_to_optim:
             grad_update = rho
             if len(param.data.shape) == 1:
@@ -1785,7 +1786,7 @@ class OurTrainer(Trainer):
 
         assert args.gradient_accumulation_steps == 1
         return loss1
-        
+
     @torch.no_grad()
     def zo_step(self, model, inputs):
         """
