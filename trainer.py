@@ -85,7 +85,7 @@ from transformers.utils import (
 
 # from torch.optim.optimizer import StateDict, params_t
 import wandb
-# from clearml import Task
+from clearml import Task
 from gradient_pruning.pruning_utils import (
     fast_random_mask_like,
     estimate_pretrained_model_magnitude_pruning_threshold,
@@ -1681,6 +1681,112 @@ class OurTrainer(Trainer):
         assert args.gradient_accumulation_steps == 1
         return loss1
 
+    # def zo_ns_jaguar_step(self, model, inputs, debug=False):
+    #     args = self.args
+    #     tau = args.zo_tau
+    #     beta = args.zo_beta
+    #     use_smoothing = args.zo_use_smoothing
+
+    #     self.named_parameters_to_optim = [(name, param) for name, param in model.named_parameters() if param.requires_grad]
+
+    #     self.zo_random_seed = np.random.randint(1_000_000_000)
+    #     torch.manual_seed(self.zo_random_seed)
+
+    #     selected_indices = {}
+    #     original_values = {}
+
+    #     if self.gradients is not None:
+    #         for name, param in model.named_parameters():
+    #             if name in self.gradients:
+    #                 if self.gradients[name] is not None:
+    #                     param.grad = self.gradients[name].clone()  
+    #                 else:
+    #                     param.grad = None
+
+    #     for name, param in self.named_parameters_to_optim:
+    #         if param.grad is None:
+    #             param.grad = torch.zeros_like(param)
+    #         # if self.name is None:
+    #         #     self.name = name 
+    #         # if name == self.name:
+    #         #     print("beg", name, param.grad)
+
+    #         if len(param.data.shape) == 1:
+    #             n_elements = param.data.shape[0]
+    #             k = max(1, n_elements // 10)
+    #             indices = torch.randperm(n_elements, device=param.device)[:k]
+    #             selected_indices[name] = indices
+    #             original_values[name] = param.data[indices].clone()
+    #         else:
+    #             n_rows, n_cols = param.data.shape
+    #             k = max(1, n_rows // 10)
+    #             m = max(1, n_cols // 10)
+    #             selected_rows = torch.randperm(n_rows, device=param.device)[:k]
+    #             selected_cols = torch.randperm(n_cols, device=param.device)[:m]
+    #             selected_indices[name] = (selected_rows, selected_cols)
+    #             original_values[name] = param.data[selected_rows[:, None], selected_cols].clone()
+
+    #     with torch.no_grad():
+    #         for name, param in self.named_parameters_to_optim:
+    #             if len(param.data.shape) == 1:
+    #                 indices = selected_indices[name]
+    #                 param.data[indices] += tau
+    #             else:
+    #                 selected_rows, selected_cols = selected_indices[name]
+    #                 param.data[selected_rows[:, None], selected_cols] += tau
+    #     loss1 = self.zo_forward(model, inputs)
+
+    #     with torch.no_grad():
+    #         for name, param in self.named_parameters_to_optim:
+    #             if len(param.data.shape) == 1:
+    #                 indices = selected_indices[name]
+    #                 param.data[indices] = original_values[name] - tau
+    #             else:
+    #                 selected_rows, selected_cols = selected_indices[name]
+    #                 param.data[selected_rows[:, None], selected_cols] = original_values[name] - tau
+    #     loss2 = self.zo_forward(model, inputs)
+
+    #     with torch.no_grad():
+    #         for name, param in self.named_parameters_to_optim:
+    #             if len(param.data.shape) == 1:
+    #                 indices = selected_indices[name]
+    #                 param.data[indices] = original_values[name]
+    #             else:
+    #                 selected_rows, selected_cols = selected_indices[name]
+    #                 param.data[selected_rows[:, None], selected_cols] = original_values[name]
+
+    #     rho = (loss1 - loss2).item() / (2 * tau)
+
+    #     for name, param in self.named_parameters_to_optim:
+    #         grad_update = rho
+    #         if len(param.data.shape) == 1:
+    #             indices = selected_indices[name]
+    #             if use_smoothing:
+    #                 param.grad[indices] = beta * param.grad[indices] + (1 - beta) * grad_update
+    #             else:
+    #                 param.grad[indices] += grad_update  
+    #             param.grad[indices] = torch.sign(param.grad[indices])
+    #         else:
+    #             selected_rows, selected_cols = selected_indices[name]
+    #             if use_smoothing:
+    #                 param.grad[selected_rows[:, None], selected_cols] = beta * param.grad[selected_rows[:, None], selected_cols] + (1 - beta) * grad_update
+    #             else:
+    #                 param.grad[selected_rows[:, None], selected_cols] += grad_update 
+    #             param.grad = zeropower_via_newtonschulz5(param.grad, steps=5).to(param.data.dtype)
+    #     self.gradients = {}
+    #     for name, param in model.named_parameters():
+    #         if param.grad is not None:
+    #             self.gradients[name] = param.grad.clone()  
+    #         else:
+    #             self.gradients[name] = None 
+    #     self.optimizer.step()
+
+    #     if debug:
+    #         print(f"loss1={loss1.item():.4f}, loss2={loss2.item():.4f}, rho={rho:.2f}")
+
+    #     assert args.gradient_accumulation_steps == 1
+    #     return loss1
+
     def zo_ns_jaguar_step(self, model, inputs, debug=False):
         args = self.args
         tau = args.zo_tau
@@ -1692,25 +1798,20 @@ class OurTrainer(Trainer):
         self.zo_random_seed = np.random.randint(1_000_000_000)
         torch.manual_seed(self.zo_random_seed)
 
+        # Сохраняем оригинальные градиенты
+        original_grads = {}
+        for name, param in self.named_parameters_to_optim:
+            original_grads[name] = param.grad.clone() if param.grad is not None else None
+
         selected_indices = {}
         original_values = {}
 
-        if self.gradients is not None:
-            for name, param in model.named_parameters():
-                if name in self.gradients:
-                    if self.gradients[name] is not None:
-                        param.grad = self.gradients[name].clone()  # Восстанавливаем градиент
-                    else:
-                        param.grad = None
-
         for name, param in self.named_parameters_to_optim:
-            if param.grad is None:
-                param.grad = torch.zeros_like(param)
-            # if self.name is None:
-            #     self.name = name 
-            # if name == self.name:
-            #     print("beg", name, param.grad)
-
+            # Инициализация state
+            if param not in self.optimizer.state:
+                self.optimizer.state[param] = {}
+                self.optimizer.state[param]['grad_accum'] = torch.zeros_like(param.data)
+            
             if len(param.data.shape) == 1:
                 n_elements = param.data.shape[0]
                 k = max(1, n_elements // 10)
@@ -1757,116 +1858,120 @@ class OurTrainer(Trainer):
 
         rho = (loss1 - loss2).item() / (2 * tau)
 
+        # Обновляем state без влияния на param.grad
         for name, param in self.named_parameters_to_optim:
             grad_update = rho
+            state = self.optimizer.state[param]
             if len(param.data.shape) == 1:
                 indices = selected_indices[name]
                 if use_smoothing:
-                    param.grad[indices] = beta * param.grad[indices] + (1 - beta) * grad_update
+                    state['grad_accum'][indices] = beta * state['grad_accum'][indices] + (1 - beta) * grad_update
                 else:
-                    param.grad[indices] += grad_update  # Накопление градиента
-                param.grad[indices] = torch.sign(param.grad[indices])
+                    state['grad_accum'][indices] += grad_update  
+                state['grad_accum'][indices] = torch.sign(state['grad_accum'][indices])
             else:
                 selected_rows, selected_cols = selected_indices[name]
                 if use_smoothing:
-                    param.grad[selected_rows[:, None], selected_cols] = beta * param.grad[selected_rows[:, None], selected_cols] + (1 - beta) * grad_update
+                    state['grad_accum'][selected_rows[:, None], selected_cols] = beta * state['grad_accum'][selected_rows[:, None], selected_cols] + (1 - beta) * grad_update
                 else:
-                    param.grad[selected_rows[:, None], selected_cols] += grad_update  # Накопление градиента
-                param.grad = zeropower_via_newtonschulz5(param.grad, steps=5).to(param.data.dtype)
-        self.gradients = {}
-        for name, param in model.named_parameters():
-            if param.grad is not None:
-                self.gradients[name] = param.grad.clone()  # Копируем градиент
-            else:
-                self.gradients[name] = None  # Сохраняем None, если градиента нет
+                    state['grad_accum'][selected_rows[:, None], selected_cols] += grad_update 
+                state['grad_accum'] = zeropower_via_newtonschulz5(state['grad_accum'], steps=5).to(param.data.dtype)
+            
+            # Временно устанавливаем grad для выполнения шага
+            param.grad = state['grad_accum'].clone()
+
         self.optimizer.step()
+
+        # Восстанавливаем оригинальные градиенты
+        for name, param in self.named_parameters_to_optim:
+            param.grad = original_grads[name]
 
         if debug:
             print(f"loss1={loss1.item():.4f}, loss2={loss2.item():.4f}, rho={rho:.2f}")
 
         assert args.gradient_accumulation_steps == 1
         return loss1
+        
+        @torch.no_grad()
+        def zo_step(self, model, inputs):
+            """
+            Estimate gradient by MeZO. Return the loss from f(theta + z)
+            """
+            args = self.args
 
-    @torch.no_grad()
-    def zo_step(self, model, inputs):
-        """
-        Estimate gradient by MeZO. Return the loss from f(theta + z)
-        """
-        args = self.args
+            # What parameters to optimize
+            self.named_parameters_to_optim = []
+            for name, param in model.named_parameters():
+                if param.requires_grad:
+                    self.named_parameters_to_optim.append((name, param))
+                    # # TODO avoid init the memory for grad.
+                    # param.grad = torch.zeros_like(param.data)
+                    param.grad = None  # Make sure the grad is empty and will not be updated.
 
-        # What parameters to optimize
-        self.named_parameters_to_optim = []
-        for name, param in model.named_parameters():
-            if param.requires_grad:
-                self.named_parameters_to_optim.append((name, param))
-                # # TODO avoid init the memory for grad.
-                # param.grad = torch.zeros_like(param.data)
-                param.grad = None  # Make sure the grad is empty and will not be updated.
+            # Sample the random seed for sampling z
+            self.zo_random_seed = np.random.randint(1000000000)
 
-        # Sample the random seed for sampling z
-        self.zo_random_seed = np.random.randint(1000000000)
+            # First function evaluation
+            # NOTE: when sparse_grad is set to True, it will also check the args.gradient_sparsity,
+            # so it does not necessarily use sparse grad.
+            self.zo_perturb_parameters(scaling_factor=1)
+            loss1 = self.zo_forward(model, inputs)
 
-        # First function evaluation
-        # NOTE: when sparse_grad is set to True, it will also check the args.gradient_sparsity,
-        # so it does not necessarily use sparse grad.
-        self.zo_perturb_parameters(scaling_factor=1)
-        loss1 = self.zo_forward(model, inputs)
+            # Second function evaluation
+            assert args.q == 1, "only support q=1 for the memory efficiency. If you want to implement q>1, need to store random seeds to save memory. In addition, we need to set different random seed for different z in the q-loop."
+            for _ in range(args.q):  # TODO shall we change the seed?
+                if self.args.perturbation_mode == "one_side":
+                    self.zo_perturb_parameters(scaling_factor=-1)
+                    loss2 = self.zo_forward(model, inputs)
+                    self.projected_grad = ((loss1 - loss2) / self.args.zo_eps).item()
+                else:  # two side perturbation
+                    self.zo_perturb_parameters(scaling_factor=-2)
+                    loss2 = self.zo_forward(model, inputs)
+                    self.projected_grad = ((loss1 - loss2) / (2 * self.args.zo_eps)).item()
 
-        # Second function evaluation
-        assert args.q == 1, "only support q=1 for the memory efficiency. If you want to implement q>1, need to store random seeds to save memory. In addition, we need to set different random seed for different z in the q-loop."
-        for _ in range(args.q):  # TODO shall we change the seed?
-            if self.args.perturbation_mode == "one_side":
-                self.zo_perturb_parameters(scaling_factor=-1)
-                loss2 = self.zo_forward(model, inputs)
-                self.projected_grad = ((loss1 - loss2) / self.args.zo_eps).item()
-            else:  # two side perturbation
-                self.zo_perturb_parameters(scaling_factor=-2)
-                loss2 = self.zo_forward(model, inputs)
-                self.projected_grad = ((loss1 - loss2) / (2 * self.args.zo_eps)).item()
+                    # Reset model back to its parameters at start of step
+                    self.zo_perturb_parameters(scaling_factor=1)
 
-                # Reset model back to its parameters at start of step
-                self.zo_perturb_parameters(scaling_factor=1)
+                # Set the random seed to ensure that we sample the same z for perturbation/update
+                torch.manual_seed(self.zo_random_seed)
+                self.sparse_grad_rng.manual_seed(self.sparse_grad_random_seed)
+                for name, param in self.named_parameters_to_optim:
+                    # Resample z
+                    z = torch.normal(mean=0, std=1, size=param.data.size(), device=param.data.device,
+                                    dtype=param.data.dtype)
+                    grad_sparsity = self.get_grad_sparsity_by_name(name)
+                    if grad_sparsity is not None:
+                        z[fast_random_mask_like(z, grad_sparsity, generator=self.sparse_grad_rng)] = 0
 
-            # Set the random seed to ensure that we sample the same z for perturbation/update
-            torch.manual_seed(self.zo_random_seed)
-            self.sparse_grad_rng.manual_seed(self.sparse_grad_random_seed)
-            for name, param in self.named_parameters_to_optim:
-                # Resample z
-                z = torch.normal(mean=0, std=1, size=param.data.size(), device=param.data.device,
-                                 dtype=param.data.dtype)
-                grad_sparsity = self.get_grad_sparsity_by_name(name)
-                if grad_sparsity is not None:
-                    z[fast_random_mask_like(z, grad_sparsity, generator=self.sparse_grad_rng)] = 0
+                    if args.trainer == "zo_sign_opt":
+                        # ----signOpt_orig
+                        # TODo why do we multiply lr here? We will multiply lr twice?
+                        graddiff_times_z = np.sign(self.projected_grad) * z
+                        # ----signOpt_mul_sign
+                        # graddiff_times_z = self._get_learning_rate() * torch.sign(self.projected_grad * z)
+                    else:
+                        # ----mezo original
+                        graddiff_times_z = self.projected_grad * z
 
-                if args.trainer == "zo_sign_opt":
-                    # ----signOpt_orig
-                    # TODo why do we multiply lr here? We will multiply lr twice?
-                    graddiff_times_z = np.sign(self.projected_grad) * z
-                    # ----signOpt_mul_sign
-                    # graddiff_times_z = self._get_learning_rate() * torch.sign(self.projected_grad * z)
-                else:
-                    # ----mezo original
-                    graddiff_times_z = self.projected_grad * z
+                    # # previous implementation
+                    # # no param.grad involved
+                    # param.data -= self._get_learning_rate() * self.projected_grad * z
 
-                # # previous implementation
-                # # no param.grad involved
-                # param.data -= self._get_learning_rate() * self.projected_grad * z
+                    # param.grad += graddiff_times_z.detach()
+                    # more mem-efficient:
+                    # run optimizer.step here to avoid caching all grad.
+                    param.grad = graddiff_times_z / args.q  # NOTE this q division does not work for q>1.
+                    self.optimizer.step()  # will only update grad that is not None.
+                    # param.data = param.data - graddiff_times_z / args.q  # NOTE this q division does not work for q>1.
+                    param.grad = None  # avoid further update.
 
-                # param.grad += graddiff_times_z.detach()
-                # more mem-efficient:
-                # run optimizer.step here to avoid caching all grad.
-                param.grad = graddiff_times_z / args.q  # NOTE this q division does not work for q>1.
-                self.optimizer.step()  # will only update grad that is not None.
-                # param.data = param.data - graddiff_times_z / args.q  # NOTE this q division does not work for q>1.
-                param.grad = None  # avoid further update.
+            # for name, param in self.named_parameters_to_optim:
+            #     param.grad = param.grad / args.q
 
-        # for name, param in self.named_parameters_to_optim:
-        #     param.grad = param.grad / args.q
+            # No gradient accumulation support
+            assert self.args.gradient_accumulation_steps == 1
 
-        # No gradient accumulation support
-        assert self.args.gradient_accumulation_steps == 1
-
-        return loss1
+            return loss1
 
     @torch.no_grad()
     def zo_step_v1(self, model, inputs):
