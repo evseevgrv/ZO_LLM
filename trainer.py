@@ -661,19 +661,20 @@ class OurTrainer(Trainer):
             # self.optimizer = {name: SGD([param], lr=args.learning_rate) for name, param in self.model.named_parameters()}
             # print(f"### args.lr_scheduler: {args.lr_scheduler_type}")
             # assert args.lr_scheduler_type == 'constant', "we did not implement lr_schedule."
-        elif args.trainer == "zo_jaguar":
+        elif args.trainer == "zo_jaguar" or args.trainer == "jaguar_signsgd":
             self.optimizer = SGD(self.model.parameters(), lr=args.learning_rate, momentum=args.momentum)
-            # self.optimizer = SGD(self.model.parameters(), lr=args.learning_rate)
-            # self.optimizer = {name: SGD([param], lr=args.learning_rate) for name, param in self.model.named_parameters()}
-            # print(f"### args.lr_scheduler: {args.lr_scheduler_type}")
-            # assert args.lr_scheduler_type == 'constant', "we did not implement lr_schedule."
+            self.lr_scheduler = get_cosine_schedule_with_warmup(
+                    self.optimizer, 
+                    num_warmup_steps=args.warmup_steps, 
+                    num_training_steps=max_steps
+            )
         elif args.trainer == "zo_muon":
             self.optimizer = SGD(self.model.parameters(), lr=args.learning_rate, momentum=args.momentum)
             # self.optimizer = SGD(self.model.parameters(), lr=args.learning_rate)
             '''and smth else'''
         elif args.trainer == "zo_muon_sampling":
             self.optimizer = SGD(self.model.parameters(), lr=args.learning_rate, momentum=args.momentum)
-        elif args.trainer == "zo_ns_jaguar":
+        elif args.trainer == "zo_ns_jaguar" or args.trainer == "jaguar_muon":
             self.optimizer = SGD(self.model.parameters(), lr=args.learning_rate, momentum=args.momentum)
             self.lr_scheduler = get_cosine_schedule_with_warmup(
                     self.optimizer, 
@@ -1576,21 +1577,28 @@ class OurTrainer(Trainer):
         beta = args.zo_beta
         use_smoothing = args.zo_use_smoothing
         tau = args.zo_tau
-        # lr = self._get_learning_rate()
-        # if lr != 0:
-        #     tau = lr
-        # else:
-        #     tau = args.zo_tau
-        # print(tau)
+
         self.named_parameters_to_optim = [(name, param) for name, param in model.named_parameters() if param.requires_grad]
 
         self.zo_random_seed = np.random.randint(1_000_000_000)
         torch.manual_seed(self.zo_random_seed)
 
+        original_grads = {}
+        for name, param in self.named_parameters_to_optim:
+            original_grads[name] = param.grad.clone() if param.grad is not None else None
+
+        self.optimizer.zero_grad()
+
         selected_indices = {}
         original_values = {}
 
-        # self.optimizer.zero_grad(set_to_none=False)
+        # Инициализация state['grad_accum'] для всех параметров
+        for name, param in self.named_parameters_to_optim:
+            if param not in self.optimizer.state:
+                self.optimizer.state[param] = {}
+                self.optimizer.state[param]['grad_accum'] = torch.zeros_like(param.data)
+
+        # Выбор случайных подмножеств параметров
         for name, param in self.named_parameters_to_optim:
             if len(param.data.shape) == 1:
                 n_elements = param.data.shape[0]
@@ -1606,79 +1614,64 @@ class OurTrainer(Trainer):
                 selected_cols = torch.randperm(n_cols, device=param.device)[:m]
                 selected_indices[name] = (selected_rows, selected_cols)
                 original_values[name] = param.data[selected_rows[:, None], selected_cols].clone()
+
+        # Вычисление f(z + tau*v)
         with torch.no_grad():
             for name, param in self.named_parameters_to_optim:
                 if len(param.data.shape) == 1:
-                    indices = selected_indices[name]
-                    param.data[indices] += tau
+                    param.data[selected_indices[name]] += tau
                 else:
-                    selected_rows, selected_cols = selected_indices[name]
-                    param.data[selected_rows[:, None], selected_cols] += tau
+                    rows, cols = selected_indices[name]
+                    param.data[rows[:, None], cols] += tau
         loss1 = self.zo_forward(model, inputs)
 
+        # Вычисление f(z - tau*v)
         with torch.no_grad():
             for name, param in self.named_parameters_to_optim:
                 if len(param.data.shape) == 1:
-                    indices = selected_indices[name]
-                    param.data[indices] = original_values[name] - tau
+                    param.data[selected_indices[name]] = original_values[name] - tau
                 else:
-                    selected_rows, selected_cols = selected_indices[name]
-                    param.data[selected_rows[:, None], selected_cols] = original_values[name] - tau
+                    rows, cols = selected_indices[name]
+                    param.data[rows[:, None], cols] = original_values[name] - tau
         loss2 = self.zo_forward(model, inputs)
 
+        # Восстановление оригинальных значений
         with torch.no_grad():
             for name, param in self.named_parameters_to_optim:
                 if len(param.data.shape) == 1:
-                    indices = selected_indices[name]
-                    param.data[indices] = original_values[name]
+                    param.data[selected_indices[name]] = original_values[name]
                 else:
-                    selected_rows, selected_cols = selected_indices[name]
-                    param.data[selected_rows[:, None], selected_cols] = original_values[name]
+                    rows, cols = selected_indices[name]
+                    param.data[rows[:, None], cols] = original_values[name]
 
-        # rho = sign(f(z_+) - f(z_-))
+        # Вычисление оценки градиента
         rho = (loss1 - loss2).item() / (2 * tau)
 
+        # Накопление градиента в state['grad_accum'] вместо param.grad
         for name, param in self.named_parameters_to_optim:
-            # if self.name == None:
-            #     self.name = name 
-            # if name == self.name:
-            #     print(0, self.name, param.grad)
-            if param.grad is None:
-                param.grad = torch.zeros_like(param)
-                
-                # if name == self.name:
-                #     print(1, self.name, param.grad)
-            # else:
-            #     param.grad.zero_()
-
+            state = self.optimizer.state[param]
             grad_update = rho
+            
             if len(param.data.shape) == 1:
                 indices = selected_indices[name]
                 if use_smoothing:
-                    param.grad[indices] = beta * param.grad[indices] + (1 - beta) * grad_update
+                    state['grad_accum'][indices] = beta * state['grad_accum'][indices] + (1 - beta) * grad_update
                 else:
-                    param.grad[indices] = grad_update
+                    state['grad_accum'][indices] = grad_update
             else:
-                selected_rows, selected_cols = selected_indices[name]
+                rows, cols = selected_indices[name]
                 if use_smoothing:
-                    param.grad[selected_rows[:, None], selected_cols] = beta * param.grad[selected_rows[:, None], selected_cols] + (1 - beta) * grad_update
+                    state['grad_accum'][rows[:, None], cols] = beta * state['grad_accum'][rows[:, None], cols] + (1 - beta) * grad_update
                 else:
-                    param.grad[selected_rows[:, None], selected_cols] = grad_update
+                    state['grad_accum'][rows[:, None], cols] = grad_update
 
-            # param.grad = torch.sign(param.grad)
+            param.grad = torch.sign(state['grad_accum'].clone())
 
-            # if name == self.name:
-            #     print(2, self.name, param.grad)
+        self.optimizer.step()
+        self.lr_scheduler.step()
 
-        # self.optimizer.step()
-        group = self.optimizer.param_groups[0]
-        lr = group['lr']
-        # perform in-place parameter update: param = param - lr * grad
         for name, param in self.named_parameters_to_optim:
-            if param.grad is None:
-                continue
-            param.data.add_(torch.sign(param.grad), alpha=-lr)
-        
+            param.grad = original_grads[name]
 
         if debug:
             print(f"loss1={loss1.item():.4f}, loss2={loss2.item():.4f}, rho={rho:.2f}")
@@ -1883,13 +1876,11 @@ class OurTrainer(Trainer):
                     state['grad_accum'][selected_rows[:, None], selected_cols] += grad_update 
                 accum = zeropower_via_newtonschulz5(state['grad_accum'], steps=5).to(param.data.dtype)
             
-            # Временно устанавливаем grad для выполнения шага
             param.grad = accum.clone()
 
         self.optimizer.step()
         self.lr_scheduler.step()
 
-        # Восстанавливаем оригинальные градиенты
         for name, param in self.named_parameters_to_optim:
             param.grad = original_grads[name]
 
