@@ -1890,86 +1890,86 @@ class OurTrainer(Trainer):
         assert args.gradient_accumulation_steps == 1
         return loss1
         
-        @torch.no_grad()
-        def zo_step(self, model, inputs):
-            """
-            Estimate gradient by MeZO. Return the loss from f(theta + z)
-            """
-            args = self.args
+    @torch.no_grad()
+    def zo_step(self, model, inputs):
+        """
+        Estimate gradient by MeZO. Return the loss from f(theta + z)
+        """
+        args = self.args
 
-            # What parameters to optimize
-            self.named_parameters_to_optim = []
-            for name, param in model.named_parameters():
-                if param.requires_grad:
-                    self.named_parameters_to_optim.append((name, param))
-                    # # TODO avoid init the memory for grad.
-                    # param.grad = torch.zeros_like(param.data)
-                    param.grad = None  # Make sure the grad is empty and will not be updated.
+        # What parameters to optimize
+        self.named_parameters_to_optim = []
+        for name, param in model.named_parameters():
+            if param.requires_grad:
+                self.named_parameters_to_optim.append((name, param))
+                # # TODO avoid init the memory for grad.
+                # param.grad = torch.zeros_like(param.data)
+                param.grad = None  # Make sure the grad is empty and will not be updated.
 
-            # Sample the random seed for sampling z
-            self.zo_random_seed = np.random.randint(1000000000)
+        # Sample the random seed for sampling z
+        self.zo_random_seed = np.random.randint(1000000000)
 
-            # First function evaluation
-            # NOTE: when sparse_grad is set to True, it will also check the args.gradient_sparsity,
-            # so it does not necessarily use sparse grad.
-            self.zo_perturb_parameters(scaling_factor=1)
-            loss1 = self.zo_forward(model, inputs)
+        # First function evaluation
+        # NOTE: when sparse_grad is set to True, it will also check the args.gradient_sparsity,
+        # so it does not necessarily use sparse grad.
+        self.zo_perturb_parameters(scaling_factor=1)
+        loss1 = self.zo_forward(model, inputs)
 
-            # Second function evaluation
-            assert args.q == 1, "only support q=1 for the memory efficiency. If you want to implement q>1, need to store random seeds to save memory. In addition, we need to set different random seed for different z in the q-loop."
-            for _ in range(args.q):  # TODO shall we change the seed?
-                if self.args.perturbation_mode == "one_side":
-                    self.zo_perturb_parameters(scaling_factor=-1)
-                    loss2 = self.zo_forward(model, inputs)
-                    self.projected_grad = ((loss1 - loss2) / self.args.zo_eps).item()
-                else:  # two side perturbation
-                    self.zo_perturb_parameters(scaling_factor=-2)
-                    loss2 = self.zo_forward(model, inputs)
-                    self.projected_grad = ((loss1 - loss2) / (2 * self.args.zo_eps)).item()
+        # Second function evaluation
+        assert args.q == 1, "only support q=1 for the memory efficiency. If you want to implement q>1, need to store random seeds to save memory. In addition, we need to set different random seed for different z in the q-loop."
+        for _ in range(args.q):  # TODO shall we change the seed?
+            if self.args.perturbation_mode == "one_side":
+                self.zo_perturb_parameters(scaling_factor=-1)
+                loss2 = self.zo_forward(model, inputs)
+                self.projected_grad = ((loss1 - loss2) / self.args.zo_eps).item()
+            else:  # two side perturbation
+                self.zo_perturb_parameters(scaling_factor=-2)
+                loss2 = self.zo_forward(model, inputs)
+                self.projected_grad = ((loss1 - loss2) / (2 * self.args.zo_eps)).item()
 
-                    # Reset model back to its parameters at start of step
-                    self.zo_perturb_parameters(scaling_factor=1)
+                # Reset model back to its parameters at start of step
+                self.zo_perturb_parameters(scaling_factor=1)
 
-                # Set the random seed to ensure that we sample the same z for perturbation/update
-                torch.manual_seed(self.zo_random_seed)
-                self.sparse_grad_rng.manual_seed(self.sparse_grad_random_seed)
-                for name, param in self.named_parameters_to_optim:
-                    # Resample z
-                    z = torch.normal(mean=0, std=1, size=param.data.size(), device=param.data.device,
-                                    dtype=param.data.dtype)
-                    grad_sparsity = self.get_grad_sparsity_by_name(name)
-                    if grad_sparsity is not None:
-                        z[fast_random_mask_like(z, grad_sparsity, generator=self.sparse_grad_rng)] = 0
+            # Set the random seed to ensure that we sample the same z for perturbation/update
+            torch.manual_seed(self.zo_random_seed)
+            self.sparse_grad_rng.manual_seed(self.sparse_grad_random_seed)
+            for name, param in self.named_parameters_to_optim:
+                # Resample z
+                z = torch.normal(mean=0, std=1, size=param.data.size(), device=param.data.device,
+                                dtype=param.data.dtype)
+                grad_sparsity = self.get_grad_sparsity_by_name(name)
+                if grad_sparsity is not None:
+                    z[fast_random_mask_like(z, grad_sparsity, generator=self.sparse_grad_rng)] = 0
 
-                    if args.trainer == "zo_sign_opt":
-                        # ----signOpt_orig
-                        # TODo why do we multiply lr here? We will multiply lr twice?
-                        graddiff_times_z = np.sign(self.projected_grad) * z
-                        # ----signOpt_mul_sign
-                        # graddiff_times_z = self._get_learning_rate() * torch.sign(self.projected_grad * z)
-                    else:
-                        # ----mezo original
-                        graddiff_times_z = self.projected_grad * z
+                if args.trainer == "zo_sign_opt":
+                    # ----signOpt_orig
+                    # TODo why do we multiply lr here? We will multiply lr twice?
+                    graddiff_times_z = np.sign(self.projected_grad) * z
+                    # ----signOpt_mul_sign
+                    # graddiff_times_z = self._get_learning_rate() * torch.sign(self.projected_grad * z)
+                else:
+                    # ----mezo original
+                    graddiff_times_z = self.projected_grad * z
 
-                    # # previous implementation
-                    # # no param.grad involved
-                    # param.data -= self._get_learning_rate() * self.projected_grad * z
+                # # previous implementation
+                # # no param.grad involved
+                # param.data -= self._get_learning_rate() * self.projected_grad * z
 
-                    # param.grad += graddiff_times_z.detach()
-                    # more mem-efficient:
-                    # run optimizer.step here to avoid caching all grad.
-                    param.grad = graddiff_times_z / args.q  # NOTE this q division does not work for q>1.
-                    self.optimizer.step()  # will only update grad that is not None.
-                    # param.data = param.data - graddiff_times_z / args.q  # NOTE this q division does not work for q>1.
-                    param.grad = None  # avoid further update.
+                # param.grad += graddiff_times_z.detach()
+                # more mem-efficient:
+                # run optimizer.step here to avoid caching all grad.
+                param.grad = graddiff_times_z / args.q  # NOTE this q division does not work for q>1.
+                self.optimizer.step()  # will only update grad that is not None.
+                # param.data = param.data - graddiff_times_z / args.q  # NOTE this q division does not work for q>1.
+                param.grad = None  # avoid further update.
 
-            # for name, param in self.named_parameters_to_optim:
-            #     param.grad = param.grad / args.q
+        # for name, param in self.named_parameters_to_optim:
+        #     param.grad = param.grad / args.q
 
-            # No gradient accumulation support
-            assert self.args.gradient_accumulation_steps == 1
+        # No gradient accumulation support
+        assert self.args.gradient_accumulation_steps == 1
 
-            return loss1
+        return loss1
 
     @torch.no_grad()
     def zo_step_v1(self, model, inputs):
