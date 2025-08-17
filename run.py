@@ -3,7 +3,6 @@ import os
 import random
 
 import wandb
-# from clearml import Task
 from torch.distributed.fsdp.fully_sharded_data_parallel import FullyShardedDataParallel as FSDP
 from torch.utils.data import Dataset
 from tqdm import tqdm
@@ -31,8 +30,8 @@ logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.INFO)
 
-AutoConfig.register("mistral", MistralConfig)
-AutoModelForCausalLM.register(MistralConfig, MistralForCausalLM)
+# AutoConfig.register("mistral", MistralConfig)
+# AutoModelForCausalLM.register(MistralConfig, MistralForCausalLM)
 
 
 @dataclass
@@ -40,7 +39,10 @@ class OurArguments(TrainingArguments):
     # dataset and sampling strategy
     task_name: str = "SST2"  # task name should match the string before Dataset in the Dataset class name. We support the following task_name: SST2, RTE, CB, BoolQ, WSC, WIC, MultiRC, Copa, ReCoRD, SQuAD, DROP
 
+    # report_to: str = "wandb"
+
     # Number of examples
+
     num_train: int = 0  # ICL mode: number of demonstrations; training mode: number of training samples
     num_dev: int = None  # (only enabled with training) number of development samples
     num_eval: int = None  # number of evaluation samples
@@ -161,7 +163,8 @@ class OurArguments(TrainingArguments):
     ## - mlp-attn: perturb one mlp/attention layer at a time
     ## - linear: perturb one linear layer at a time
     """
-    report_to: str = "clearml"
+
+    sampling_type: str = "Rotation"
 
 
 def parse_args():
@@ -247,7 +250,9 @@ class Framework:
                     torch_dtype = torch.float16
                 elif self.args.load_bfloat16:
                     torch_dtype = torch.bfloat16
+                # Добавил offload_folder zo_jaguar
                 # offload_folder="./offload_folder"
+                # было device_map='auto', стало device_map=6
                 model = AutoModelForCausalLM.from_pretrained(self.args.model_name, config=config, device_map='auto',
                                                              torch_dtype=torch_dtype,
                                                              max_memory={i: f'{free_in_GB - 5}GB' for i in
@@ -555,6 +560,7 @@ class Framework:
                              evaluate_func=self.evaluate,
                              perturb_module_regex=perturb_module_regex,
                              )
+        trainer.can_return_loss = True
         # scheduler = get_cosine_schedule_with_warmup(
         #     trainer.optimizer,
         #     num_warmup_steps=self.args.warmup_steps,
@@ -629,7 +635,8 @@ def main():
         args.mode = "prompt"
     else:
         args.mode = "ft"
-    args.tag = f"{args.trainer}-{args.task_name}-{args.template_ver}-{args.model_name.split('/')[-1]}-OPTIM_{args.mode}-STEP{args.max_steps}-{args.optimizer}-LR{args.learning_rate}-{args.lr_scheduler_type}-ZOEPS{args.zo_eps}-Q{args.q}"
+    # args.tag = f"{args.trainer}-{args.task_name}-{args.template_ver}-{args.model_name.split('/')[-1]}-OPTIM_{args.mode}-STEP{args.max_steps}-{args.optimizer}-LR{args.learning_rate}-{args.lr_scheduler_type}-ZOEPS{args.zo_eps}-Q{args.q}"
+    args.tag = f"{args.trainer}-{args.task_name}-{args.template_ver}-{args.model_name.split('/')[-1]}-OPTIM_{args.mode}-STEP{args.max_steps}-{args.optimizer}-LR{args.learning_rate}-{args.lr_scheduler_type}-ZOEPS{args.zo_eps}-SAMPLING{args.sampling_type}"
     args.tag = "momen" + args.tag if args.momentum > 0 else args.tag
     args.tag = f"sparse_grad-{args.gradient_sparsity}-{args.sparse_gradient_group}-{args.sparse_gradient_resample_steps}-" + args.tag if args.gradient_sparsity is not None else args.tag
     args.tag = f"module_perturb-{args.perturbed_module_level}-" + args.tag if args.module_wise_perturbation else args.tag
@@ -641,8 +648,6 @@ def main():
     os.makedirs(args.logging_dir, exist_ok=True)
 
     wandb.init(project='zo-bench', name=args.tag, config=args)
-    # clearml_task = Task.init(project_name='zo-bench', task_name=args.tag)
-    # clearml_task.connect(args)
 
     set_seed(args.seed)
     task = get_task(args.task_name)
@@ -713,25 +718,11 @@ def main():
                 metrics = framework.evaluate(train_samples, eval_samples)
             logger.info(metrics)
             wandb.log(metrics)
-            # for key, value in metrics.items():
-            #     clearml_task.get_logger().report_scalar(
-            #         title=key,
-            #         series=key,
-            #         value=value,
-            #         iteration=train_set_id if 'train_set_id' in locals() else 0
-            #     )
 
             if not args.no_eval:
                 logger.info("===== Train set %d =====" % train_set_seed)
                 logger.info(metrics)
                 wandb.log(metrics)
-                # for key, value in metrics.items():
-                #     clearml_task.get_logger().report_scalar(
-                #         title=key,
-                #         series=key,
-                #         value=value,
-                #         iteration=train_set_id if 'train_set_id' in locals() else 0
-                #     )
                 if args.local_rank <= 0:
                     write_metrics_to_file(metrics, "result/" + result_file_tag(
                         args) + f"-trainset{train_set_id}.json" if args.result_file is None else args.result_file)
@@ -749,13 +740,6 @@ def main():
         metrics = framework.evaluate(train_sets, eval_samples, one_train_set_per_eval_sample=True)
         logger.info(metrics)
         wandb.log(metrics)
-        # for key, value in metrics.items():
-        #     clearml_task.get_logger().report_scalar(
-        #         title=key,
-        #         series=key,
-        #         value=value,
-        #         iteration=train_set_id if 'train_set_id' in locals() else 0
-        #     )
         if args.local_rank <= 0:
             write_metrics_to_file(metrics, "result/" + result_file_tag(
                 args) + "-onetrainpereval.json" if args.result_file is None else args.result_file)
