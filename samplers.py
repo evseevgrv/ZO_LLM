@@ -28,6 +28,8 @@ class Sampler:
             self.sampler = self._reflection_matrix
         elif self.sampler_type == 'Random_baseline':        # + +
             self.sampler = self._random_baseline
+        elif self.sampler_type == 'Torch_QR':        # + +
+            self.sampler = self._torch_qr
         else:
             raise NotImplementedError(f"Sampling {self.sampler_type} is not implemented")
 
@@ -47,9 +49,12 @@ class Sampler:
             # V_k = V[:, :k]
             # E_k = U_k @ S_k @ V_k.T
             # E = U @ S @ V.T
-            if self.sampler_type == 'Random_baseline':
+            if self.sampler_type == 'Torch_QR':
+                E = self.sampler(n, m)
+            elif self.sampler_type == 'Random_baseline':
                 E = self.sampler(n, 3) @ self.sampler(3, m)
             else:
+
                 E = self.sampler(k)
                 E = E[:n, :m]
             for name in names:
@@ -103,6 +108,9 @@ class Sampler:
 
     def _random_baseline(self, n, r):
         return torch.randn((n, r), device=self.device)
+    
+    def _torch_qr(self, n, m):
+        return torch.nn.init.orthogonal_(torch.empty((n, m), device=self.device))
 
 
 # def create_random_matrix(n, m, device='cpu'):
